@@ -1,0 +1,11 @@
+.navbar {
+    background-color: rgb(0, 6, 90);
+    min-height: 80px;
+}
+
+.navbar-nav {
+    margin-left: 80px;
+}
+.nav-item {
+    padding: 10px;
+}
