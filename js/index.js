@@ -1,6 +1,7 @@
 $(document).ready(function() {
     // Cuando se hace clic en el botón "Añadir elemento"
     $('#addCardButton').on('click', function() {
+      // 
       // Crear un nuevo elemento "card"
       const newCard = `
         <div class="card" style="width: ;">
@@ -16,4 +17,5 @@ $(document).ready(function() {
       // Agregar la nueva "card" al contenedor de tarjetas
       $('#cardList').append(newCard);
     });
-  });
+
+});
