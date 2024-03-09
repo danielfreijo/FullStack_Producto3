@@ -34,7 +34,7 @@
                         <a class="nav-link" href="#">PROYECTOS<br>PRIORITARIOS</a>
                     </li>
                     <li class="nav-item">
-                        <label class="label" id ="lbluser" name="lbluser">Did you know?</label>
+                        <label class="nav-link" id ="lbluser" name="lbluser">Did you know?</label>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link boton" name="addproject" id="addproject" href="#">AÑADIR PROYECTO</a>
@@ -65,12 +65,9 @@
     <script src="../js/index.js"></script>
     <script>
     $(document).ready(function() {
-        // Mostrar usuario al inicio
-        var username = getCookieValue("username");
-        console.log (username);
-
         // Mostrar el valor de la cookie en el elemento con el id "username"
-        $("#lbluser").text(username);
+        var v_username = "Bienvenido " + sessionStorage.getItem("username");
+        $("#lbluser").text(v_username);
 
 
 

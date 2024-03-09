@@ -41,6 +41,7 @@ function updateCookieValue(nombre, nuevoValor) {
 //ACCEDER A LA COOKIE Y MOSTRAR
 function getCookieValue(nombre) {
 var cookies = document.cookie.split(";"); // Divide la cadena de cookies en un array
+console.log(cookies);
 for (var i = 0; i < cookies.length; i++) {
     var cookie = cookies[i].trim(); // Elimina los espacios en blanco al principio y al final
     if (cookie.startsWith(nombre + "=")) {
