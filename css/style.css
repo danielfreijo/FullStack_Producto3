@@ -14,3 +14,35 @@
     background-color: F48598;
     color: white;
 }
+
+.ProjectsBar {
+    max-height: 270px; /* Altura fija del contenedor */
+    overflow-x: auto; /* Habilita el desplazamiento horizontal */
+    white-space: nowrap; /* Evita que las cards se envuelvan */
+    display: flex;
+}
+
+.ProjectsBar .card-text{
+    line-height: 1.5; /* Ajusta el espaciado entre líneas según sea necesario */
+    width: 16rem; /* Anchura de las cards */
+    word-wrap: break-word; /* Permite que las palabras se dividan automáticamente */
+    overflow-wrap: break-word; /* Permite que el texto se ajuste correctamente */
+}
+
+.ProjectsBar .card {
+    width: 18rem; /* Anchura de las cards */
+    margin-right: 10px; /* Espacio entre las cards */
+    filter: brightness(0.8); /* Oscurece la tarjeta por defecto */
+    transition: all 0.3s ease; /* Transición suave para el cambio de estilos */
+}
+
+.ProjectsBar .card:hover {
+    filter: brightness(1); /* Aclara la tarjeta al pasar el ratón */
+}
+
+.ProjectsBar .close-button {
+    position: absolute; /* Posición absoluta para el botón */
+    top: 3px; /* Distancia desde la parte superior */
+    right: 3px; /* Distancia desde la izquierda */
+    /* Otros estilos para el botón */
+}

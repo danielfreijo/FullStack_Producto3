@@ -1,0 +1,85 @@
+<!-- Creamos el interior del formulario -->
+<form name="project" id="project">
+    <div class="mb-3">
+        <label for="ProjectName" class="form-label">Nombre del proyecto</label>
+        <input type="text" class="form-control" id="ProjectName" aria-describedby="ProjectHelp">
+        <div id="ProjectHelp" class="form-text">Titulo del proyecto</div>
+      </div>
+      <div class="mb-3">
+        <label for="ProjectDescription" class="form-label">Descripcion del proyecto</label>
+        <textarea class="form-control" id="ProjectDescription" cols="4"></textarea>
+      </div>
+  
+      <div class="row">
+      <div class="col">
+          <div class="mb-3">
+            <label for="ProjectStartDate" class="form-label">Fecha inicio del proyecto</label>
+            <input type="date" class="form-control" id="ProjectStartDate">
+          </div>
+        </div>
+        <div class="col">
+          <div class="mb-3">
+            <label for="ProjectEndDate" class="form-label">Fecha fin del proyecto</label>
+            <input type="date" class="form-control" id="ProjectEndDate">
+          </div>
+        </div>
+      </div>
+  
+      <div class="mb-3">
+        <label for="ProjectBackgroundColod" class="form-label">Establecer el color de fondo</label>
+        <input type="text" class="form-control" id="ProjectBackgroundColod">
+      </div>
+      <div class="mb-3">
+        <label for="ProjectBackgroundImage" class="form-label">Establecer imagen de fondo</label>
+        <input type="text" class="form-control" id="ProjectBackgroundImage">
+      </div>
+  
+      <div class="row">
+        <div class="col">
+          <div class="mb-3">
+            <label for="ProjectPriority" class="form-label">Proyecto prioritario</label>
+            <select id="ProjectPriority" class="form-select">
+                <option value="0" default>No</option>
+                <option value="1">Si</option>
+              </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="mb-3">
+            <label for="ProjectStatus" class="form-label">Estado del proyecto</label>
+            <select id="ProjectStatus" class="form-select">
+                <option value="0" default>En proceso</option>
+                <option value="1">Cerrado</option>
+              </select>
+          </div>
+        </div>
+      </div>
+  
+      <button type="submit" class="btn btn-primary">Crear</button>
+  </form>
+  
+  <script>
+    $(document).ready(function(event) {
+  
+      var identificador;
+  
+      $('#project').on('submit', function(e) {
+    // Evita que se ejecute automáticamente
+        e.preventDefault();
+        identificador = projects.length + 1;
+        
+        projects.push({"id":(projects.length + 1), 
+                    "name": $("#ProjectName").val(), 
+                    "description":$("#ProjectDescription").val(),
+                    "startdate":$("#ProjectStartDate").val(),
+                    "enddate":$("#ProjectEndDate").val(),
+                    "backgroundcolor":$("#ProjectBackgroundColod").val(),
+                    "backgroundimage":$("#ProjectBackgroundImage").val(),
+                    "priority":$("#ProjectPriority").val(),
+                    "status":$("#ProjectStatus").val()});
+
+      });
+  
+  
+    });
+  </script>
