@@ -1,3 +1,11 @@
+.backgroundproject{
+    background-image: linear-gradient(rgba(153, 153, 153, 1),
+    rgba(129, 129, 143, 1),
+    rgba(0, 6, 90, 1));
+    min-height: 100vh;
+    background-position: center; background-size: cover;
+}
+
 .navbar {
     background-color: rgb(0, 6, 90);
     min-height: 80px;
@@ -11,8 +19,15 @@
 }
 
 .boton{
-    background-color: F48598;
+    background-color: #F48598;
+    border: none;
     color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 12px;
 }
 
 .ProjectsBar {
@@ -45,4 +60,16 @@
     top: 3px; /* Distancia desde la parte superior */
     right: 3px; /* Distancia desde la izquierda */
     /* Otros estilos para el botón */
+}
+
+.tarea{
+    background-color:rgba(0, 6, 90, 0.28);
+    text-align: left !important;    
+}
+
+.deletetask{
+    position: absolute; /* Posición absoluta para el botón */
+    top: 3px; /* Distancia desde la parte superior */
+    right: 3px; /* Distancia desde la izquierda */
+    /* Otros estilos para el botón */ 
 }
