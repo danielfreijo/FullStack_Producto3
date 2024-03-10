@@ -37,12 +37,11 @@ body {
 /* CONTENEDOR PRINCIPAL */
 #main-container {
     height: 100vh;
-    width: auto;
-    padding: 0;
-    margin: 0;
+    width: 100vh;
+    display: flex;
+    
 }
 #title {
-    width: auto;
     margin-top: 10vh;
-    margin-left: 220px;
+    
 }
