@@ -1,52 +1,8 @@
 $(document).ready(function(event) {
-    // Cuando se hace clic en el botón "Añadir elemento"
-    $('#addCardButton').on('click', function() {
-      // 
-      // Crear un nuevo elemento "card"
-      const newCard = `
-        <div class="card" style="width: ;">
-            <img src="https://via.placeholder.com/150" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Título de la tarjeta</h5>
-                <p class="card-text">
 
-                
-                
-                </p>
-                <a href="#" class="btn btn-primary">Ir a alguna parte</a>
-            </div>
-        </div>
-      `;
-  
-      // Agregar la nueva "card" al contenedor de tarjetas
-      $('#cardList').append(newCard);
-    });
     // -----------------------------------------------------------------------------------------------------
-    // Codigo extra
+    // EVENTOS formularios PROJECTS
     // -----------------------------------------------------------------------------------------------------
-    function recentProjects(){
-        $('#RecentProjects').html("");
-        var v_startdate = new Date();
-        v_startdate.setHours(0,0,0,0); // Establece la hora a medianoche
-        $.each(projects, function(index, data) {
-            var v_enddate = new Date(data.startdate);  // Establecemos la fecha de incio del proyecto
-            var diff = Math.abs(v_startdate-v_enddate); // Diferencia de dias entre la fecha actual y la fecha de inicio del proyecto
-            var diff_days=diff/(1000*60*60*24); // Lo pasamos a dias
-            // Si es un proyecto de hace 30 dias o menos lo mostramos como reciente
-            if (diff_days<=30){
-                // Añadimos la tarjeta del proyecto a la vista de recientes
-                $('#RecentProjects').append(defineCard(index));
-            }
-        });
-    };
-
-    function allProjects(){
-        $('#AllProjects').html("");
-        $.each(projects, function(index, data) {
-            // Añadimos el Proyecto a la vista de todos.
-            $('#AllProjects').append(defineCard(index));
-        });
-    };
 
     $('#refresh1').on("click", function(e){
         allProjects();
@@ -70,33 +26,6 @@ $(document).ready(function(event) {
     $(".close").click(function() {
         $("#ModalForm").modal('hide');
     });
-
-    function defineCard(index){
-        var text='<div class="card" style="width: 18rem;">';
-        text +='<img class="card-img-top" src="../assets/' + projects[index]["backgroundimage"] + '" alt="Card image cap">';  
-        text +='<div class="card-img-overlay">';
-        text +='<h5 class="card-title">'+ projects[index]["name"];
-        if (projects[index]["status"]!=1){
-            // Si un proyecto esta completado no se puede eliminar.
-            text +='<a href="#" class="btn close-button deteleproject" data="'+ projects[index]["id"]+'">❌</a>'; 
-        };
-        text +='</h5>';
-        text +='<p class="card-text" style="width:100px;overflow-wrap: break-word;">';
-        text +=projects[index]["description"];
-        text +='</p>';
-        text +='</div>';
-        text +='<div class="card-footer">';
-        if (projects[index]["priority"]==0){
-            text +='<a href="#" class="btn priority" style="position:absolute;left:3px" data="'+ projects[index]["id"]+'">★</a>';
-        }else{
-            text +='<a href="#" class="btn downgrade" style="position:absolute;left:3px" data="'+ projects[index]["id"]+'">⭐</a>';
-        };
-        text +='<a href="#" class="btn editproject" style="position:relative;left:100px" data="'+ projects[index]["id"]+'">📝</a>';
-        text +='<a href="#" class="btn openproject" style="position:absolute;right:3px"  data="'+ projects[index]["id"]+'">➠</a>';
-        text +='</div>';
-        text +='</div>';
-        return text;
-    };
 
     $(".openproject").on("click", function(e){
         // Abrimos el proyecto para asignar tareas
@@ -129,59 +58,8 @@ $(document).ready(function(event) {
       });
 
     // --------------------------------------------------------------------------
-    // TAREAS
+    // EVENTOS Formularios TAREAS
     // --------------------------------------------------------------------------
-
-    function defineTask(index){
-        var text = '<div class="card h-100 item-Height" style="margin-top: 10px;">';
-        text += '<div class="card-body tarea">';
-        text += '<h5 class="card-title"><a href="#" class="btn close-button deletetask" data="';
-        text += index;
-        text += '">❌</a></h5>';
-        text += '<p class="card-text text-left">';
-        text += tasks[index]["nametask"];
-        text += '<br>';
-        text += '<input class="form-check-input" type="checkbox" id="taskstartdate" name="option1" value="';
-        text += tasks[index]["startdate"];
-        text += '" checked>';
-        text += '<label class="form-check-label">' + tasks[index]["startdate"] + '</label></p>';
-        text += '</div>';
-        text += '</div>';
-        return text;
-    };
-
-    function TODOTask(){
-        $('#containerTODO').html("");
-        $.each(tasks, function(index, data) {
-            // Si es un proyecto de hace 30 dias o menos lo mostramos como reciente
-            if (data.status=="TODO"){
-                // Añadimos la tarjeta del proyecto a la vista de recientes
-                $('#containerTODO').append(defineTask(index));
-            }
-        });
-    };
-
-    function ONPROGRESSTask(){
-        $('#containeronprogress').html("");
-        $.each(tasks, function(index, data) {
-            // Si es un proyecto de hace 30 dias o menos lo mostramos como reciente
-            if (data.status=="ONPROGRESS"){
-                // Añadimos la tarjeta del proyecto a la vista de recientes
-                $('#containeronprogress').append(defineTask(index));
-            }
-        });
-    };
-
-    function COMPLETEDTask(){
-        $('#containercompleted').html("");
-        $.each(tasks, function(index, data) {
-            // Si es un proyecto de hace 30 dias o menos lo mostramos como reciente
-            if (data.status=="COMPLETED"){
-                // Añadimos la tarjeta del proyecto a la vista de recientes
-                $('#containercompleted').append(defineTask(index));
-            }
-        });
-    };
 
     $('#addtask').on("click", function(e){
         e.preventDefault();
@@ -213,5 +91,123 @@ $(document).ready(function(event) {
             e.stopPropagation();
         });
 
+
+    // --------------------------------------------------------------------------
+    // PROYECTOS
+    // --------------------------------------------------------------------------
+
+    function defineCard(index){
+        var text='<div class="card" style="width: 18rem;">';
+        text +='<img class="card-img-top" src="../assets/' + projects[index]["backgroundimage"] + '" alt="Card image cap">';  
+        text +='<div class="card-img-overlay">';
+        text +='<h5 class="card-title">'+ projects[index]["name"];
+        if (projects[index]["status"]!=1){
+            // Si un proyecto esta completado no se puede eliminar.
+            text +='<a href="#" class="btn close-button deteleproject" data="'+ projects[index]["id"]+'">❌</a>'; 
+        };
+        text +='</h5>';
+        text +='<p class="card-text" style="width:100px;overflow-wrap: break-word;">';
+        text +=projects[index]["description"];
+        text +='</p>';
+        text +='</div>';
+        text +='<div class="card-footer">';
+        if (projects[index]["priority"]==0){
+            text +='<a href="#" class="btn priority" style="position:absolute;left:3px" data="'+ projects[index]["id"]+'">★</a>';
+        }else{
+            text +='<a href="#" class="btn downgrade" style="position:absolute;left:3px" data="'+ projects[index]["id"]+'">⭐</a>';
+        };
+        text +='<a href="#" class="btn editproject" style="position:relative;left:100px" data="'+ projects[index]["id"]+'">📝</a>';
+        text +='<a href="#" class="btn openproject" style="position:absolute;right:3px"  data="'+ projects[index]["id"]+'">➠</a>';
+        text +='</div>';
+        text +='</div>';
+        return text;
+    };
+
+    function recentProjects(){
+        $('#RecentProjects').html("");
+        var v_startdate = new Date();
+        v_startdate.setHours(0,0,0,0); // Establece la hora a medianoche
+        $.each(projects, function(index, data) {
+            var v_enddate = new Date(data.startdate);  // Establecemos la fecha de incio del proyecto
+            var diff = Math.abs(v_startdate-v_enddate); // Diferencia de dias entre la fecha actual y la fecha de inicio del proyecto
+            var diff_days=diff/(1000*60*60*24); // Lo pasamos a dias
+            // Si es un proyecto de hace 30 dias o menos lo mostramos como reciente
+            if (diff_days<=30){
+                // Añadimos la tarjeta del proyecto a la vista de recientes
+                $('#RecentProjects').append(defineCard(index));
+            }
+        });
+    };
+
+    function allProjects(){
+        $('#AllProjects').html("");
+        $.each(projects, function(index, data) {
+            // Añadimos el Proyecto a la vista de todos.
+            $('#AllProjects').append(defineCard(index));
+        });
+    };
+
+    // --------------------------------------------------------------------------
+    // TAREAS
+    // --------------------------------------------------------------------------
+
+    $(".sortable").sortable({
+        connectWith: ".sortable",
+        // Puedes definir otras opciones aquí
+        receive: function(event, ui) {
+          // Esta función se ejecuta cuando se suelta un elemento en la lista
+          console.log("Elemento soltado en la lista:", this.id);
+          
+        }
+    }).disableSelection();
+
+    function defineTask(index){
+        var text = '<li class="TASK" draggable="true">';
+        text += '<h5><a href="#" class="btn close-button deletetask" data="';
+        text += index;
+        text += '">❌</a></h5>';
+        text += '<p class="texttask">';
+        text += tasks[index]["nametask"];
+        text += '<br>';
+        text += '<input class="form-check-input" type="checkbox" id="taskstartdate" name="option1" value="';
+        text += tasks[index]["startdate"];
+        text += '" checked>';
+        text += '<label class="form-check-label">' + tasks[index]["startdate"] + '</label></p>';
+        text += '</li>';
+        return text;
+    };
+
+    function TODOTask(){
+        $('#lst_todo').html("");
+        $.each(tasks, function(index, data) {
+            // Si es un proyecto de hace 30 dias o menos lo mostramos como reciente
+            if (data.status=="TODO"){
+                // Añadimos la tarjeta del proyecto a la vista de recientes
+                $('#lst_todo').append(defineTask(index));
+            }
+        });
+    };
+
+    function ONPROGRESSTask(){
+        $('#lst_onprogress').html("");
+        $.each(tasks, function(index, data) {
+            // Si es un proyecto de hace 30 dias o menos lo mostramos como reciente
+            if (data.status=="ONPROGRESS"){
+                // Añadimos la tarjeta del proyecto a la vista de recientes
+                $('#lst_onprogress').append(defineTask(index));
+            }
+        });
+    };
+
+    function COMPLETEDTask(){
+        $('#lst_completed').html("");
+        $.each(tasks, function(index, data) {
+            // Si es un proyecto de hace 30 dias o menos lo mostramos como reciente
+            if (data.status=="COMPLETED"){
+                // Añadimos la tarjeta del proyecto a la vista de recientes
+                $('#lst_completed').append(defineTask(index));
+            }
+        });
+    };
 
 });

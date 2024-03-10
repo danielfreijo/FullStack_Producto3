@@ -41,27 +41,24 @@
     <!-- HACER -->
     <a class="boton" href="#">HACER</a>
     <br>
-    <div class="TSKCOL" name="containerTODO" id="containerTODO" style="margin-top: 10px;">
+    <div class="TASK" name="containerTODO" id="containerTODO" style="margin-top: 10px;">
         <ul class="sortable" id="lst_todo" name="lst_todo">
-            <li>Item1</li>
-            <li>Item2</li>
-            <li>Item2</li>
+            <li>TO DO 1</li>
+            <li>TO DO 2</li>
+            <li>TO DO 3</li>
         </ul>
     </div>
 </div>
-
-
-
 
 <div class="col text-center">
     <!-- EN PROGRESO -->
     <a class="boton"  href="#">EN PROGRESO</a>
     <br>
-    <div class="TSKCOL" name="containeronprogress" id="containeronprogress" style="margin-top: 10px;">
+    <div class="TASK" name="containeronprogress" id="containeronprogress" style="margin-top: 10px;">
         <ul class="sortable" id="lst_onprogress" name="lst_onprogress">
-            <li>Item1</li>
-            <li>Item2</li>
-            <li>Item2</li>
+            <li>ON PROGRESS 1</li>
+            <li>ON PROGRESS 2</li>
+            <li>ON PROGRESS 3</li>
         </ul>
     </div>
 
@@ -74,11 +71,11 @@
     <!-- REALIZADO -->
     <a class="boton" href="#">REALIZADO</a>
     <br>
-    <div class="TSKCOL" name="containercompleted" id="containercompleted" style="margin-top: 10px;">
+    <div class="TASK" name="containercompleted" id="containercompleted" style="margin-top: 10px;">
         <ul class="sortable" id="lst_completed" name="lst_completed">
-<li>Item1</li>
-<li>Item2</li>
-<li>Item2</li>
+<li>COMPLETED 1</li>
+<li>COMPLETED 2</li>
+<li>COMPLETED 3</li>
         </ul>
 
     </div>
@@ -162,17 +159,6 @@
     <script src="../assets/libraries/bootstrap.bundle.min.js"></script>
     <script src="../js/data.js"></script>
     <script src="../js/index.js"></script>
-<script>
-$(function() {  
 
-    $(".sortable").sortable({
-       axis: 'y',
-       containment: "parent" 
-    }).disableSelection();
-
-})
-
-
-</script>
 </body>
 </html>

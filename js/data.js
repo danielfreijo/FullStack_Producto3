@@ -1,5 +1,7 @@
 
-    var userselected="";
+    var userselected="0";
+    var projectselected="0";
+    var taskselected="0";
     
     // Defino los usuarios
     var userdata = [
