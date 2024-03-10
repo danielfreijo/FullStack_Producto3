@@ -1,5 +1,4 @@
-$(document).ready(function() {
-
+$(document).ready(function(event) {
     // Cuando se hace clic en el botón "Añadir elemento"
     $('#addCardButton').on('click', function() {
       // 

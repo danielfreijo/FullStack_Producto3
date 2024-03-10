@@ -73,3 +73,20 @@
     right: 3px; /* Distancia desde la izquierda */
     /* Otros estilos para el botón */ 
 }
+
+.TSKCOL ul{
+    margin:20px 0 0 20px;
+    border:1px solid #000;
+    width:70%;
+    overflow:hidden;
+    position:relative;
+}
+.TSKCOL li{
+    background:#ccc;
+    border-top:1px solid #000;
+    padding:10px 5px;
+    cursor:move;
+}   
+.TSKCOL li:first-child{
+    border-top:0;
+}
