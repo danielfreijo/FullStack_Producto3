@@ -4,14 +4,22 @@ body {
     margin: 0;
     padding: 0;
 }
+.container {
+    min-width: 1100px !important;
+    height: auto;
+}
+.container-fluid {
+    margin: 0;
+    padding: 0;
+}
 
 /* BARRA DE NAVEGACION */
 .navbar {
     background-color: rgb(0, 6, 90);
-    min-height: 80px;
 }
 .navbar-nav {
     margin-left: 80px;
+    display: flex;
 }
 .nav-item{
     padding-left: 30px;
@@ -38,10 +46,17 @@ body {
 #main-container {
     height: 100vh;
     width: 100vh;
-    display: flex;
-    
+    display: flex; 
+    padding: 0%; 
 }
 #title {
     margin-top: 10vh;
-    
+    margin-bottom: 5vh;
+}
+.card {
+    display: inline-flex;
+    height: 160px;
+    width: 220px;
+    margin-right: 10px;
+
 }

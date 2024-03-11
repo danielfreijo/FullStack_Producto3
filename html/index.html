@@ -13,7 +13,7 @@
     
     <!--Menú de navegación-->
     <nav class="navbar navbar-expand-md navbar-dark">
-        <div class="container">
+        <div class="container-fluid">
             <a class="navbar-brand" href="index.html">
                 <img src="../assets/logo.png" alt="Logo" width="125" height="70" class="d-inline-block">
             </a>
@@ -21,7 +21,7 @@
                 <span class="navbar-toggler-icon"></span>                
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="#">PROYECTOS</a>
                     </li>
@@ -32,27 +32,36 @@
                         <a class="nav-link" href="#">CONTACTO</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item ">
                         <button class="btn btn-primary" id="openModal" >AÑADIR PROYECTO</button>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-    
+
+    <!--Contenedor principal del contenido-->
     <div class="container" id="main-container">
-        <h4 class="text-white" id="title">Proyectos recientes
-            <div class="container"></div>
-        </h4>
+
+        <!--Contenedor de proyectos recientes-->
+        <div class="container-fluid" id="recentProjects-container">
+            <h4 class="text-white" id="title">Proyectos recientes</h4>
+            <div class="container-fluid" id="recentProjects">
+                <!--Aquí se insertarán los proyectos-->
+            </div>
+        </div>
+
+
     </div>
-      
+
 
     <!--Scripts para funcionalidades-->
     <script src="../assets/libraries/jquery-3.6.0.min.js" ></script>
     <script src="../assets/libraries/popper.min.js" ></script>
     <script src="../assets/libraries/bootstrap.bundle.min.js"></script>
     <script src="../js/index.js"></script>
+    <script src="../js/data.js"></script>
     
 </body>
 </html>
