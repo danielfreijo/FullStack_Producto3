@@ -18,8 +18,6 @@ var projects = [
                 "name": "Project A",
                 "description":"This is a description of the Project A.",
                 "department":"Desarrollo",
-                "startdate":"2024-01-01",
-                "enddate":"2024-02-03",
                 "backgroundcolor":"FFFFFF",
                 "backgroundimage":"default.jpg",
                 "priority":0,
@@ -27,12 +25,10 @@ var projects = [
         },
 
         {
-                "id":2, 
+                "id":1, 
                 "name": "Project B",
                 "description":"This is a description of the Project B.",
                 "department":"Diseño",
-                "startdate":"2023-01-01",
-                "enddate":"2023-02-03",
                 "backgroundcolor":"FFFFFF",
                 "backgroundimage":"default.jpg",
                 "priority":0,
@@ -40,16 +36,79 @@ var projects = [
         },
 
         {       
-                "id":1, 
+                "id":2, 
                 "name": "Project C",
                 "description":"This is a description of the Project A.",
                 "department":"Marketing",
-                "startdate":"2024-03-01",
-                "enddate":"2024-05-03",
                 "backgroundcolor":"FFFFFF",
                 "backgroundimage":"default.jpg",
                 "priority":1,
                 "status":0
-        }
+        },
+
+        {       
+                "id":3, 
+                "name": "Project D",
+                "description":"This is a description of the Project A.",
+                "department":"Desarrollo",
+                "backgroundcolor":"FFFFFF",
+                "backgroundimage":"default.jpg",
+                "priority":0,
+                "status":1
+        },
+
+        {       
+                "id":4, 
+                "name": "Project E",
+                "description":"This is a description of the Project A.",
+                "department":"Desarrollo",
+                "backgroundcolor":"FFFFFF",
+                "backgroundimage":"default.jpg",
+                "priority":0,
+                "status":1
+        },
+
+        {       
+                "id":5, 
+                "name": "Project F",
+                "description":"This is a description of the Project A.",
+                "department":"Desarrollo",
+                "backgroundcolor":"FFFFFF",
+                "backgroundimage":"default.jpg",
+                "priority":0,
+                "status":1
+        },
+
+        {       
+                "id":6, 
+                "name": "Project H",
+                "description":"This is a description of the Project A.",
+                "department":"Diseño",
+                "backgroundcolor":"FFFFFF",
+                "backgroundimage":"default.jpg",
+                "priority":0,
+                "status":1
+        },
+
+        {       
+                "id":7, 
+                "name": "Project I",
+                "description":"This is a description of the Project A.",
+                "department":"Diseño",
+                "backgroundcolor":"FFFFFF",
+                "backgroundimage":"default.jpg",
+                "priority":0,
+                "status":1
+        },
+        {       
+                "id":8, 
+                "name": "Project J",
+                "description":"This is a description of the Project A.",
+                "department":"Diseño",
+                "backgroundcolor":"FFFFFF",
+                "backgroundimage":"default.jpg",
+                "priority":0,
+                "status":1
+        },
 ];
 
