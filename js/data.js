@@ -18,7 +18,7 @@ var projects = [
                 "name": "Project A",
                 "description":"This is a description of the Project A.",
                 "department":"Desarrollo",
-                "backgroundcolor":"FFFFFF",
+                "backgroundcolor":"f8e800",
                 "backgroundimage":"default.jpg",
                 "priority":0,
                 "status":1
@@ -29,7 +29,7 @@ var projects = [
                 "name": "Project B",
                 "description":"This is a description of the Project B.",
                 "department":"Diseño",
-                "backgroundcolor":"FFFFFF",
+                "backgroundcolor":"1256f2",
                 "backgroundimage":"default.jpg",
                 "priority":0,
                 "status":1
@@ -40,7 +40,7 @@ var projects = [
                 "name": "Project C",
                 "description":"This is a description of the Project A.",
                 "department":"Marketing",
-                "backgroundcolor":"FFFFFF",
+                "backgroundcolor":"909D30",
                 "backgroundimage":"default.jpg",
                 "priority":1,
                 "status":0
@@ -51,9 +51,9 @@ var projects = [
                 "name": "Project D",
                 "description":"This is a description of the Project A.",
                 "department":"Desarrollo",
-                "backgroundcolor":"FFFFFF",
+                "backgroundcolor":"1DC53F",
                 "backgroundimage":"default.jpg",
-                "priority":0,
+                "priority":1,
                 "status":1
         },
 
@@ -62,7 +62,7 @@ var projects = [
                 "name": "Project E",
                 "description":"This is a description of the Project A.",
                 "department":"Desarrollo",
-                "backgroundcolor":"FFFFFF",
+                "backgroundcolor":"AC0FA2",
                 "backgroundimage":"default.jpg",
                 "priority":0,
                 "status":1
@@ -73,7 +73,7 @@ var projects = [
                 "name": "Project F",
                 "description":"This is a description of the Project A.",
                 "department":"Desarrollo",
-                "backgroundcolor":"FFFFFF",
+                "backgroundcolor":"967B94",
                 "backgroundimage":"default.jpg",
                 "priority":0,
                 "status":1
@@ -84,9 +84,9 @@ var projects = [
                 "name": "Project H",
                 "description":"This is a description of the Project A.",
                 "department":"Diseño",
-                "backgroundcolor":"FFFFFF",
+                "backgroundcolor":"F1C0A9",
                 "backgroundimage":"default.jpg",
-                "priority":0,
+                "priority":1,
                 "status":1
         },
 
@@ -97,7 +97,7 @@ var projects = [
                 "department":"Diseño",
                 "backgroundcolor":"FFFFFF",
                 "backgroundimage":"default.jpg",
-                "priority":0,
+                "priority":1,
                 "status":1
         },
         {       
@@ -105,7 +105,7 @@ var projects = [
                 "name": "Project J",
                 "description":"This is a description of the Project A.",
                 "department":"Diseño",
-                "backgroundcolor":"FFFFFF",
+                "backgroundcolor":"000000",
                 "backgroundimage":"default.jpg",
                 "priority":0,
                 "status":1

@@ -112,6 +112,21 @@
                     <button class="btn btn-primary filter-button" data-filter="Diseño">Diseño</button>
                 </div>   
             </div>
+            
+            <!-- Botón de filtrar en pantallas pequeñas -->
+            <div class="col text-end" id="filterButtonSmallScreen">
+                <div class="dropdown">
+                    <button class="btn btn-primary d-md-none" id="filterButtonSmall" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filtrar
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><button class="dropdown-item filter-button" data-filter="all">Mostrar todos</button></li>
+                        <li><button class="dropdown-item filter-button" data-filter="Desarrollo">Desarrollo</button></li>
+                        <li><button class="dropdown-item filter-button" data-filter="Marketing">Marketing</button></li>
+                        <li><button class="dropdown-item filter-button" data-filter="Diseño">Diseño</button></li>
+                    </ul>  
+                </div>
+            </div>
 
             <div class="container-fluid" id="allProjects">
                 <!--Aquí se insertarán los proyectos-->

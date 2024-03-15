@@ -1,8 +1,9 @@
 body {
     font-family: 'Montserrat', sans-serif;
     background: linear-gradient(to bottom, #999999, #00065A);
+    height: auto;
     min-height: 100vh;
-    height: auto !important;
+    width: auto;
     margin: 0;
     padding: 0;
 }
@@ -19,16 +20,15 @@ body {
     body {
         font-family: 'Montserrat', sans-serif;
         background: linear-gradient(to bottom, #999999, #00065A);
-        height: 1500px;
+        height: auto;
         margin: 0;
         padding: 0;
     }
     .container {
         min-width: auto !important; 
-        width: 100%; 
-        height: auto;
+        width: auto; 
+    
     }
-
 }
 
 /****************************************************/
@@ -105,18 +105,19 @@ body {
 /****************************************************/
 
 #main-container {
-    height: 100vh;
+    height: auto;
     width: 100vh;
     display: block; 
     padding: 0%; 
+    margin-bottom: 160px;
 }
-#recentProjects-container  {
+#recentProjects-container, #priorityProjects-container, #contact-container {
     margin-top: 10vh;
 }
 #Projects-container {
     margin-top: 8vh;
 }
-#recentProjects, #allProjects  {
+#recentProjects, #allProjects, #priorityProjects  {
     display: flex; 
     flex-wrap: wrap;
 }
@@ -155,18 +156,32 @@ body {
     #main-container {
         position: relative;
         z-index: 0;
-        height: auto;
         width: auto;
         margin-top: 12vh;
         margin-left: 2vh;
     }
-    #recentProjects-container {
-        margin-top: 5%;
-        margin-top: 5%;
-    }
-    #title {
+
+    #titleProjects{
         margin-top: 3vh;
-        margin-bottom: 3vh;
+        margin-bottom: 1vh;
+    }
+    #recentProjects-container  {
+        margin-top: 15vh;
+        width: auto;
+    }
+    #Projects-container {
+        margin-top: 4vh;
+        width: auto;
+    }
+    .filter-buttons {
+        display: none;
+    }
+    #filterButtonSmall{
+        margin-bottom: 2vh;
+        margin-right: 2vh;
+    }
+    .dropdown-menu.show {
+        background-color: #fccdd4; 
     }
     .card {
         display: inline-flex;

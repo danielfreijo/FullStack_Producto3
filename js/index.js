@@ -1,8 +1,12 @@
 function createProjectCard(project) {
   return `
-    <div class="card">
-      ${project.name}
-    </div>
+      <a class="card" href="/html/cardDetail.html?id=${project.id}">
+          <div class="card-body">
+            <h5 class="card-title">${project.name}</h5>
+            <p class="card-text">${project.description}</p>
+          </div>
+      </a>
+     
   `;
 }
 
@@ -42,10 +46,23 @@ function showAllProjects(projects, category = 'all') {
   });
 }
 
+function showPriorityProjects(projects) {
+  const priorityProjects = $('#priorityProjects');
+  priorityProjects.empty();
+
+  const priorityProjectsArray = projects.filter(project => project.priority === 1);
+
+  priorityProjectsArray.forEach(project => {
+    const cardHTML = createProjectCard(project);
+    priorityProjects.append(cardHTML);
+  });
+}
+
 $(document).ready(function() {
 
   showRecentProjects(projects);
   showAllProjects(projects);
+  showPriorityProjects(projects);
 
   // Evento para abrir el modal
   $('#openModal').click(function() {
@@ -55,18 +72,19 @@ $(document).ready(function() {
 
   // Evento para agregar un proyecto
   $('#addProjectForm').submit(function(event) {
-    
     event.preventDefault(); // Evitar el envío del formulario
-
-    // obtener los valores del formulario y agregar el proyecto  a la BBDD
-  
+    
+    console.log("Formulario de proyecto enviado"); 
+    
     // Obtener los valores del formulario
     var projectName = $('#projectName').val();
-    var projectDescription = $('#projectDescription').val();
-    var projectDepartment = $('#projectDepartment').val();
-    var projectColor = $('#projectColor').val(); 
-    var projectPriority = $('#projectPriority').prop('checked') ? 1 : 0; 
+    var projectDescription = $('#description').val();
+    var projectDepartment = $('#department').val();
+    var projectColor = $('#backgroundColor').val(); 
+    var projectPriority = $('#priority').prop('checked') ? 1 : 0; 
 
+    console.log("Valores del formulario obtenidos"); 
+    
     // Agregar el proyecto al array projects
     var newProject = {
       "id": projects.length, 
@@ -78,13 +96,17 @@ $(document).ready(function() {
       "priority": projectPriority,
       "status": 1 
     };
+    console.log("Nuevo proyecto creado:", newProject); 
 
     projects.push(newProject); 
 
- 
-    alert('Proyecto añadido: ' + projectName);
+    console.log("Proyecto añadido al array 'projects'"); 
+    console.log("Proyectos después de agregar:", projects);
 
     $('#addProjectModal').modal('hide');
+    
+    showRecentProjects(projects);
+    showAllProjects(projects);
   });
 
   // Evento para filtrar los proyectos
@@ -97,5 +119,11 @@ $(document).ready(function() {
     showAllProjects(projects, category);
   });
 
+  // Evento para mostrar el tablero del proyecto
+  $(document).on('click', '.card', function() {
+    var projectId = $(this).data('id');
+    console.log('Proyecto seleccionado:', projectId);
+    window.location.href = '../html/cardDetail.html?id=' + projectId;
+  });
 
 });

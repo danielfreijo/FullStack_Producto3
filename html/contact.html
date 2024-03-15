@@ -41,5 +41,45 @@
         </div>
     </nav>
 
+    <div class="container" id="main-container">
+        
+        <!--Formulario de contacto-->
+        <div class="container-fluid" id="contact-container">
+            <h3 class="text-white mb-5">Contacta con nosotros</h3>
+            <h6 class="text-white mb-5">Rellena el siguiente formulario y te responderemos en un máximo de 48 horas.</h6>
+            
+            <form id="contactForm">
+                <div class="row">
+                    <label for="name" class="col-sm-6 col-form-label text-white">Nombre*</label>
+                    <label for="correo" class="col-sm-6 col-form-label text-white">Correo Electrónico*</label>
+                </div>
+                <div class="mb-3 row">
+                    <div class="col-sm-6">
+                        <input type="text" id="nombre" name="nombre" class="form-control" required>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="email" id="correo" name="correo" class="form-control" required>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="motivo" class="col-sm-12 col-form-label text-white">Motivo*</label>
+                    <div class="col-sm-12">
+                        <input type="text" id="motivo" name="motivo" class="form-control" required>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="mensaje" class="col-sm-12 col-form-label text-white">Mensaje*</label>
+                    <div class="col-sm-12">
+                        <textarea id="mensaje" name="mensaje" class="form-control" rows="5" required></textarea>
+                    </div>
+                </div>
+                <div class="text-end mt-5">
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
+        </div>
+            
+    </div>
+
 </body>
 </html>
