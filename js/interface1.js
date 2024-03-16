@@ -99,8 +99,8 @@ $(document).ready(function(event) {
         }
 
         // Si todo está correcto podemos agregarlo al ARRAY
-        console.log(ErrorMSG);
-        if (ErrorMSG != ""){
+        console.log(ErrorMSG.length);
+        if (ErrorMSG.length == 0){
             projects.push({"id":(projects.length + 1), 
             "name": $("#ProjectName").val(), 
             "description":$("#ProjectDescription").val(),
