@@ -1,8 +1,10 @@
 $(document).ready(function(event) {
     
-    TODOTask();
-    ONPROGRESSTask();
-    COMPLETEDTask();
+    var SelectedProject = sessionStorage.getItem('MyProject2');
+
+    TODOTask(SelectedProject);
+    ONPROGRESSTask(SelectedProject);
+    COMPLETEDTask(SelectedProject);
 
     // --------------------------------------------------------------------------
     // EVENTOS Formularios TAREAS
@@ -31,9 +33,9 @@ $(document).ready(function(event) {
                         "backgroundcolor":$("#TaskBackground").val(),
                         "status":$("#TaskStatus").val()});
             // Actualizo las listas de Proyectos
-            TODOTask();
-            ONPROGRESSTask();
-            COMPLETEDTask();
+            TODOTask(SelectedProject);
+            ONPROGRESSTask(SelectedProject);
+            COMPLETEDTask(SelectedProject);
             $("#ModalForm").modal('hide');
             e.stopPropagation();
         });
@@ -68,33 +70,33 @@ $(document).ready(function(event) {
         return text;
     };
 
-    function TODOTask(){
+    function TODOTask(ID_Project){
         $('#lst_todo').html("");
         $.each(tasks, function(index, data) {
             // Si es un proyecto de hace 30 dias o menos lo mostramos como reciente
-            if (data.status=="TODO"){
+            if (data.status=="TODO" && data.project_id == ID_Project){
                 // Añadimos la tarjeta del proyecto a la vista de recientes
                 $('#lst_todo').append(defineTask(index));
             }
         });
     };
 
-    function ONPROGRESSTask(){
+    function ONPROGRESSTask(ID_Project){
         $('#lst_onprogress').html("");
         $.each(tasks, function(index, data) {
             // Si es un proyecto de hace 30 dias o menos lo mostramos como reciente
-            if (data.status=="ONPROGRESS"){
+            if (data.status=="ONPROGRESS" && data.project_id == ID_Project){
                 // Añadimos la tarjeta del proyecto a la vista de recientes
                 $('#lst_onprogress').append(defineTask(index));
             }
         });
     };
 
-    function COMPLETEDTask(){
+    function COMPLETEDTask(ID_Project){
         $('#lst_completed').html("");
         $.each(tasks, function(index, data) {
             // Si es un proyecto de hace 30 dias o menos lo mostramos como reciente
-            if (data.status=="COMPLETED"){
+            if (data.status=="COMPLETED" && data.project_id == ID_Project){
                 // Añadimos la tarjeta del proyecto a la vista de recientes
                 $('#lst_completed').append(defineTask(index));
             }

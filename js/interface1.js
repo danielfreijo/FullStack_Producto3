@@ -2,7 +2,7 @@ $(document).ready(function(event) {
 
     allProjects();
     recentProjects();
-    
+
     // -----------------------------------------------------------------------------------------------------
     // EVENTOS formularios PROJECTS
     // -----------------------------------------------------------------------------------------------------
@@ -33,9 +33,14 @@ $(document).ready(function(event) {
     $(".openproject").on("click", function(e){
         // Abrimos el proyecto para asignar tareas
         e.preventDefault();
-        var id=$(this).attr("data");
-        window.location.href = "interface2.html?id="+id;
+        var id=$(this).attr("data_project");
+        // Modificamos el objeto session "MyProject" con el valor del proyecto seleccionado.
+        sessionStorage.setItem('MyProject2', id);
+        //$.session.set("MyProject", id);
         e.stopPropagation();
+
+        window.location.href = "interface2.html";
+        
     });
 
     $('#project').on('submit', function(e) {
@@ -81,12 +86,12 @@ $(document).ready(function(event) {
         text +='</div>';
         text +='<div class="card-footer">';
         if (projects[index]["priority"]==0){
-            text +='<a href="#" class="btn priority" style="position:absolute;left:3px" data="'+ projects[index]["id"]+'">★</a>';
+            text +='<a href="#" class="btn priority" style="position:absolute;left:3px" data_project="'+ projects[index]["id"]+'">★</a>';
         }else{
-            text +='<a href="#" class="btn downgrade" style="position:absolute;left:3px" data="'+ projects[index]["id"]+'">⭐</a>';
+            text +='<a href="#" class="btn downgrade" style="position:absolute;left:3px" data_project="'+ projects[index]["id"]+'">⭐</a>';
         };
-        text +='<a href="#" class="btn editproject" style="position:relative;left:100px" data="'+ projects[index]["id"]+'">📝</a>';
-        text +='<a href="#" class="btn openproject" style="position:absolute;right:3px"  data="'+ projects[index]["id"]+'">➠</a>';
+        text +='<a href="#" class="btn editproject" style="position:relative;left:100px" data_project="'+ projects[index]["id"]+'">📝</a>';
+        text +='<a href="#" class="btn openproject" style="position:absolute;right:3px"  data_project="'+ projects[index]["id"]+'">➠</a>';
         text +='</div>';
         text +='</div>';
         return text;
