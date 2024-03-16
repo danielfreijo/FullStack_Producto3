@@ -2,6 +2,11 @@ $(document).ready(function(event) {
     
     var SelectedProject = sessionStorage.getItem('MyProject2');
 
+    // Mostramos el nombre del proyecto
+    $("#ProjectName").val(projects[SelectedProject]["name"]);
+
+    // Actualizamos la lista de tareas
+
     TODOTask(SelectedProject);
     ONPROGRESSTask(SelectedProject);
     COMPLETEDTask(SelectedProject);
@@ -49,16 +54,30 @@ $(document).ready(function(event) {
         // Puedes definir otras opciones aquí
         receive: function(event, ui) {
           // Esta función se ejecuta cuando se suelta un elemento en la lista
-          console.log("Elemento soltado en la lista:", this.id);
-          
+          var TaskNumber = parseInt($(ui.item).attr("taskdata"));
+            console.log(event);
+            console.log(ui);
+
+          console.log (TaskNumber);
+          console.log("Elemento " + TaskNumber + " soltado en la lista:" + this.id);
+          switch (this.id){
+            case "lst_onprogress":
+                tasks[TaskNumber].status=("ONPROGRESS");
+            break;
+            case "lst_todo":
+                tasks[TaskNumber].status=("TODO");
+            break;
+            case "lst_completed":
+                tasks[TaskNumber].status=("COMPLETED");
+            break;
+          }
+          console.log("Estado actualizado:", tasks[TaskNumber]);
         }
     }).disableSelection();
 
     function defineTask(index){
-        var text = '<li class="TASK" draggable="true">';
-        text += '<h5><a href="#" class="btn close-button deletetask" data="';
-        text += index;
-        text += '">❌</a></h5>';
+        var text = '<li class="TASK" draggable="true" taskdata="' + index + '">';
+        text += '<h5><a href="#" class="btn close-button deletetask" >❌</a></h5>';
         text += '<p class="texttask">';
         text += tasks[index]["nametask"];
         text += '<br>';

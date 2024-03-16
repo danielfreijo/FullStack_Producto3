@@ -65,7 +65,7 @@
                 "startdate":"2024-01-01", 
                 "enddate":"2024-01-15", 
                 "backgroundcolor":"FFFFFF",
-                "status":"INPROGRESS"},  
+                "status":"ONPROGRESS"},  
         task3= {"idtask":2, 
                 "project_id":0, 
                 "userassigned":"Carlos", 
