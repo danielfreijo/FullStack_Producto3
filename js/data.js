@@ -1,8 +1,4 @@
-
-    var userselected="0";
-    var projectselected="0";
-    var taskselected="0";
-    
+   
     // Defino los usuarios
     var userdata = [
         user1 = {"nombre":"Ana López", "pass":"12345678", "active":1, 
@@ -37,8 +33,6 @@
                   "name": "Project A",
                   "description":"This is a description of the Project A.",
                   "department":"Desarrollo",
-                  "startdate":"2024-01-01",
-                  "enddate":"2024-02-03",
                   "backgroundcolor":"FaF2FF",
                   "backgroundimage":"default.jpg",
                   "priority":0,
@@ -47,8 +41,6 @@
                   "name": "Project C",
                   "description":"This is a description of the Project A.",
                   "department":"Marketing",
-                  "startdate":"2024-03-01",
-                  "enddate":"2024-05-03",
                   "backgroundcolor":"FFe3FF",
                   "backgroundimage":"default.jpg",
                   "priority":1,
@@ -57,8 +49,6 @@
                   "name": "Project B",
                   "description":"This is a description of the Project B.",
                   "department":"Diseño",
-                  "startdate":"2023-01-01",
-                  "enddate":"2023-02-03",
                   "backgroundcolor":"FFaF3Fe",
                   "backgroundimage":"default.jpg",
                   "priority":0,
@@ -95,3 +85,18 @@
                 "backgroundcolor":"FFFFFF",
                 "status":"COMPLETED"}        
     ];
+
+    // Creamos las variables de entorno  para acceder a los elementos del DOM
+
+    sessionStorage.setItem('MyName', "Carlos Martínez");
+    sessionStorage.setItem('MyProject', 0);
+    sessionStorage.setItem('MyTask', 0);
+
+    // 
+    var tempProjects = JSON.stringify(projects);
+    var tempTasks = JSON.stringify(tasks);
+    var tempUsers = JSON.stringify(userdata);
+
+    sessionStorage.setItem('projectsdb', tempProjects);
+    sessionStorage.setItem('tasksdb', tempTasks);
+    sessionStorage.setItem('usersdb', tempUsers);

@@ -1,13 +1,22 @@
 $(document).ready(function(event) {
-    
-    var SelectedProject = sessionStorage.getItem('MyProject2');
+    // Cargamos el array de Session
+    var arrayJSON_Projects = sessionStorage.getItem('projectsdb');
+    var WorkingProjects = JSON.parse(arrayJSON_Projects);
+
+    var arrayJSON_task = sessionStorage.getItem('tasksdb');
+    var WorkingTasks = JSON.parse(arrayJSON_task);
+
+    var SelectedProject = sessionStorage.getItem('MyProject');
+
+    console.log(WorkingProjects);
+    console.log(WorkingTasks);
+    console.log(SelectedProject);
+
 
     // Mostramos el nombre del proyecto
-    $("#ProjectName").html(projects[SelectedProject].name);
-
+    $("#ProjectName").html(WorkingProjects[SelectedProject].name);
 
     // Actualizamos la lista de tareas
-
     TODOTask(SelectedProject);
     ONPROGRESSTask(SelectedProject);
     COMPLETEDTask(SelectedProject);
@@ -27,9 +36,9 @@ $(document).ready(function(event) {
     $('#task').on('submit', function(e) {
         // Evita que se ejecute automáticamente
             e.preventDefault();
-            identificador = tasks.length + 1;
+            identificador = WorkingTasks.length + 1;
 
-            tasks.push({"idtask":identificador, 
+            WorkingTasks.push({"idtask":identificador, 
                         "project_id": $("#idproyecto").val(), 
                         "userassigned":$("#TaskAssigned").val(),
                         "nametask":$("TaskName").val(),
@@ -38,6 +47,10 @@ $(document).ready(function(event) {
                         "enddate":$("#TaskEndDate").val(),
                         "backgroundcolor":$("#TaskBackground").val(),
                         "status":$("#TaskStatus").val()});
+            // Ahora hay que volverlo a subir al objeto de session
+            var arrayJSON = JSON.stringify(WorkingTasks);
+            sessionStorage.setItem('tasksdb', arrayJSON);
+
             // Actualizo las listas de Proyectos
             TODOTask(SelectedProject);
             ONPROGRESSTask(SelectedProject);
@@ -46,7 +59,7 @@ $(document).ready(function(event) {
             e.stopPropagation();
         });
 
-           // --------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
     // TAREAS
     // --------------------------------------------------------------------------
 
@@ -63,16 +76,19 @@ $(document).ready(function(event) {
           console.log("Elemento " + TaskNumber + " soltado en la lista:" + this.id);
           switch (this.id){
             case "lst_onprogress":
-                tasks[TaskNumber].status=("ONPROGRESS");
+                WorkingTasks[TaskNumber].status=("ONPROGRESS");
             break;
             case "lst_todo":
-                tasks[TaskNumber].status=("TODO");
+                WorkingTasks[TaskNumber].status=("TODO");
             break;
             case "lst_completed":
-                tasks[TaskNumber].status=("COMPLETED");
+                WorkingTasks[TaskNumber].status=("COMPLETED");
             break;
           }
-          console.log("Estado actualizado:", tasks[TaskNumber]);
+          console.log("Estado actualizado:", WorkingTasks[TaskNumber]);
+          // Ahora hay que volverlo a subir al objeto de session
+          var arrayJSON = JSON.stringify(WorkingTasks);
+          sessionStorage.setItem('tasksdb', arrayJSON);
         }
     }).disableSelection();
 
@@ -80,19 +96,19 @@ $(document).ready(function(event) {
         var text = '<li class="TASK" draggable="true" taskdata="' + index + '">';
         text += '<h5><a href="#" class="btn close-button deletetask" >❌</a></h5>';
         text += '<p class="texttask">';
-        text += tasks[index]["nametask"];
+        text += WorkingTasks[index]["nametask"];
         text += '<br>';
         text += '<input class="form-check-input" type="checkbox" id="taskstartdate" name="option1" value="';
-        text += tasks[index]["startdate"];
+        text += WorkingTasks[index]["startdate"];
         text += '" checked>';
-        text += '<label class="form-check-label">' + tasks[index]["startdate"] + '</label></p>';
+        text += '<label class="form-check-label">' + WorkingTasks[index]["startdate"] + '</label></p>';
         text += '</li>';
         return text;
     };
 
     function TODOTask(ID_Project){
         $('#lst_todo').html("");
-        $.each(tasks, function(index, data) {
+        $.each(WorkingTasks, function(index, data) {
             // Si es un proyecto de hace 30 dias o menos lo mostramos como reciente
             if (data.status=="TODO" && data.project_id == ID_Project){
                 // Añadimos la tarjeta del proyecto a la vista de recientes
@@ -103,7 +119,7 @@ $(document).ready(function(event) {
 
     function ONPROGRESSTask(ID_Project){
         $('#lst_onprogress').html("");
-        $.each(tasks, function(index, data) {
+        $.each(WorkingTasks, function(index, data) {
             // Si es un proyecto de hace 30 dias o menos lo mostramos como reciente
             if (data.status=="ONPROGRESS" && data.project_id == ID_Project){
                 // Añadimos la tarjeta del proyecto a la vista de recientes
@@ -114,7 +130,7 @@ $(document).ready(function(event) {
 
     function COMPLETEDTask(ID_Project){
         $('#lst_completed').html("");
-        $.each(tasks, function(index, data) {
+        $.each(WorkingTasks, function(index, data) {
             // Si es un proyecto de hace 30 dias o menos lo mostramos como reciente
             if (data.status=="COMPLETED" && data.project_id == ID_Project){
                 // Añadimos la tarjeta del proyecto a la vista de recientes

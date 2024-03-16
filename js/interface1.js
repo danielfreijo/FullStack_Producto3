@@ -1,7 +1,13 @@
 $(document).ready(function(event) {
+    
+    // Cargamos el array de Session
+    var arrayJSON_Projects = sessionStorage.getItem('projectsdb');
+    var WorkingProjects = JSON.parse(arrayJSON_Projects);
+
+    var arrayJSON_task = sessionStorage.getItem('tasksdb');
+    var WorkingTasks = JSON.parse(arrayJSON_task);
 
     // Actualizamos los proyectos
-
     allProjects("ALL");
     recentProjects();
 
@@ -13,27 +19,27 @@ $(document).ready(function(event) {
     // Entra el indice del proyecto a mostrar en la tarjeta
     // Devuelve una variable de texto para insertar la en HTML
     function defineCard(index){
-        var text='<div class="card" style="width: 18rem; background-color:' + projects[index]["backgroundcolor"] + ';">';
-        text +='<img class="card-img-top" src="../assets/' + projects[index]["backgroundimage"] + '" alt="Card image cap">';  
+        var text='<div class="card" style="width: 18rem; background-color:' + WorkingProjects[index]["backgroundcolor"] + ';">';
+        text +='<img class="card-img-top" src="../assets/' + WorkingProjects[index]["backgroundimage"] + '" alt="Card image cap">';  
         text +='<div class="card-img-overlay">';
-        text +='<h5 class="card-title">'+ projects[index]["name"];
-        if (projects[index]["status"]!=1){
+        text +='<h5 class="card-title">'+ WorkingProjects[index]["name"];
+        if (WorkingProjects[index]["status"]!=1){
             // Si un proyecto esta completado no se puede eliminar.
-            text +='<a href="#" class="btn close-button deteleproject" data="'+ projects[index]["id"]+'">❌</a>'; 
+            text +='<a href="#" class="btn close-button deteleproject" data="'+ WorkingProjects[index]["id"]+'">❌</a>'; 
         };
         text +='</h5>';
         text +='<p class="card-text" style="width:100px;overflow-wrap: break-word;">';
-        text +=projects[index]["description"];
+        text +=WorkingProjects[index]["description"];
         text +='</p>';
         text +='</div>';
-        text +='<div class="card-footer" style="background-color:' + projects[index]["backgroundcolor"] + '">';
-        if (projects[index]["priority"]==0){
-            text +='<a href="#" class="btn priority" style="position:absolute;left:3px" data_project="'+ projects[index]["id"]+'">★</a>';
+        text +='<div class="card-footer" style="background-color:' + WorkingProjects[index]["backgroundcolor"] + '">';
+        if (WorkingProjects[index]["priority"]==0){
+            text +='<a href="#" class="btn priority" style="position:absolute;left:3px" data_project="'+ WorkingProjects[index]["id"]+'">★</a>';
         }else{
-            text +='<a href="#" class="btn priority" style="position:absolute;left:3px" data_project="'+ projects[index]["id"]+'">⭐</a>';
+            text +='<a href="#" class="btn priority" style="position:absolute;left:3px" data_project="'+ WorkingProjects[index]["id"]+'">⭐</a>';
         };
-        text +='<a href="#" class="btn editproject" style="position:relative;left:100px" data_project="'+ projects[index]["id"]+'">📝</a>';
-        text +='<a href="#" class="btn openproject" style="position:absolute;right:3px"  data_project="'+ projects[index]["id"]+'">➠</a>';
+        text +='<a href="#" class="btn editproject" style="position:relative;left:100px" data_project="'+ WorkingProjects[index]["id"]+'">📝</a>';
+        text +='<a href="#" class="btn openproject" style="position:absolute;right:3px"  data_project="'+ WorkingProjects[index]["id"]+'">➠</a>';
         text +='</div>';
         text +='</div>';
         return text;
@@ -44,23 +50,39 @@ $(document).ready(function(event) {
     function recentProjects(){
         $('#RecentProjects').html("");
         var v_startdate = new Date();
+        var recent=0;
         v_startdate.setHours(0,0,0,0); // Establece la hora a medianoche
-        $.each(projects, function(index, data) {
-            var v_enddate = new Date(data.startdate);  // Establecemos la fecha de incio del proyecto
-            var diff = Math.abs(v_startdate-v_enddate); // Diferencia de dias entre la fecha actual y la fecha de inicio del proyecto
-            var diff_days=diff/(1000*60*60*24); // Lo pasamos a dias
-            // Si es un proyecto de hace 30 dias o menos lo mostramos como reciente
-            if (diff_days<=30){
-                // Añadimos la tarjeta del proyecto a la vista de recientes
+
+        $.each(WorkingProjects, function(index_project, data_project) {
+
+            $.each(WorkingTasks, function(index_task, data_task){
+                // La tarea corresponde al proyecto
+                if ( data_task.project_id == data_project.id ){
+                    // Veamos la fecha de creación de la tarea
+                    var v_enddate = new Date(data_task.startdate);  // Establecemos la fecha de incio del proyecto
+                    var diff = Math.abs(v_startdate-v_enddate); // Diferencia de dias entre la fecha actual y la fecha de inicio del proyecto
+                    var diff_days=diff/(1000*60*60*24); // Lo pasamos a dias
+                    // Si es un proyecto de hace 30 dias o menos lo mostramos como reciente
+                    if (diff_days<=30 && recent==0){
+                        // Añadimos la tarjeta del proyecto a la vista de recientes
+                        recent=1;
+                    }
+                }
+            });
+
+            // Si alguna tarea a cumplido con la condición de ser reciente entonces añadimos el proyecto a la vista de recientes
+            if (recent==1){
                 $('#RecentProjects').append(defineCard(index));
-            }
+                recent = 0;
+            }            
+            
         });
     };
 
     // Función para filtrar todos los proyectos
     function allProjects(filter){
         $('#AllProjects').html("");
-        $.each(projects, function(index, data) {
+        $.each(WorkingProjects, function(index, data) {
             // Añadimos el Proyecto a la vista de todos.
             if (filter=="ALL"){
                 $('#AllProjects').append(defineCard(index));
@@ -104,8 +126,9 @@ $(document).ready(function(event) {
         // Abrimos el proyecto para asignar tareas
         e.preventDefault();
         var id=$(this).attr("data_project");
+        console.log(id);
         // Modificamos el objeto session "MyProject" con el valor del proyecto seleccionado.
-        sessionStorage.setItem('MyProject2', id);
+        sessionStorage.setItem('MyProject', id);
         //$.session.set("MyProject", id);
         e.stopPropagation();
 
@@ -117,7 +140,7 @@ $(document).ready(function(event) {
         var ErrorMSG = "";
     // Evita que se ejecute automáticamente
         e.preventDefault();
-        identificador = projects.length + 1;
+        identificador = WorkingProjects.length + 1;
 
         // Verificar que se han rellenado todos los campos
         if ($("#ProjectName").val()==="") {
@@ -134,16 +157,6 @@ $(document).ready(function(event) {
             // Tiene que ser un modal de error
             ErrorMSG += "Por favor, debe introducir el nombre del Departamento.<br>";
             $("#ProjecDepartment").css('background-color', 'red');
-        }
-        if ($("#ProjectStartDate").val()==="") {
-            // Tiene que ser un modal de error
-            ErrorMSG += "Por favor, debe introducir la fecha de inicio del proyecto.<br>";
-            $("#ProjectStartDate").css('background-color', 'red');
-        }
-        if ($("#ProjectEndDate").val()==="") {
-            // Tiene que ser un modal de error
-            ErrorMSG += "Por favor, debe introducir la fecha aproximada de fin del proyecto.<br>";
-            $("#ProjectEndDate").css('background-color', 'red');
         }
         if ($("#ProjectBackgroundColod").val()==="") {
             // Tiene que ser un modal de error
@@ -168,16 +181,19 @@ $(document).ready(function(event) {
 
         // Si todo está correcto podemos agregarlo al ARRAY
         if (ErrorMSG.length === 0){
-            projects.push({"id":(projects.length + 1), 
+            WorkingProjects.push({"id":(WorkingProjects.length + 1), 
             "name": $("#ProjectName").val(), 
             "description":$("#ProjectDescription").val(),
             "department":$("ProjecDepartment").val(),
-            "startdate":$("#ProjectStartDate").val(),
-            "enddate":$("#ProjectEndDate").val(),
             "backgroundcolor":$("#ProjectBackgroundColod").val(),
             "backgroundimage":$("#ProjectBackgroundImage").val(),
             "priority":$("#ProjectPriority").val(),
             "status":$("#ProjectStatus").val()});
+
+            // Ahora hay que volverlo a subir al objeto de session
+            var arrayJSON = JSON.stringify(WorkingProjects);
+            sessionStorage.setItem('projectsdb', arrayJSON);
+
             $("#ModalForm").modal('hide');
             // Actualizo las listas de Proyectos
             allProjects($("ProjecDepartment").val());
