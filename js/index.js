@@ -12,7 +12,7 @@ $(document).ready(function(event) {
     
     Para leer
 
-    var variable = sessionStorage.getItem('MyName2');
+    var variable = sessionStorage.getItem('MyProject2');
 
 
     */

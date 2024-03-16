@@ -1,6 +1,8 @@
 $(document).ready(function(event) {
 
-    allProjects();
+    // Actualizamos los proyectos
+
+    allProjects("ALL");
     recentProjects();
 
     // -----------------------------------------------------------------------------------------------------
@@ -44,25 +46,81 @@ $(document).ready(function(event) {
     });
 
     $('#project').on('submit', function(e) {
+        var ErrorMSG = "";
     // Evita que se ejecute automáticamente
         e.preventDefault();
         identificador = projects.length + 1;
-        
-        projects.push({"id":(projects.length + 1), 
-                    "name": $("#ProjectName").val(), 
-                    "description":$("#ProjectDescription").val(),
-                    "department":$("ProjecDepartment").val(),
-                    "startdate":$("#ProjectStartDate").val(),
-                    "enddate":$("#ProjectEndDate").val(),
-                    "backgroundcolor":$("#ProjectBackgroundColod").val(),
-                    "backgroundimage":$("#ProjectBackgroundImage").val(),
-                    "priority":$("#ProjectPriority").val(),
-                    "status":$("#ProjectStatus").val()});
-        // Actualizo las listas de Proyectos
-        allProjects();
-        recentProjects();
-        $("#ModalForm").modal('hide');
-        e.stopPropagation();
+
+        // Verificar que se han rellenado todos los campos
+        if ($("#ProjectName").val()==="") {
+            // Tiene que ser un modal de error
+            ErrorMSG += "Por favor, debe introducir el nombre del proyecto.<br>";
+            $("#ProjectName").css('background-color', 'red');
+        }
+        if ($("#ProjectDescription").val()==="") {
+            // Tiene que ser un modal de error
+            ErrorMSG += "Por favor, debe introducir la descripción del proyecto.<br>";
+            $("#ProjectDescription").css('background-color', 'red');
+        }
+        if ($("#ProjecDepartment").val()==="") {
+            // Tiene que ser un modal de error
+            ErrorMSG += "Por favor, debe introducir el nombre del Departamento.<br>";
+            $("#ProjecDepartment").css('background-color', 'red');
+        }
+        if ($("#ProjectStartDate").val()==="") {
+            // Tiene que ser un modal de error
+            ErrorMSG += "Por favor, debe introducir la fecha de inicio del proyecto.<br>";
+            $("#ProjectStartDate").css('background-color', 'red');
+        }
+        if ($("#ProjectEndDate").val()==="") {
+            // Tiene que ser un modal de error
+            ErrorMSG += "Por favor, debe introducir la fecha aproximada de fin del proyecto.<br>";
+            $("#ProjectEndDate").css('background-color', 'red');
+        }
+        if ($("#ProjectBackgroundColod").val()==="") {
+            // Tiene que ser un modal de error
+            ErrorMSG += "Por favor, debe introducir el color de fondo de la tarjeta del proyecto.<br>";
+            $("#ProjectBackgroundColod").css('background-color', 'red');
+        }
+        if ($("#ProjectBackgroundImage").val()==="") {
+            // Tiene que ser un modal de error
+            ErrorMSG += "Por favor, debe introducir la imagen de fondo del proyecto.<br>";
+            $("#ProjectBackgroundImage").css('background-color', 'red');
+        }
+        if ($("#ProjectPriority").val()==="") {
+            // Tiene que ser un modal de error
+            ErrorMSG += "Por favor, debe introducir si es prioritario o no el proyecto.<br>";
+            $("#ProjectPriority").css('background-color', 'red');
+        }
+        if ($("#ProjectStatus").val()==="") {
+            // Tiene que ser un modal de error
+            ErrorMSG += "Por favor, debe introducir el estado del proyecto.<br>";
+            $("#ProjectStatus").css('background-color', 'red');
+        }
+
+        // Si todo está correcto podemos agregarlo al ARRAY
+        console.log(ErrorMSG);
+        if (ErrorMSG != ""){
+            projects.push({"id":(projects.length + 1), 
+            "name": $("#ProjectName").val(), 
+            "description":$("#ProjectDescription").val(),
+            "department":$("ProjecDepartment").val(),
+            "startdate":$("#ProjectStartDate").val(),
+            "enddate":$("#ProjectEndDate").val(),
+            "backgroundcolor":$("#ProjectBackgroundColod").val(),
+            "backgroundimage":$("#ProjectBackgroundImage").val(),
+            "priority":$("#ProjectPriority").val(),
+            "status":$("#ProjectStatus").val()});
+            $("#ModalForm").modal('hide');
+            // Actualizo las listas de Proyectos
+            allProjects();
+            recentProjects();
+        } else {
+            // Tiene que ser un modal de error
+            alert (ErrorMSG);
+
+        };
+        e.stopPropagation();        
       });
 
 
@@ -84,11 +142,11 @@ $(document).ready(function(event) {
         text +=projects[index]["description"];
         text +='</p>';
         text +='</div>';
-        text +='<div class="card-footer">';
+        text +='<div class="card-footer" style="backgroundcolor:' + projects[index]["backgroundcolor"] + '">';
         if (projects[index]["priority"]==0){
             text +='<a href="#" class="btn priority" style="position:absolute;left:3px" data_project="'+ projects[index]["id"]+'">★</a>';
         }else{
-            text +='<a href="#" class="btn downgrade" style="position:absolute;left:3px" data_project="'+ projects[index]["id"]+'">⭐</a>';
+            text +='<a href="#" class="btn priority" style="position:absolute;left:3px" data_project="'+ projects[index]["id"]+'">⭐</a>';
         };
         text +='<a href="#" class="btn editproject" style="position:relative;left:100px" data_project="'+ projects[index]["id"]+'">📝</a>';
         text +='<a href="#" class="btn openproject" style="position:absolute;right:3px"  data_project="'+ projects[index]["id"]+'">➠</a>';
@@ -113,12 +171,50 @@ $(document).ready(function(event) {
         });
     };
 
-    function allProjects(){
+    function allProjects(filter){
         $('#AllProjects').html("");
         $.each(projects, function(index, data) {
             // Añadimos el Proyecto a la vista de todos.
-            $('#AllProjects').append(defineCard(index));
+            if (filter=="ALL"){
+                $('#AllProjects').append(defineCard(index));
+            }else{
+                if (data.department == filter){
+                    $('#AllProjects').append(defineCard(index));
+                }
+            }
+            
         });
     };
     
+    $(".filterproject").on("click", function(e){
+        var filterappliced = $(this).find("a").attr("dataproject");
+        console.log(filterappliced);
+        allProjects(filterappliced);
+    });
+
+    $(".deteleproject").on("click", function(e){
+        e.preventDefault();
+        var filterappliced =$(this).attr("data");
+        console.log(filterappliced);
+        alert("Seguro que quieres borrarlo");
+        e.stopPropagation();
+    });
+
+    $(".priority").on("click", function(e){
+        e.preventDefault();
+        var filterappliced = $(this).attr("data");
+        console.log(filterappliced);
+        alert("Seguro que quieres cambiar la prioridad");
+        e.stopPropagation();
+    });
+    
+    $(".editproject").on("click", function(e){
+        e.preventDefault();
+        var filterappliced =$(this).attr("data");
+        console.log(filterappliced);
+        alert("Seguro que quieres editarlo");
+        e.stopPropagation();
+    });
+
+
 });

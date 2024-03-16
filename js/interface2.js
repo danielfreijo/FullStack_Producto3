@@ -3,7 +3,8 @@ $(document).ready(function(event) {
     var SelectedProject = sessionStorage.getItem('MyProject2');
 
     // Mostramos el nombre del proyecto
-    $("#ProjectName").val(projects[SelectedProject]["name"]);
+    $("#ProjectName").html(projects[SelectedProject].name);
+
 
     // Actualizamos la lista de tareas
 

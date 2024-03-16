@@ -45,10 +45,15 @@
         <!-- Panel de Proyectos -->
         <h3>Proyectos
         <a  class="btn"  href="#" name="refresh2" id="refresh2">↺</a></h3>
+        <div class="row" name="menu" id="menu">
+          <div class="col mb-4 filterproject"><a class="boton" href="#" id="showall" dataproject="ALL">TODOS</a></div>
+          <div class="col mb-4 filterproject"><a class="boton" href="#" id="showdesign" dataproject="Diseño">DISEÑO</a></div>
+          <div class="col mb-4 filterproject"><a class="boton" href="#" id="showmarketing" dataproject="Marketing">MARKETING</a></div>
+          <div class="col mb-4 filterproject"><a class="boton" href="#" id="showdevelop" dataproject="Desarrollo">DESARROLLO</a></div>
+        </div>
         <div class="ProjectsBar sortable" name="AllProjects" id="AllProjects">
             <!-- Se muestra al abrir la pagina -->  
     </div>
-    
 
 <!-- Modal -->
 <div class="modal fade" id="ModalForm" tabindex="-1" role="dialog" aria-labelledby="TitleModal" aria-hidden="true">
@@ -64,12 +69,12 @@
             <form name="project" id="project">
                 <div class="mb-3">
                     <label for="ProjectName" class="form-label">Nombre del proyecto</label>
-                    <input type="text" class="form-control" id="ProjectName" aria-describedby="ProjectHelp">
+                    <input type="text" class="form-control" id="ProjectName" aria-describedby="ProjectHelp" required>
                     <div id="ProjectHelp" class="form-text">Titulo del proyecto</div>
                   </div>
                   <div class="mb-3">
                     <label for="ProjectDescription" class="form-label">Descripcion del proyecto</label>
-                    <textarea class="form-control" id="ProjectDescription" cols="4"></textarea>
+                    <textarea class="form-control" id="ProjectDescription" cols="4" required></textarea>
                   </div>
                   <div class="mb-3">
                     <label for="ProjecDepartment" class="form-label">Departamento</label>
@@ -84,13 +89,13 @@
                   <div class="col">
                       <div class="mb-3">
                         <label for="ProjectStartDate" class="form-label">Fecha inicio del proyecto</label>
-                        <input type="date" class="form-control" id="ProjectStartDate">
+                        <input type="date" class="form-control" id="ProjectStartDate" required>
                       </div>
                     </div>
                     <div class="col">
                       <div class="mb-3">
                         <label for="ProjectEndDate" class="form-label">Fecha fin del proyecto</label>
-                        <input type="date" class="form-control" id="ProjectEndDate">
+                        <input type="date" class="form-control" id="ProjectEndDate" required>
                       </div>
                     </div>
                   </div>
@@ -103,12 +108,12 @@
                     <label for="ProjectBackgroundImage" class="form-label">Establecer imagen de fondo</label>
                     <select id="ProjectBackgroundImage" class="form-select">
                       <option value="0" default>Imagen 1</option>
-                      <option value="_8c275997-5a37-47a7-a87e-9e9608d22433.png">Imagen 2</option>
-                      <option value="_94db2ec0-8ae4-4d4d-8fc7-9befb53f86c1.jpeg">Imagen 3</option>
-                      <option value="_666ca7f1-a496-4452-a546-1454b3bb4b41.jpeg">Imagen 4</option>
-                      <option value="_3297db69-30f5-4440-91ee-6ab819b3f27f.jpeg">Imagen 5</option>
-                      <option value="_87515d19-89cd-46a4-839f-b173abe81bc3.jpeg">Imagen 6</option>
-                      <option value="_f5fd140c-37c4-4274-9ace-7fe0c36d35d5.jpeg">Imagen 7</option>
+                      <option value="default.jpg">Imagen 2</option>
+                      <option value="depressing-blue-monday-composition.jpg.jpeg">Imagen 3</option>
+                      <option value="group-casually-dressed-business-people-discussing-ideas-office.jpeg">Imagen 4</option>
+                      <option value="representation-user-experience-interface-design.jpeg">Imagen 5</option>
+                      <option value="shopping-cart-3d-render-icon.jpeg">Imagen 6</option>
+                      <option value="side-view-elder-women-using-elbows-salute-each-other-while-wearing-medical-masks.jpeg">Imagen 7</option>
                     </select>
                   </div>
               
@@ -134,7 +139,7 @@
                 </div>
         </div>
           <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-secondary close" data-dismiss="modal">Cerrar</button>
           <button type="submit" class="btn btn-primary">Guardar cambios</button>
         </div>
 </form>
