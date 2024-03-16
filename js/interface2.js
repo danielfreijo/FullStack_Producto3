@@ -7,14 +7,17 @@ $(document).ready(function(event) {
     var WorkingTasks = JSON.parse(arrayJSON_task);
 
     var SelectedProject = sessionStorage.getItem('MyProject');
+    var posicion= WorkingProjects.indexOf(SelectedProject);
 
     console.log(WorkingProjects);
     console.log(WorkingTasks);
     console.log(SelectedProject);
+    console.log(posicion);
 
 
     // Mostramos el nombre del proyecto
     $("#ProjectName").html(WorkingProjects[SelectedProject].name);
+    $("#taskcontainer").attr("style='background-color:"+WorkingProjects[SelectedProject].backgroundcolor +"'");
 
     // Actualizamos la lista de tareas
     TODOTask(SelectedProject);

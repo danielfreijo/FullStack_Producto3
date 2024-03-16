@@ -69,14 +69,15 @@
     text-align: left !important;  
     border-radius: 12px;  
     height:max-content;
-    z-index: 9999;
+    z-index: 9998;
 }
 
 .TASK .deletetask{
     position: absolute; /* Posición absoluta para el botón */
     top: 3px; /* Distancia desde la parte superior */
     right: 3px; /* Distancia desde la izquierda */
-    z-index: 9999;
+    z-index: 9999 !important;
+    
 }
 
 .TASK ul{
@@ -86,7 +87,7 @@
     height:700px;
     overflow:hidden;
     position:relative;
-    z-index: 9999;
+    z-index: 9996;
     list-style-type:none;
     padding-top:5px;
 }
@@ -99,7 +100,7 @@
     cursor:move;
     border-radius: 12px;
     text-align: left !important;
-    z-index: 9999;
+    z-index: 9997;
 }   
 .TASK li:first-child{
     border-top:0;

@@ -140,7 +140,7 @@ $(document).ready(function(event) {
         var ErrorMSG = "";
     // Evita que se ejecute automáticamente
         e.preventDefault();
-        identificador = WorkingProjects.length + 1;
+        identificador = WorkingProjects.length;
 
         // Verificar que se han rellenado todos los campos
         if ($("#ProjectName").val()==="") {
@@ -181,7 +181,7 @@ $(document).ready(function(event) {
 
         // Si todo está correcto podemos agregarlo al ARRAY
         if (ErrorMSG.length === 0){
-            WorkingProjects.push({"id":(WorkingProjects.length + 1), 
+            WorkingProjects.push({"id": identificador, 
             "name": $("#ProjectName").val(), 
             "description":$("#ProjectDescription").val(),
             "department":$("ProjecDepartment").val(),
