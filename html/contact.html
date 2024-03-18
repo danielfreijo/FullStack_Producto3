@@ -11,7 +11,6 @@
 
 <body>
     <!--Menú de navegación-->
-    <!--Menú de navegación-->
     <nav class="navbar navbar-expand-md navbar-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html">
@@ -41,6 +40,48 @@
         </div>
     </nav>
 
+    <!--Modal para añadir proyecto-->
+    <div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProjectModalLabel">Crear nuevo proyecto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body mt-4">  
+                    <form id="addProjectForm">
+                        <div class="mb-4">
+                            <label for="projectName" class="form-label">Nombre del Proyecto</label>
+                            <input type="text" class="form-control" id="projectName" required>  
+                        </div>
+                        <div class="mb-4">
+                            <label for="description" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="description" rows="4"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="department" class="form-label">Departamento</label>
+                            <select class="form-select" id="department" required>
+                                <option value="Desarrollo">Desarrollo</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Diseño">Diseño</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="backgroundColor" class="form-label">Color de fondo</label>
+                            <input type="color" class="form-control" id="backgroundColor" value="#FFFFFF" style="width: 150px;">
+                        </div>
+                        <div class="mb-3 form-check">
+                            <label for="priority" class="form-check-label" >Marcar como prioritario</label>
+                            <input type="checkbox" class="form-check-input" id="priority"> 
+                        </div>
+                        <button type="submit" class="btn btn-primary float-end">Crear proyecto</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Contenedor principal del contenido-->
     <div class="container" id="main-container">
         
         <!--Formulario de contacto-->
@@ -74,12 +115,18 @@
                     </div>
                 </div>
                 <div class="text-end mt-5">
-                    <button type="submit" class="btn btn-primary">Enviar</button>
+                    <button type="submit" class="btn btn-primary" style="width: 150px;">Enviar</button>
                 </div>
             </form>
         </div>
             
     </div>
-
+    
+        <!--Scripts para funcionalidades-->
+        <script src="../assets/libraries/jquery-3.6.0.min.js" ></script>
+        <script src="../assets/libraries/popper.min.js" ></script>
+        <script src="../assets/libraries/bootstrap.bundle.min.js"></script>
+        <script src="../js/index.js"></script>
+        
 </body>
 </html>

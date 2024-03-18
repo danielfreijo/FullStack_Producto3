@@ -1,114 +1,114 @@
-var userselected="0";
-var projectselected="0";
-   
-    
-// Defino los usuarios
-var userdata = [
-user1 = {"nombre":"Maria", "pass":"12345678", "active":1},
-user2 = {"nombre":"Carlos", "pass":"12345678", "active":1},
-user3 = {"nombre":"Esteban", "pass":"12345678", "active":1},
-user4 = {"nombre":"Daniel", "pass":"12345678", "active":1},
-user5 = {"nombre":"Jordi", "pass":"12345678", "active":1},
-];  
+if (!sessionStorage.getItem('projectsdb') || !sessionStorage.getItem('usersdb')) {
 
-// Defino el array de los Proyectos
-var projects = [
-        {       
-                "id":0, 
-                "name": "Project A",
-                "description":"This is a description of the Project A.",
-                "department":"Desarrollo",
-                "backgroundcolor":"f8e800",
-                "backgroundimage":"default.jpg",
-                "priority":0,
-                "status":1
-        },
+        // Defino los usuarios
+        var userdata = [
+        user1 = {"nombre":"Maria", "pass":"12345678", "active":1},
+        user2 = {"nombre":"Carlos", "pass":"12345678", "active":1},
+        user3 = {"nombre":"Esteban", "pass":"12345678", "active":1},
+        user4 = {"nombre":"Daniel", "pass":"12345678", "active":1},
+        user5 = {"nombre":"Jordi", "pass":"12345678", "active":1},
+        ];  
 
-        {
-                "id":1, 
-                "name": "Project B",
-                "description":"This is a description of the Project B.",
-                "department":"Diseño",
-                "backgroundcolor":"1256f2",
-                "backgroundimage":"default.jpg",
-                "priority":0,
-                "status":1
-        },
+        // Defino el array de los Proyectos
+        var projectsModel = [
+                {       
+                        "id":0, 
+                        "name": "Desarrollo web Cafeteria el barrio",
+                        "description":"This is a description of the Project A.",
+                        "department":"Desarrollo",
+                        "backgroundcolor":"#f8e800",
+                        "backgroundimage":"null",
+                        "backgroundcard": "cafeteria.jpg",
+                        "priority":0,
+                        "status":1
+                },
 
-        {       
-                "id":2, 
-                "name": "Project C",
-                "description":"This is a description of the Project A.",
-                "department":"Marketing",
-                "backgroundcolor":"909D30",
-                "backgroundimage":"default.jpg",
-                "priority":1,
-                "status":0
-        },
+                {
+                        "id":1, 
+                        "name": "Logotipo E-commerce Luís",
+                        "description":"This is a description of the Project B.",
+                        "department":"Diseño",
+                        "backgroundcolor":"#1256f2",
+                        "backgroundimage":"null",
+                        "backgroundcard": "diseño2.jpg",
+                        "priority":0,
+                        "status":1
+                },
 
-        {       
-                "id":3, 
-                "name": "Project D",
-                "description":"This is a description of the Project A.",
-                "department":"Desarrollo",
-                "backgroundcolor":"1DC53F",
-                "backgroundimage":"default.jpg",
-                "priority":1,
-                "status":1
-        },
+                {       
+                        "id":2, 
+                        "name": "Campaña de impacto Gripo SA",
+                        "description":"This is a description of the Project A.",
+                        "department":"Marketing",
+                        "backgroundcolor":"#909D30",
+                        "backgroundimage":"null",
+                        "backgroundcard": "marketing1.jpg",
+                        "priority":1,
+                        "status":1
+                },
 
-        {       
-                "id":4, 
-                "name": "Project E",
-                "description":"This is a description of the Project A.",
-                "department":"Desarrollo",
-                "backgroundcolor":"AC0FA2",
-                "backgroundimage":"default.jpg",
-                "priority":0,
-                "status":1
-        },
+                {       
+                        "id":3, 
+                        "name": "Branding Pasteleria Pepita",
+                        "description":"This is a description of the Project A.",
+                        "department":"Diseño",
+                        "backgroundcolor":"#1DC53F",
+                        "backgroundimage":"null",
+                        "backgroundcard": "pasteleria.jpg",
+                        "priority":1,
+                        "status":1
+                },
+                {
+                        "id":4, 
+                        "name": "Desarrollo web Restaurante Japonés",
+                        "description":"This is a description of the Project B.",
+                        "department":"Desarrollo",
+                        "backgroundcolor":"#f2df38",
+                        "backgroundimage":"null",
+                        "backgroundcard": "sushi.jpg",
+                        "priority":0,
+                        "status":1
+                },
 
-        {       
-                "id":5, 
-                "name": "Project F",
-                "description":"This is a description of the Project A.",
-                "department":"Desarrollo",
-                "backgroundcolor":"967B94",
-                "backgroundimage":"default.jpg",
-                "priority":0,
-                "status":1
-        },
+                {       
+                        "id":5, 
+                        "name": "Estrategia de marca Micas's",
+                        "description":"This is a description of the Project A.",
+                        "department":"Diseño",
+                        "backgroundcolor":"#909D30",
+                        "backgroundimage":"null",
+                        "backgroundcard": "diseño1.jpg",
+                        "priority":1,
+                        "status":1
+                },
 
-        {       
-                "id":6, 
-                "name": "Project H",
-                "description":"This is a description of the Project A.",
-                "department":"Diseño",
-                "backgroundcolor":"F1C0A9",
-                "backgroundimage":"default.jpg",
-                "priority":1,
-                "status":1
-        },
+                {       
+                        "id":6, 
+                        "name": "Desarrollo aplicación móvil",
+                        "description":"This is a description of the Project A.",
+                        "department":"Desarrollo",
+                        "backgroundcolor":"#1DC53F",
+                        "backgroundimage":"null",
+                        "backgroundcard": "desarrollo1.jpg",
+                        "priority":1,
+                        "status":1
+                },
 
-        {       
-                "id":7, 
-                "name": "Project I",
-                "description":"This is a description of the Project A.",
-                "department":"Diseño",
-                "backgroundcolor":"FFFFFF",
-                "backgroundimage":"default.jpg",
-                "priority":1,
-                "status":1
-        },
-        {       
-                "id":8, 
-                "name": "Project J",
-                "description":"This is a description of the Project A.",
-                "department":"Diseño",
-                "backgroundcolor":"000000",
-                "backgroundimage":"default.jpg",
-                "priority":0,
-                "status":1
-        },
-];
+        ];
+
+        // Almacenamiento de datos en el almacenamiento de sesión del navegador
+        console.log("Guardando datos en el almacenamiento de sesión del navegador: ", tempProjects);
+
+        // Convertir Array de objetos a cadenas JSON
+        var tempProjects = JSON.stringify(projectsModel);
+        var tempUsers = JSON.stringify(userdata);
+
+        console.log("Proyectos en JSON: ", tempProjects);
+
+        // Almacenar cadenas JSON en el almacenamiento de sesión
+        sessionStorage.setItem('projectsdb', tempProjects);
+        sessionStorage.setItem('usersdb', tempUsers);
+
+        console.log("Datos guardados en el almacenamiento de sesión del navegador: ", sessionStorage);
+}
 

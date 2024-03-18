@@ -1,12 +1,13 @@
 function createProjectCard(project) {
+  const projectNameUpperCase = project.name.toUpperCase();
+  const backgroundUrl = `../assets/BackgroundCards/${project.backgroundcard}`; 
   return `
-      <a class="card" href="/html/cardDetail.html?id=${project.id}">
-          <div class="card-body">
-            <h5 class="card-title">${project.name}</h5>
-            <p class="card-text">${project.description}</p>
-          </div>
-      </a>
-     
+  <a class="card" href="/html/cardDetail.html?id=${project.id}" style="background-image: url('${backgroundUrl}');">
+      <div class="card-body">
+        <h5 class="card-title">${projectNameUpperCase}</h5>
+        <!--<p class="card-text">${project.description}</p>-->
+      </div>
+  </a>
   `;
 }
 
@@ -28,7 +29,7 @@ function showAllProjects(projects, category = 'all') {
   const allProjects = $('#allProjects');
   allProjects.empty();
 
-  console.log('Categoría seleccionada:', category); 
+  //console.log('Categoría seleccionada:', category); 
 
   let filteredProjects;
   
@@ -38,7 +39,7 @@ function showAllProjects(projects, category = 'all') {
     filteredProjects = projects.filter(project => project.department === category);
   }
 
-  console.log('Proyectos filtrados:', filteredProjects); 
+  //console.log('Proyectos filtrados:', filteredProjects); 
 
   filteredProjects.forEach(project => {
     const cardHTML = createProjectCard(project);
@@ -59,21 +60,23 @@ function showPriorityProjects(projects) {
 }
 
 $(document).ready(function() {
+  // Cargamos el array de Session
+  var arrayJSON_Projects = sessionStorage.getItem('projectsdb');
+  var projects = JSON.parse(arrayJSON_Projects);
 
+  // Mostrar los proyectos
   showRecentProjects(projects);
   showAllProjects(projects);
   showPriorityProjects(projects);
 
   // Evento para abrir el modal
   $('#openModal').click(function() {
-    
     $('#addProjectModal').modal('show');
   });
 
   // Evento para agregar un proyecto
   $('#addProjectForm').submit(function(event) {
-    event.preventDefault(); // Evitar el envío del formulario
-    
+    event.preventDefault(); 
     console.log("Formulario de proyecto enviado"); 
     
     // Obtener los valores del formulario
@@ -82,8 +85,6 @@ $(document).ready(function() {
     var projectDepartment = $('#department').val();
     var projectColor = $('#backgroundColor').val(); 
     var projectPriority = $('#priority').prop('checked') ? 1 : 0; 
-
-    console.log("Valores del formulario obtenidos"); 
     
     // Agregar el proyecto al array projects
     var newProject = {
@@ -97,21 +98,25 @@ $(document).ready(function() {
       "status": 1 
     };
     console.log("Nuevo proyecto creado:", newProject); 
-
     projects.push(newProject); 
+    
+    // Guardar el proyecto en Storage
+    sessionStorage.setItem('projectsdb', JSON.stringify(projects)); 
+    console.log("Proyecto guardado en localStorage:", projects);
 
-    console.log("Proyecto añadido al array 'projects'"); 
-    console.log("Proyectos después de agregar:", projects);
+    // Actualizar la variable projects después de guardar los datos en el almacenamiento local
+    arrayJSON_Projects = sessionStorage.getItem('projectsdb');
+    projects = JSON.parse(arrayJSON_Projects);
+    console.log("localstorage::", arrayJSON_Projects);
 
     $('#addProjectModal').modal('hide');
-    
+
     showRecentProjects(projects);
     showAllProjects(projects);
   });
 
   // Evento para filtrar los proyectos
   $('.filter-button').click(function() {
-    
     $('.filter-button').removeClass('active');
     $(this).addClass('active');
     var category = $(this).data('filter');
@@ -127,3 +132,4 @@ $(document).ready(function() {
   });
 
 });
+

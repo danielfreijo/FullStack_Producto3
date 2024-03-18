@@ -7,6 +7,9 @@ body {
     margin: 0;
     padding: 0;
 }
+a {
+    text-decoration: none; /* Esto quitará el subrayado */
+}
 .container {
     min-width: 1100px !important;
     height: auto;
@@ -151,6 +154,22 @@ body {
     margin-bottom: 10px;
     flex: 1 0 25%; /* Ocupar 25% del ancho disponible (4 columnas) */
     max-width: calc(25% - 10px);
+    background-size: cover; 
+    background-position: center;
+    opacity: 0.6;  
+}
+.card:hover {
+    opacity: 1.0;
+    transform: scale(1.05); 
+}
+.card-body {
+    display: flex;
+    align-items: center; 
+}
+.card-title {
+    text-align: center;  
+    color: rgb(255, 255, 255) !important;
+    font-weight: bold;
 }
 @media (max-width: 768px) {
     #main-container {
