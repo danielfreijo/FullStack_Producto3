@@ -1,11 +1,14 @@
 function createProjectCard(project) {
   const projectNameUpperCase = project.name.toUpperCase();
   const backgroundUrl = `../assets/BackgroundCards/${project.backgroundcard}`; 
+  const starIcon = project.priority === 1 ? '⭐' : '★'
+
   return `
-  <a class="card" href="/html/cardDetail.html?id=${project.id}" style="background-image: url('${backgroundUrl}');">
+  <a class="card" href="/html/cardDetail.html?id=${project.id}" data-id="${project.id}" style="background-image: url('${backgroundUrl}');">
       <div class="card-body">
         <h5 class="card-title">${projectNameUpperCase}</h5>
-        <!--<p class="card-text">${project.description}</p>-->
+        <button class="btn btn-primary delete-button" style="display:none;" >ELIMINAR</button>
+        <button class="btn btn-star priority-button" style="display:none;">${starIcon}</button>
       </div>
   </a>
   `;
@@ -15,8 +18,10 @@ function showRecentProjects(projects) {
   const recentProjects = $('#recentProjects');
   recentProjects.empty();
 
-  projects.sort((a,b) => new Date(b.lastAccessed)- new Date(a.lastAccessed));
+  // Ordenar los proyectos por fecha de acceso de manera descendente
+  projects.sort((a, b) => new Date(b.dateAccess) - new Date(a.dateAccess));
 
+  // Tomar los 4 proyectos más recientes
   const projectsToShow = projects.slice(0, 4);
 
   projectsToShow.forEach(project => {
@@ -28,7 +33,6 @@ function showRecentProjects(projects) {
 function showAllProjects(projects, category = 'all') {
   const allProjects = $('#allProjects');
   allProjects.empty();
-
   //console.log('Categoría seleccionada:', category); 
 
   let filteredProjects;
@@ -38,8 +42,10 @@ function showAllProjects(projects, category = 'all') {
   } else {
     filteredProjects = projects.filter(project => project.department === category);
   }
-
   //console.log('Proyectos filtrados:', filteredProjects); 
+
+  // Ordenar los proyectos por su ID de manera ascendente
+  filteredProjects.sort((a, b) => a.id - b.id);
 
   filteredProjects.forEach(project => {
     const cardHTML = createProjectCard(project);
@@ -63,6 +69,7 @@ $(document).ready(function() {
   // Cargamos el array de Session
   var arrayJSON_Projects = sessionStorage.getItem('projectsdb');
   var projects = JSON.parse(arrayJSON_Projects);
+  //console.log("proyectos:", projects);
 
   // Mostrar los proyectos
   showRecentProjects(projects);
@@ -94,8 +101,10 @@ $(document).ready(function() {
       "department": projectDepartment,
       "backgroundcolor": projectColor,
       "backgroundimage": "null",
+      "backgroundcard": "default.jpg",
       "priority": projectPriority,
-      "status": 1 
+      "status": 1,
+      "dateAccess": new Date().toString()
     };
     console.log("Nuevo proyecto creado:", newProject); 
     projects.push(newProject); 
@@ -128,7 +137,69 @@ $(document).ready(function() {
   $(document).on('click', '.card', function() {
     var projectId = $(this).data('id');
     console.log('Proyecto seleccionado:', projectId);
-    window.location.href = '../html/cardDetail.html?id=' + projectId;
+  });
+
+  // Evento para cambiar la prioridad del proyecto
+  $(document).on('click', '.priority-button', function(event) {
+    event.stopPropagation();
+
+    const card = $(this).closest('.card');
+    const projectId = card.data('id');
+    const project = projects.find(project => project.id === projectId)
+
+    // Cambiar la prioridad del proyecto
+    project.priority = project.priority === 1 ? 0 : 1;
+    $(this).text(project.priority === 1 ? '⭐' : '★');
+
+    sessionStorage.setItem('projectsdb', JSON.stringify(projects)); 
+    showPriorityProjects(projects);
+    
+    return false;
+  });
+
+  // Evento para mostrar el botón de eliminación y prioridad
+  $(document).on('mouseenter', '.card', function() {  
+    $(this).find('.delete-button').show();
+    $(this).find('.priority-button').show();
+  });
+  
+  // Evento para ocultar el botón de eliminación
+  $(document).on('mouseleave', '.card', function() {
+    $(this).find('.delete-button').hide();
+    $(this).find('.priority-button').hide();  
+  });
+
+  // Evento para eliminar un proyecto
+  $(document).on('click', '.delete-button', function(event) {
+    event.preventDefault();
+    console.log("Botón de eliminación clicado");
+
+    // Obtener el ID del proyecto asociado con la tarjeta
+    var projectId = $(this).closest('.card').data('id');
+    //console.log("ID del proyecto a eliminar:", projectId);
+
+    // Mostrar el modal de confirmación
+    $('#confirmationModal').modal('show');
+
+    // Manejar el evento de confirmación
+    $('#confirmDelete').click(function() {
+
+      // Filtrar los proyectos para eliminar el proyecto con el ID correspondiente
+      projects = projects.filter(project => project.id !== projectId);
+      //console.log("Proyectos después de la eliminación:", projects);
+
+      // Actualizar el sessionStorage con los proyectos filtrados
+      sessionStorage.setItem('projectsdb', JSON.stringify(projects));
+      //console.log("Proyectos guardados en sessionStorage:", sessionStorage.getItem('projectsdb'));
+
+      // Mostrar los proyectos actualizados
+      showRecentProjects(projects);
+      showAllProjects(projects);
+      showPriorityProjects(projects);
+
+      $('#confirmationModal').modal('hide');
+    });
+    return false; // Evita el comportamiento predeterminado del enlace
   });
 
 });

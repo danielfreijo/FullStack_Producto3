@@ -94,6 +94,24 @@
         </div>
     </div>
 
+    <!--Modal confirmación-->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Confirmación de eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mt-4 mb-4 text-center">¿Estás seguro de que deseas eliminar este proyecto?</p>
+                    <button type="button" class="btn btn-secondary mt-4" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger mt-4 float-end" id="confirmDelete">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
     <!--Scripts para funcionalidades-->
     <script src="../assets/libraries/jquery-3.6.0.min.js" ></script>
     <script src="../assets/libraries/popper.min.js" ></script>

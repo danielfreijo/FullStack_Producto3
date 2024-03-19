@@ -20,46 +20,12 @@ if (!sessionStorage.getItem('projectsdb') || !sessionStorage.getItem('usersdb'))
                         "backgroundimage":"null",
                         "backgroundcard": "cafeteria.jpg",
                         "priority":0,
-                        "status":1
+                        "status":1,
+                        "dateAccess": new Date("2023-12-11T16:32:00")
                 },
 
                 {
                         "id":1, 
-                        "name": "Logotipo E-commerce Luís",
-                        "description":"This is a description of the Project B.",
-                        "department":"Diseño",
-                        "backgroundcolor":"#1256f2",
-                        "backgroundimage":"null",
-                        "backgroundcard": "diseño2.jpg",
-                        "priority":0,
-                        "status":1
-                },
-
-                {       
-                        "id":2, 
-                        "name": "Campaña de impacto Gripo SA",
-                        "description":"This is a description of the Project A.",
-                        "department":"Marketing",
-                        "backgroundcolor":"#909D30",
-                        "backgroundimage":"null",
-                        "backgroundcard": "marketing1.jpg",
-                        "priority":1,
-                        "status":1
-                },
-
-                {       
-                        "id":3, 
-                        "name": "Branding Pasteleria Pepita",
-                        "description":"This is a description of the Project A.",
-                        "department":"Diseño",
-                        "backgroundcolor":"#1DC53F",
-                        "backgroundimage":"null",
-                        "backgroundcard": "pasteleria.jpg",
-                        "priority":1,
-                        "status":1
-                },
-                {
-                        "id":4, 
                         "name": "Desarrollo web Restaurante Japonés",
                         "description":"This is a description of the Project B.",
                         "department":"Desarrollo",
@@ -67,11 +33,12 @@ if (!sessionStorage.getItem('projectsdb') || !sessionStorage.getItem('usersdb'))
                         "backgroundimage":"null",
                         "backgroundcard": "sushi.jpg",
                         "priority":0,
-                        "status":1
+                        "status":1,
+                        "dateAccess": new Date("2024-02-11T16:32:00")
                 },
 
                 {       
-                        "id":5, 
+                        "id":2, 
                         "name": "Estrategia de marca Micas's",
                         "description":"This is a description of the Project A.",
                         "department":"Diseño",
@@ -79,7 +46,47 @@ if (!sessionStorage.getItem('projectsdb') || !sessionStorage.getItem('usersdb'))
                         "backgroundimage":"null",
                         "backgroundcard": "diseño1.jpg",
                         "priority":1,
-                        "status":1
+                        "status":1,
+                        "dateAccess": new Date("2024-02-21T16:32:00")
+                },
+
+                {
+                        "id":3, 
+                        "name": "Logotipo E-commerce Luís",
+                        "description":"This is a description of the Project B.",
+                        "department":"Diseño",
+                        "backgroundcolor":"#1256f2",
+                        "backgroundimage":"null",
+                        "backgroundcard": "diseño2.jpg",
+                        "priority":0,
+                        "status":1,
+                        "dateAccess": new Date("2023-12-19T09:10:00")
+                },
+
+                {       
+                        "id":4, 
+                        "name": "Campaña de impacto Gripo SA",
+                        "description":"This is a description of the Project A.",
+                        "department":"Marketing",
+                        "backgroundcolor":"#909D30",
+                        "backgroundimage":"null",
+                        "backgroundcard": "marketing1.jpg",
+                        "priority":1,
+                        "status":1,
+                        "dateAccess": new Date("2023-12-28T11:52:00")
+                },
+
+                {       
+                        "id":5, 
+                        "name": "Branding Pasteleria Pepita",
+                        "description":"This is a description of the Project A.",
+                        "department":"Diseño",
+                        "backgroundcolor":"#1DC53F",
+                        "backgroundimage":"null",
+                        "backgroundcard": "pasteleria.jpg",
+                        "priority":1,
+                        "status":1,
+                        "dateAccess": new Date("2024-01-08T12:32:00")
                 },
 
                 {       
@@ -91,7 +98,8 @@ if (!sessionStorage.getItem('projectsdb') || !sessionStorage.getItem('usersdb'))
                         "backgroundimage":"null",
                         "backgroundcard": "desarrollo1.jpg",
                         "priority":1,
-                        "status":1
+                        "status":1,
+                        "dateAccess": new Date("2024-03-11T16:32:00")
                 },
 
         ];

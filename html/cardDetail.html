@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaskHub | Proyectos</title>
+    <title>TaskHub | Proyecto</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap">
     <link href="../assets/libraries/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/cardDetail.css">
+
 </head>
 
 <body>
@@ -35,10 +36,43 @@
                         <a class="nav-link" href="/html/contact.html">CONTACTO</a>
                     </li>
                 </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-btn">
+                        <button class="btn btn-primary" id="sidebar-toggle" >INFORMACIÓN</button>
+                    </li>
+                </ul>
 
             </div>
         </div>
     </nav>
+
+    <!--Contenedor principal del contenido-->
+    <div class="container" id="main-container">
+        
+        <div class="col-4 text-center d-flex justify-content-center">
+            <h5 id="card-title">POR HACER</h5>
+        </div>
+        <div class="col-4 text-center d-flex justify-content-center">
+            <h5 id="card-title">EN PROCESO</h5>
+        </div>
+        <div class="col-4 text-center d-flex justify-content-center">
+            <h5 id="card-title">FINALIZADO</h5>
+        </div>
+      
+    </div>
+
+    <!--Barra lateral con información del proyecto-->
+    <div class="collapse fade" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Información del Proyecto</h3>
+        </div>
+        <ul class="list-unstyled components">
+            <li>
+                <p>Nombre del Proyecto: <span id="projectName"></span></p>
+            </li>
+            <!-- Agrega más información del proyecto según tus necesidades -->
+        </ul>
+    </div>
 
     <!--Scripts para funcionalidades-->
     <script src="../assets/libraries/jquery-3.6.0.min.js" ></script>

@@ -1,3 +1,38 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    height: auto;
+    min-height: 100vh;
+    width: auto;
+    margin: 0;
+    padding: 0;
+}
+a {
+    text-decoration: none; 
+}
+.container {
+    min-width: 1400px !important;
+    height: auto;
+    width: auto;
+}
+.col-4 {
+    width: calc(33.33% - 20px); /* Ancho de las columnas teniendo en cuenta el espacio entre ellas */
+    height: 100vh;
+    background: linear-gradient(to bottom, #999999, #00065A);
+    float: left; 
+    margin-right: 20px; 
+}
+@media (max-width: 768px) {
+    body {
+        font-family: 'Montserrat', sans-serif;
+        height: auto;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        min-width: auto !important; 
+        width: auto; 
+    }
+}
 
 /****************************************************/
 /* BARRA DE NAVEGACION */
@@ -67,4 +102,45 @@
     margin-right: 10px;
     margin-left: 10px;
     font-size: 13px;
+}
+
+
+/****************************************************/
+/* CONTENEDOR PRINCIPAL */
+/****************************************************/
+
+#main-container {
+    height: auto;
+    width: auto;
+    display: block; 
+    padding: 0%; 
+    margin-bottom: 160px;
+}
+#card-title {
+    margin-top: 10vh;
+    background-color: #F48598 ; 
+    color: white;
+    width: 200px;
+    height: 45px;
+    padding: 10px; 
+    border-radius: 20px; 
+}
+@media (max-width: 768px) {
+    #main-container {
+        position: relative;
+        z-index: 0;
+        width: auto;
+        margin-top: 12vh;
+        margin-left: 2vh;
+    }
+   
+    #card-title {
+        background-color: #F48598 ; 
+        color: white;
+        width: 110px;
+        height: 36px;
+        font-size: 13px;
+        padding: 10px; 
+        border-radius: 20px; 
+    }
 }
