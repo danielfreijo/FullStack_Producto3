@@ -68,8 +68,29 @@
                             </select>
                         </div>
                         <div class="mb-3">
+                            <label for="backgroundType" class="form-label">Tipo de Fondo</label>
+                            <select class="form-select" id="backgroundType" required>
+                                <option value="color">Color</option>
+                                <option value="image">Imagen</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="colorSection">
                             <label for="backgroundColor" class="form-label">Color de fondo</label>
                             <input type="color" class="form-control" id="backgroundColor" value="#FFFFFF" style="width: 150px;">
+                        </div>
+                        <div class="mb-3" id="imageSection" style="display: none;" >
+                            <label for="backgroundImage" class="form-label">Imagen de fondo</label>
+                            <!-- <input type="file" class="form-control" id="backgroundImage"> -->
+                            <select class="form-select" id="backgroundImage">
+                                <option value="">Seleccionar Imagen</option>
+                                <option value="animal1.jpg">imagen 1</option>
+                                <option value="animal2.jpg">imagen 2</option>
+                                <option value="espacio1.jpg">imagen 3</option>
+                                <option value="espacio2.jpg">imagen 4</option>
+                                <option value="paisaje1.jpg">imagen 5</option>
+                                <option value="paisaje2.jpg">imagen 6</option>
+                            </select>
+                            <img id="previewImage" src="#" alt="Vista previa" style="width: 100px; height: 90px; display: none; margin-top: 10px; margin-bottom: 10px; border: 1px solid #000; border-radius: 5px; padding: 5px; background-color: #fff; box-shadow: 0 0 5px #000;">
                         </div>
                         <div class="mb-3 form-check">
                             <label for="priority" class="form-check-label" >Marcar como prioritario</label>

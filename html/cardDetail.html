@@ -38,7 +38,7 @@
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-btn">
-                        <button class="btn btn-primary" id="sidebar-toggle" >INFORMACIÓN</button>
+                        <button class="btn btn-primary" id="board-menu" >INFORMACIÓN</button>
                     </li>
                 </ul>
 
@@ -61,18 +61,41 @@
       
     </div>
 
-    <!--Barra lateral con información del proyecto-->
-    <div class="collapse fade" id="sidebar">
-        <div class="sidebar-header">
-            <h3>Información del Proyecto</h3>
+    <!--Sidebar para editar proyecto-->
+    <div class="sidebar bg-light position-absolute" id="sidebar-menu">
+        <div class="sidebar-header m-4">
+            <button type="button" class="btn btn-close" id="close-sidebar"></button>
+            <div class="sidebar-title">
+                <h5 id="sidebarProjectName"></h5>
+            </div>
+            <div class="sidebar-content">
+                <form id="editForm">
+                    <div class="form-group mb-3">
+                        <label for="sidebarProjectNameEdit">Nombre del Proyecto</label>
+                        <input type="text" class="form-control" id="sidebarProjectNameEdit">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="sidebarDescription">Descripción</label>
+                        <textarea class="form-control" id="sidebarDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="sidebarDepartment">Departamento</label>
+                        <select class="form-control" id="sidebarDepartment">
+                            <option value="Desarrollo">Desarrollo</option>
+                            <option value="Diseño">Diseño</option>
+                            <option value="Marketing">Marketing</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="backgroundColor" class="form-label">Color de fondo</label>
+                        <input type="color" class="form-control" id="sidebarBackgroundColor" style="width: 150px;">
+                    </div>
+                    <button type="button" class="btn btn-primary mt-5" id="saveChangesBtn">Guardar Cambios</button>
+                </form>
+            </div>
         </div>
-        <ul class="list-unstyled components">
-            <li>
-                <p>Nombre del Proyecto: <span id="projectName"></span></p>
-            </li>
-            <!-- Agrega más información del proyecto según tus necesidades -->
-        </ul>
     </div>
+
 
     <!--Scripts para funcionalidades-->
     <script src="../assets/libraries/jquery-3.6.0.min.js" ></script>

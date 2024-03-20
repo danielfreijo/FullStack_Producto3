@@ -80,6 +80,32 @@ $(document).ready(function() {
   $('#openModal').click(function() {
     $('#addProjectModal').modal('show');
   });
+  
+  // Evento para cambiar la sección de fondo
+  $('#backgroundType').change(function() {
+    var backgroundType = $(this).val(); // Obtener el valor seleccionado del select
+    if (backgroundType === 'color') {
+      $('#colorSection').show();
+      $('#imageSection').hide();
+      console.log("Tipo de fondo seleccionado fuera de la función:", backgroundType);
+    } else if (backgroundType === 'image') {
+      $('#imageSection').show();
+      $('#colorSection').hide();
+      console.log("Tipo de fondo seleccionado fuera de la función:", backgroundType);
+    }
+  });
+
+  // Función para mostrar la vista previa de la imagen seleccionada
+  $('#backgroundImage').change(function() {
+    var selectedImage = $(this).val();
+    if (selectedImage) {
+      console.log("Imagen seleccionada:", selectedImage);
+      $('#previewImage').attr('src', '../assets/BackgroundsProjects/' + selectedImage).show();
+    } else {
+      $('#previewImage').hide();
+    }
+  });
+
 
   // Evento para agregar un proyecto
   $('#addProjectForm').submit(function(event) {
@@ -90,17 +116,35 @@ $(document).ready(function() {
     var projectName = $('#projectName').val();
     var projectDescription = $('#description').val();
     var projectDepartment = $('#department').val();
-    var projectColor = $('#backgroundColor').val(); 
     var projectPriority = $('#priority').prop('checked') ? 1 : 0; 
+
+    var projectBackgroundColor;
+    var projectBackgroundImage;
     
+    // Verificar el tipo de fondo seleccionado por el usuario
+    var backgroundType = $('#backgroundType').val();
+    console.log("Tipo de fondo seleccionado:", backgroundType); // Agrega este console.log para verificar el valor de backgroundType
+
+    if (backgroundType === 'color') {
+      $('#colorSection').show();
+      $('#imageSection').hide();
+      projectBackgroundColor = $('#backgroundColor').val();
+      projectBackgroundImage = null; 
+    } else if (backgroundType === 'image') {
+      $('#imageSection').show();
+      $('#colorSection').hide();
+      projectBackgroundColor = null; // Si es una imagen, el color de fondo es nulo
+      projectBackgroundImage = "../assets/BackgroundsProjects/${variable de la imagen escogida}"; // Ejemplo de URL de la imagen
+    }
+
     // Agregar el proyecto al array projects
     var newProject = {
       "id": projects.length, 
       "name": projectName,
       "description": projectDescription,
       "department": projectDepartment,
-      "backgroundcolor": projectColor,
-      "backgroundimage": "null",
+      "backgroundcolor": projectBackgroundColor,
+      "backgroundimage": projectBackgroundImage,
       "backgroundcard": "default.jpg",
       "priority": projectPriority,
       "status": 1,

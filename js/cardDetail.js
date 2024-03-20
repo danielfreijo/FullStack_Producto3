@@ -10,10 +10,11 @@ $(document).ready(function() {
   //console.log('ID del proyecto:', projectId);
 
   // Buscar el proyecto correspondiente en el array de proyectos
-  const project = projects.find(project => project.id == projectId);
+  const projectIndex = projects.findIndex(project => project.id == projectId); // Usamos findIndex para obtener el índice del proyecto
+    const project = projects[projectIndex]; 
 
   if (project) {
-    // Actualizar el campo dataAcces
+    // Actualizar el campo dateAcces
     project.dateAccess = new Date().toString();
 
     // Guardar los cambios en el almacenamiento
@@ -24,14 +25,46 @@ $(document).ready(function() {
     $('#projectName').text(project.name.toUpperCase());
     console.log('Proyecto encontrado:', project);
 
+    // Mostrar INFO del proyecto en el sidebar y hacerlos editables
+    $('#sidebarProjectName').text(project.name.toUpperCase())
+    $('#sidebarProjectNameEdit').val(project.name)
+    $('#sidebarDescription').text(project.description)
+    $('#sidebarDepartment').val(project.department)
+    $('#sidebarBackgroundColor').val(project.backgroundcolor) 
+    
+    // Guardar los cambios cuando se hace clic en el botón "Guardar Cambios"
+    $('#saveChangesBtn').click(function() {
+      var newName = $('#sidebarProjectNameEdit').val();
+      var newDescription = $('#sidebarDescription').val();
+      var newDepartment = $('#sidebarDepartment').val();
+      var newBackgroundColor = $('#sidebarBackgroundColor').val();
+
+      // Actualizar los valores del proyecto
+      project.name = newName;
+      project.description = newDescription;
+      project.department = newDepartment;
+      project.backgroundcolor = newBackgroundColor;
+
+      // Guardar el proyecto actualizado en sessionStorage
+      projects[projectIndex] = project;
+      sessionStorage.setItem('projectsdb', JSON.stringify(projects));
+      
+      // Opcional: Mostrar un mensaje de éxito o realizar alguna otra acción después de guardar los cambios
+      alert('Cambios guardados correctamente');
+      location.reload();
+    });
+
     // Aplicar el color de fondo al elemento deseado en la página
     $('body').css('background-color', `${project.backgroundcolor}`);
     
     // Abrir el menú lateral al hacer clic en el botón "INFORMACIÓN"
-    $('#sidebar-toggle').click(function() {
-      $('#sidebar').toggleClass('show');
-      console.log('Botón "Opciones" clicado');
+    $('#board-menu').click(function() {
+      $('#sidebar-menu').css('width', '350px');
+    });
 
+     // Cerrar el sidebar
+    $("#close-sidebar").click(function() {
+      $("#sidebar-menu").css("width", "0");
     });
 
   }
