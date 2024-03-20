@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/formulario.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="../assets/logo.png" alt="Logo" width="125" height="70" class="d-inline-block">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>                
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">INICIO</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">PROYECTOS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">PROYECTOS<br>PRIORITARIOS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">CONTACTO</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link addbtn" name="addproject" id="addproject" href="#">AÑADIR PROYECTO</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+      
+    <div class="container"> 
+        <h2 class="title">Contacta con nosotros</h2>
+        <label>Rellena el siguiente formulario y te responderemos en un máximo de 48 horas.</label>
+        <form>
+            <div class="row">
+                <div class="form-group col-6">
+                    </label class="form-label">Nombre*</label>
+                    <input type="text" class="text_container form-control" id="nombreproyecto" placeholder="">
+                </div>
+                <div class="form-group col-6">
+                    </label class="form-label">Correo*</label>
+                    <input type="text" class="text_container form-control" id="nombreproyecto" placeholder="">
+                </div>
+                <div class="form-group col-12">
+                    </label class="form-label">Motivo*</label>
+                    <input type="text" class="text_container form-control" id="nombreproyecto" placeholder="">
+                </div>
+                <div class="form-group col-12">
+                    <label class="form-label">Mensaje*</label>
+                    <textarea class="text_container form-control" id="descripcion" rows="10" cols="100" placeholder=""></textarea>
+                </div>
+            </div>
+          <button type="submit" class="buttonCrear btn-primary float-right">Crear</button>
+        </form>
+    </div>  
+</body>
+</html>

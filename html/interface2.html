@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo proyecto</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/newproject.css">
+</head>
+
+<body>
+  <button id="openBtn">Abrir</button>
+
+<div id="popup" class="popup">
+  <div class="popup-content">
+    <span class="close" id="closeBtn">&times;</span>   
+    <div class="container"> 
+        <h2 class="title">Crear nuevo proyecto</h2>
+        <form>
+          <div class="form-group">
+            </label><b>Nombre del proyecto</b></label>
+            <input type="text" class="nombre form-control" id="nombreproyecto" placeholder="">
+          </div>
+          <div class="form-group">
+            <label><b>Descripción</b></label>
+            <textarea class="descripcion form-control" id="descripcion" rows="6" cols="80" placeholder=""></textarea>
+          </div>
+          <button type="submit" class="buttonCrear btn-primary float-right">Crear</button>
+        </form>
+    </div> 
+    
+    <script src="../js/newproject.js"></script>  
+</body>
+</html>
