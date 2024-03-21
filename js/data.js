@@ -88,15 +88,19 @@
 
     // Creamos las variables de entorno  para acceder a los elementos del DOM
 
-    sessionStorage.setItem('MyName', "Carlos Martínez");
-    sessionStorage.setItem('MyProject', 0);
-    sessionStorage.setItem('MyTask', 0);
-
-    // 
-    var tempProjects = JSON.stringify(projects);
-    var tempTasks = JSON.stringify(tasks);
-    var tempUsers = JSON.stringify(userdata);
-
-    sessionStorage.setItem('projectsdb', tempProjects);
-    sessionStorage.setItem('tasksdb', tempTasks);
-    sessionStorage.setItem('usersdb', tempUsers);
+    if (sessionStorage.length==0 ){
+        // Si no hay objeto session al empezar lo creamos.
+        sessionStorage.setItem('MyName', "Carlos Martínez");
+        sessionStorage.setItem('MyProject', 0);
+        sessionStorage.setItem('MyTask', 0);
+    
+        // 
+        var tempProjects = JSON.stringify(projects);
+        var tempTasks = JSON.stringify(tasks);
+        var tempUsers = JSON.stringify(userdata);
+    
+        sessionStorage.setItem('projectsdb', tempProjects);
+        sessionStorage.setItem('tasksdb', tempTasks);
+        sessionStorage.setItem('usersdb', tempUsers);
+    }
+    

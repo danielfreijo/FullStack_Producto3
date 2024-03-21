@@ -132,7 +132,7 @@ $(document).ready(function(event) {
         //$.session.set("MyProject", id);
         e.stopPropagation();
 
-        window.location.href = "interface2.html";
+        window.location.href = "interface3.html";
         
     });
 
@@ -216,7 +216,12 @@ $(document).ready(function(event) {
         e.preventDefault();
         var filterappliced =$(this).attr("data");
         console.log(filterappliced);
-        alert("Seguro que quieres borrarlo");
+        var resultado = $("#dialog-confirm").dialog("open");
+        if (resultado == true){
+            alert("Pues sí");
+        }else{
+            alert("Pues no");
+        }
         e.stopPropagation();
     });
 
@@ -237,4 +242,44 @@ $(document).ready(function(event) {
     });
 
 
+    $("#myDialog").dialog({
+        autoOpen  : false,
+        modal     : true,
+        title     : "A Dialog Box",
+        buttons   : {
+                  'OK' : function() {
+                      return true;
+                  },
+                  'Close' : function() {
+                      $(this).dialog('close');
+                      return false;
+                  }
+        }
+    });
+
+});
+
+// ----------------------------------------------------------------------
+// Modales de alerta. Con Jquery-UI
+// ----------------------------------------------------------------------
+$(function() {
+    $("#dialog-confirm").dialog({
+      autoOpen: false,
+      resizable: false,
+      height: "auto",
+      width: 400,
+      modal: true,
+      buttons: {
+        "Sí": function() {
+          // Acción si el usuario hace clic en Sí
+          alert("Acción confirmada");
+          $(this).dialog("close");
+        },
+        "No": function() {
+          // Acción si el usuario hace clic en No
+          alert("Acción cancelada");
+          $(this).dialog("close");
+        }
+      }
+    });
 });

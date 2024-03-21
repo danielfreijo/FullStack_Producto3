@@ -8,8 +8,10 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 
-<body class="backgroundproject">
-    <div class="container-fluid">
+<body class="backgroundproject" onload="javascript:document.getElementById('refresh1').click();">
+    <div class="container-fluid backgroundproject">
+        
+        
     <!--Menú de navegación-->
     <nav class="navbar navbar-expand-md navbar-dark">
         <div class="container-fluid">
@@ -25,7 +27,7 @@
                         <a class="nav-link" href="interface1.html">INICIO</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link boton" name="addtask" id="addtask" href="#">AÑADIR TAREA</a>
+                        <a class="boton" name="addproject" id="addproject" href="#">AÑADIR PROYECTO</a>
                     </li>
                 </ul>
             </div>
@@ -34,131 +36,74 @@
     <br>
     <div class="container-fluid">
 
-<input type="hidden" name="idproyecto" id="idproyecto">
-
-<div class="row" id="taskcontainer" name="taskcontainer">
-  <h1><label name="ProjectName" id="ProjectName">...</label></h1>
-<div class="col text-center">
-    <!-- HACER -->
-    <a class="boton" href="#">PENDIENTE</a>
-    <br>
-    <div class="TASK" name="containerTODO" id="containerTODO" style="margin-top: 10px;">
-        <ul class="sortable" id="lst_todo" name="lst_todo">
-            <li>TO DO 1</li>
-            <li>TO DO 2</li>
-            <li>TO DO 3</li>
-        </ul>
-    </div>
-</div>
-
-<div class="col text-center">
-    <!-- EN PROGRESO -->
-    <a class="boton"  href="#">EN PROGRESO</a>
-    <br>
-    <div class="TASK" name="containeronprogress" id="containeronprogress" style="margin-top: 10px;">
-        <ul class="sortable" id="lst_onprogress" name="lst_onprogress">
-            <li>ON PROGRESS 1</li>
-            <li>ON PROGRESS 2</li>
-            <li>ON PROGRESS 3</li>
-        </ul>
-    </div>
-
-</div>
-
-
-
-
-<div class="col text-center">
-    <!-- REALIZADO -->
-    <a class="boton" href="#">REALIZADO</a>
-    <br>
-    <div class="TASK" name="containercompleted" id="containercompleted" style="margin-top: 10px;">
-        <ul class="sortable" id="lst_completed" name="lst_completed">
-<li>COMPLETED 1</li>
-<li>COMPLETED 2</li>
-<li>COMPLETED 3</li>
-        </ul>
-
-    </div>
-</div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="ModalForm" tabindex="-1" role="dialog" aria-labelledby="TitleModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="TitleModal">TAREA</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body" id="formulario" name="formulario">
-            <form name="task" id="task">
-                <div class="mb-3">
-                    <label for="TaskName" class="form-label">Nombre de la tarea</label>
-                    <input type="text" class="form-control" id="TaskName" aria-describedby="TaskHelp">
-                    <div id="TaskHelp" class="form-text">Titulo de la tarea.</div>
-                  </div>
+        <form name="project" id="project">
+            <div class="mb-3">
+                <label for="ProjectName" class="form-label">Nombre del proyecto</label>
+                <input type="text" class="form-control" id="ProjectName" aria-describedby="ProjectHelp" required>
+                <div id="ProjectHelp" class="form-text">Titulo del proyecto</div>
+              </div>
+              <div class="mb-3">
+                <label for="ProjectDescription" class="form-label">Descripcion del proyecto</label>
+                <textarea class="form-control" id="ProjectDescription" cols="4" required></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="ProjecDepartment" class="form-label">Departamento</label>
+                <select id="ProjecDepartment" class="form-select">
+                  <option value="Desarrollo" default>Desarrollo</option>
+                  <option value="Marketing">Marketing</option>
+                  <option value="Diseño">Diseño</option>
+                </select>
+              </div>
+          
+              <div class="mb-3">
+                <label for="ProjectBackgroundColod" class="form-label">Establecer el color de fondo</label>
+                <input type="color" class="form-control" id="ProjectBackgroundColod">
+              </div>
+              <div class="mb-3">
+                <label for="ProjectBackgroundImage" class="form-label">Establecer imagen de fondo</label>
+                <select id="ProjectBackgroundImage" class="form-select">
+                  <option value="logo.png">Imagen 1</option>
+                  <option value="default.jpg" default>Imagen 2</option>
+                  <option value="depressing-blue-monday-composition.jpg">Imagen 3</option>
+                  <option value="group-casually-dressed-business-people-discussing-ideas-office.jpg">Imagen 4</option>
+                  <option value="representation-user-experience-interface-design.jpg">Imagen 5</option>
+                  <option value="shopping-cart-3d-render-icon.jpg">Imagen 6</option>
+                  <option value="side-view-elder-women-using-elbows-salute-each-other-while-wearing-medical-masks.jpg">Imagen 7</option>
+                </select>
+              </div>
+          
+              <div class="row">
+                <div class="col">
                   <div class="mb-3">
-                    <label for="TaskDescription" class="form-label">Descripcion de la tarea</label>
-                    <textarea class="form-control" id="TaskDescription" cols="4"></textarea>
+                    <label for="ProjectPriority" class="form-label">Proyecto prioritario</label>
+                    <select id="ProjectPriority" class="form-select">
+                        <option value="0" default>No</option>
+                        <option value="1">Si</option>
+                      </select>
                   </div>
-              
-                  <div class="row">
-                  <div class="col">
-                      <div class="mb-3">
-                        <label for="TaskStartDate" class="form-label">Fecha inicio del proyecto</label>
-                        <input type="date" class="form-control" id="TaskStartDate">
-                      </div>
-                    </div>
-                    <div class="col">
-                      <div class="mb-3">
-                        <label for="TaskEndDate" class="form-label">Fecha fin del proyecto</label>
-                        <input type="date" class="form-control" id="TaskEndDate">
-                      </div>
-                    </div>
-                  </div>
-              
+                </div>
+                <div class="col">
                   <div class="mb-3">
-                    <label for="TaskBackground" class="form-label">Establecer el color de fondo</label>
-                    <input type="color" class="form-control" id="TaskBackground">
+                    <label for="ProjectStatus" class="form-label">Estado del proyecto</label>
+                    <select id="ProjectStatus" class="form-select">
+                        <option value="0" default>En proceso</option>
+                        <option value="1">Cerrado</option>
+                      </select>
                   </div>
-                  <div class="mb-3">
-                    <label for="TaskAssigned" class="form-label">Asignada a</label>
-                    <select id="TaskAssigned" class="form-select">
-                      <option value="Maria" default>Maria</option>
-                      <option value="Esteban">Esteban</option>
-                      <option value="Daniel">Daniel</option>
-                      <option value="Jordi">Jordi</option>
-                      <option value="Carlos">Carlos</option>
-                    </select>
-                  </div>
-                  <div class="mb-3">
-                    <label for="TaskStatus" class="form-label">Asignada a</label>
-                    <select id="TaskStatus" class="form-select">
-                      <option value="TODO" default>Pendiente</option>
-                      <option value="ONPROGRESS">En curso</option>
-                      <option value="COMPLETED">Completada</option>
-                    </select>
-                  </div>
-        </div>
-          <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          <button type="submit" class="btn btn-primary">Guardar cambios</button>
-        </div>
-</form>
-      </div>
-    </div>
-  </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-secondary close" data-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </form>
 
+    </div>
+        
 </div>
-    <!--Scripts para funcionalidades-->
-    <script src="../assets/libraries/jquery-3.7.1.min.js" ></script>
-    <script src="../assets/libraries/jquery-ui.min.js" ></script>
-    <script src="../assets/libraries/popper.min.js" ></script>
-    <script src="../assets/libraries/bootstrap.bundle.min.js"></script>
-    <script src="../js/interface2.js"></script>
+<!--Scripts para funcionalidades-->
+<script src="../assets/libraries/jquery-3.7.1.min.js" ></script>
+<script src="../assets/libraries/popper.min.js" ></script>
+<script src="../assets/libraries/bootstrap.bundle.min.js"></script>
+<script src="../js/interface1.js"></script>
 
 </body>
 </html>

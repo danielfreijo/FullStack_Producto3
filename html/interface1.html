@@ -89,6 +89,7 @@
                     <label for="ProjectBackgroundColod" class="form-label">Establecer el color de fondo</label>
                     <input type="color" class="form-control" id="ProjectBackgroundColod">
                   </div>
+
                   <div class="mb-3">
                     <label for="ProjectBackgroundImage" class="form-label">Establecer imagen de fondo</label>
                     <select id="ProjectBackgroundImage" class="form-select">
@@ -121,18 +122,22 @@
                           </select>
                       </div>
                     </div>
+                  </div>
                 </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary close" data-dismiss="modal">Cerrar</button>
+                  <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                </div>
+            </form>
         </div>
-          <div class="modal-footer">
-          <button type="button" class="btn btn-secondary close" data-dismiss="modal">Cerrar</button>
-          <button type="submit" class="btn btn-primary">Guardar cambios</button>
-        </div>
-</form>
       </div>
-    </div>
-  </div>
-
 </div>
+
+<div id="dialog-confirm" title="Confirmación">
+  <p>¿Estás seguro de realizar esta acción?</p>
+</div>
+
+
     <!--Scripts para funcionalidades-->
     <script src="../assets/libraries/jquery-3.7.1.min.js" ></script>
     <script src="../assets/libraries/popper.min.js" ></script>
