@@ -57,7 +57,33 @@
                         </div>
                         <div class="mb-4">
                             <label for="description" class="form-label">Descripción</label>
-                            <textarea class="form-control" id="description" rows="4"></textarea>
+                            <textarea class="form-control" id="description" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="backgroundTypeCard" class="form-label">Tipo de fondo para la targeta</label>
+                            <select class="form-select" id="backgroundTypeCard" required>
+                                <option value="color">Color</option>
+                                <option value="image">Imagen</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="colorSectionCard">
+                            <label for="backgroundColorCard" class="form-label">Color de fondo del tablero</label>
+                            <input type="color" class="form-control" id="backgroundColorCard" value="#FFFFFF" style="width: 150px;">
+                        </div>
+                        <div class="mb-3" id="imageSectionCard" style="display: none;" >
+                            <label for="backgroundImageCard" class="form-label">Imagen de fondo del tablero</label>
+                            <select class="form-select" id="backgroundImageCard">
+                                <option value="">Seleccionar Imagen</option>
+                                <option value="cafeteria.jpg">imagen 1</option>
+                                <option value="default.jpg">imagen 2</option>
+                                <option value="desarrollo1.jpg">imagen 3</option>
+                                <option value="desarrollo2.jpg">imagen 4</option>
+                                <option value="diseño1.jpg">imagen 5</option>
+                                <option value="diseño2.jpg">imagen 6</option>
+                                <option value="marketing1.jpg">imagen 7</option>
+                                <option value="marketing2.jpg">imagen 8</option>
+                            </select>
+                            <img id="previewImageCard" src="#" alt="Vista previa" style="width: 210px; height: 120px; display: none; margin-top: 10px; margin-bottom: 10px; border: 1px solid #000; border-radius: 5px; padding: 5px; background-color: #fff; box-shadow: 0 0 5px #000;">
                         </div>
                         <div class="mb-3">
                             <label for="department" class="form-label">Departamento</label>
@@ -68,18 +94,18 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="backgroundType" class="form-label">Tipo de Fondo</label>
+                            <label for="backgroundType" class="form-label">Tipo de fondo para el Tablero</label>
                             <select class="form-select" id="backgroundType" required>
                                 <option value="color">Color</option>
                                 <option value="image">Imagen</option>
                             </select>
                         </div>
                         <div class="mb-3" id="colorSection">
-                            <label for="backgroundColor" class="form-label">Color de fondo</label>
+                            <label for="backgroundColor" class="form-label">Color de fondo del tablero</label>
                             <input type="color" class="form-control" id="backgroundColor" value="#FFFFFF" style="width: 150px;">
                         </div>
                         <div class="mb-3" id="imageSection" style="display: none;" >
-                            <label for="backgroundImage" class="form-label">Imagen de fondo</label>
+                            <label for="backgroundImage" class="form-label">Imagen de fondo del tablero</label>
                             <!-- <input type="file" class="form-control" id="backgroundImage"> -->
                             <select class="form-select" id="backgroundImage">
                                 <option value="">Seleccionar Imagen</option>
@@ -90,7 +116,7 @@
                                 <option value="paisaje1.jpg">imagen 5</option>
                                 <option value="paisaje2.jpg">imagen 6</option>
                             </select>
-                            <img id="previewImage" src="#" alt="Vista previa" style="width: 100px; height: 90px; display: none; margin-top: 10px; margin-bottom: 10px; border: 1px solid #000; border-radius: 5px; padding: 5px; background-color: #fff; box-shadow: 0 0 5px #000;">
+                            <img id="previewImage" src="#" alt="Vista previa" style="width: 210px; height: 120px; display: none; margin-top: 10px; margin-bottom: 10px; border: 1px solid #000; border-radius: 5px; padding: 5px; background-color: #fff; box-shadow: 0 0 5px #000;">
                         </div>
                         <div class="mb-3 form-check">
                             <label for="priority" class="form-check-label" >Marcar como prioritario</label>

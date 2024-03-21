@@ -1,14 +1,23 @@
 function createProjectCard(project) {
   const projectNameUpperCase = project.name.toUpperCase();
-  const backgroundUrl = `../assets/BackgroundCards/${project.backgroundcard}`; 
-  const starIcon = project.priority === 1 ? '⭐' : '★'
+  let backgroundStyle = '';
+  if (!project.backgroundcard) {
+    backgroundStyle = `background-color: ${project.backgroundcolorcard};`;
+  } else{
+    const backgroundUrl = `../assets/BackgroundCards/${project.backgroundcard}`; 
+    backgroundStyle = `background-image: url('${backgroundUrl}');`;
+  }
+  //console.log("backgroundStyle:", backgroundStyle);
+  const starIcon = project.priority === 1 
+  ? '<img src="../assets/estrellaM.png" alt="prioridad" style="width: 22px; height: 22px;">' 
+  : '<img src="../assets/estrellaV.png" alt="sin prioridad" style="width: 22px; height: 22px;">';
 
   return `
-  <a class="card" href="/html/cardDetail.html?id=${project.id}" data-id="${project.id}" style="background-image: url('${backgroundUrl}');">
+  <a class="card" href="/html/cardDetail.html?id=${project.id}" data-id="${project.id}" style="${backgroundStyle};">
       <div class="card-body">
         <h5 class="card-title">${projectNameUpperCase}</h5>
         <button class="btn btn-primary delete-button" style="display:none;" >ELIMINAR</button>
-        <button class="btn btn-star priority-button" style="display:none;">${starIcon}</button>
+        <button class="btn btn-primary priority-button" style="display:none;">-${starIcon}-</button>
       </div>
   </a>
   `;
@@ -76,12 +85,12 @@ $(document).ready(function() {
   showAllProjects(projects);
   showPriorityProjects(projects);
 
-  // Evento para abrir el modal
+  // Función para abrir el modal
   $('#openModal').click(function() {
     $('#addProjectModal').modal('show');
   });
   
-  // Evento para cambiar la sección de fondo
+  // Función para cambiar la sección de fondo
   $('#backgroundType').change(function() {
     var backgroundType = $(this).val(); // Obtener el valor seleccionado del select
     if (backgroundType === 'color') {
@@ -92,6 +101,19 @@ $(document).ready(function() {
       $('#imageSection').show();
       $('#colorSection').hide();
       console.log("Tipo de fondo seleccionado fuera de la función:", backgroundType);
+    }
+  });
+
+  $('#backgroundTypeCard').change(function() {
+    var backgroundTypeCard = $(this).val(); // Obtener el valor seleccionado del select
+    if (backgroundTypeCard === 'color') {
+      $('#colorSectionCard').show();
+      $('#imageSectionCard').hide();
+      console.log("Tipo de fondo seleccionado fuera de la función:", backgroundTypeCard);
+    } else if (backgroundTypeCard === 'image') {
+      $('#imageSectionCard').show();
+      $('#colorSectionCard').hide();
+      console.log("Tipo de fondo seleccionado fuera de la función:", backgroundTypeCard);
     }
   });
 
@@ -106,6 +128,15 @@ $(document).ready(function() {
     }
   });
 
+  $('#backgroundImageCard').change(function() {
+    var selectedImage = $(this).val();
+    if (selectedImage) {
+      console.log("Imagen seleccionada:", selectedImage);
+      $('#previewImageCard').attr('src', '../assets/BackgroundCards/' + selectedImage).show();
+    } else {
+      $('#previewImageCard').hide();
+    }
+  });
 
   // Evento para agregar un proyecto
   $('#addProjectForm').submit(function(event) {
@@ -118,23 +149,34 @@ $(document).ready(function() {
     var projectDepartment = $('#department').val();
     var projectPriority = $('#priority').prop('checked') ? 1 : 0; 
 
+    var projectBackgroundColorCard;
+    var projectBackgroundImageCard;
+    
+    // Verificar el tipo de fondo seleccionado para la tarjeta
+    var backgroundTypeCard = $('#backgroundTypeCard').val();
+    console.log("Tipo de fondo seleccionado:", backgroundType); 
+
+    if (backgroundTypeCard === 'color') {
+      projectBackgroundColorCard = $('#backgroundColorCard').val();
+      projectBackgroundImageCard = null; 
+    } else if (backgroundTypeCard === 'image') {
+      projectBackgroundColorCard = $('#backgroundColorCard').val();
+      projectBackgroundImageCard = $('#backgroundImageCard').val();
+    }
+
     var projectBackgroundColor;
     var projectBackgroundImage;
     
-    // Verificar el tipo de fondo seleccionado por el usuario
+    // Verificar el tipo de fondo seleccionado pora el proyecto
     var backgroundType = $('#backgroundType').val();
-    console.log("Tipo de fondo seleccionado:", backgroundType); // Agrega este console.log para verificar el valor de backgroundType
+    console.log("Tipo de fondo seleccionado:", backgroundType); 
 
     if (backgroundType === 'color') {
-      $('#colorSection').show();
-      $('#imageSection').hide();
       projectBackgroundColor = $('#backgroundColor').val();
       projectBackgroundImage = null; 
     } else if (backgroundType === 'image') {
-      $('#imageSection').show();
-      $('#colorSection').hide();
-      projectBackgroundColor = null; // Si es una imagen, el color de fondo es nulo
-      projectBackgroundImage = "../assets/BackgroundsProjects/${variable de la imagen escogida}"; // Ejemplo de URL de la imagen
+      projectBackgroundColor = $('#backgroundColor').val();
+      projectBackgroundImage = $('#backgroundImage').val();
     }
 
     // Agregar el proyecto al array projects
@@ -145,12 +187,14 @@ $(document).ready(function() {
       "department": projectDepartment,
       "backgroundcolor": projectBackgroundColor,
       "backgroundimage": projectBackgroundImage,
-      "backgroundcard": "default.jpg",
+      "backgroundcolorcard": projectBackgroundColorCard,
+      "backgroundcard": projectBackgroundImageCard,
       "priority": projectPriority,
       "status": 1,
       "dateAccess": new Date().toString()
     };
     console.log("Nuevo proyecto creado:", newProject); 
+    console.log("imagen guardada:", newProject.backgroundimage);
     projects.push(newProject); 
     
     // Guardar el proyecto en Storage
@@ -162,13 +206,14 @@ $(document).ready(function() {
     projects = JSON.parse(arrayJSON_Projects);
     console.log("localstorage::", arrayJSON_Projects);
 
+    $('#addProjectForm').trigger('reset');
     $('#addProjectModal').modal('hide');
 
     showRecentProjects(projects);
     showAllProjects(projects);
   });
 
-  // Evento para filtrar los proyectos
+  // Función para filtrar los proyectos
   $('.filter-button').click(function() {
     $('.filter-button').removeClass('active');
     $(this).addClass('active');
@@ -177,7 +222,7 @@ $(document).ready(function() {
     showAllProjects(projects, category);
   });
 
-  // Evento para mostrar el tablero del proyecto
+  // Función para mostrar el tablero del proyecto
   $(document).on('click', '.card', function() {
     var projectId = $(this).data('id');
     console.log('Proyecto seleccionado:', projectId);
@@ -185,7 +230,9 @@ $(document).ready(function() {
 
   // Evento para cambiar la prioridad del proyecto
   $(document).on('click', '.priority-button', function(event) {
+    event.preventDefault();
     event.stopPropagation();
+    console.log('Se hizo clic en el botón de prioridad.');
 
     const card = $(this).closest('.card');
     const projectId = card.data('id');
@@ -193,21 +240,28 @@ $(document).ready(function() {
 
     // Cambiar la prioridad del proyecto
     project.priority = project.priority === 1 ? 0 : 1;
-    $(this).text(project.priority === 1 ? '⭐' : '★');
+    isPriority = project.priority === 1; // Actualizar el estado de la prioridad
+
+    // Actualizar la imagen del botón
+    if (isPriority) {
+      $(this).find('img').attr('src', '../assets/estrellaM.png');
+      $(this).find('img').attr('alt', 'prioridad');
+    } else {
+      $(this).find('img').attr('src', '../assets/estrellaV.png');
+      $(this).find('img').attr('alt', 'sin prioridad');
+    }
 
     sessionStorage.setItem('projectsdb', JSON.stringify(projects)); 
     showPriorityProjects(projects);
-    
-    return false;
   });
 
-  // Evento para mostrar el botón de eliminación y prioridad
+  // Función para mostrar el botón de eliminación y prioridad
   $(document).on('mouseenter', '.card', function() {  
     $(this).find('.delete-button').show();
     $(this).find('.priority-button').show();
   });
   
-  // Evento para ocultar el botón de eliminación
+  // Función para ocultar el botón de eliminación y prioridad
   $(document).on('mouseleave', '.card', function() {
     $(this).find('.delete-button').hide();
     $(this).find('.priority-button').hide();  

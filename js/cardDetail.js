@@ -55,7 +55,16 @@ $(document).ready(function() {
     });
 
     // Aplicar el color de fondo al elemento deseado en la página
-    $('body').css('background-color', `${project.backgroundcolor}`);
+    if (project.backgroundimage != null) {
+      $('body').css('background-image', `url(../assets/BackgroundsProjects/${project.backgroundimage})`);
+      $('body').css('background-size', 'cover');
+      $('body').css('background-position', 'center');
+      $('body').css('background-repeat', 'no-repeat');
+      console.log('Imagen de fondo:', project.backgroundimage); 
+    } else {
+      $('body').css('background-color', `${project.backgroundcolor}`);
+      console.log('Color de fondo:', project.backgroundcolor);
+    }
     
     // Abrir el menú lateral al hacer clic en el botón "INFORMACIÓN"
     $('#board-menu').click(function() {
