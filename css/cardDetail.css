@@ -22,7 +22,7 @@ a {
     margin-right: 20px; 
     border-left: #ffffff 1px solid;
     border-right: #ffffff 1px solid;
-    opacity: 0.8;
+    opacity: 0.9;
 }
 @media (max-width: 768px) {
     body {
@@ -120,13 +120,31 @@ a {
     margin-bottom: 160px;
 }
 #card-title {
-    margin-top: 10vh;
+    margin-top: 6vh;
     background-color: #F48598 ; 
     color: white;
     width: 200px;
     height: 45px;
     padding: 10px; 
     border-radius: 20px; 
+}
+.addCardBtn {
+    font: 600 Montserrat, sans-serif !important;
+    background-color: transparent;
+    border: none;
+    padding: 1px;
+}
+.task-card-btn {
+    color: rgb(0, 6, 90);
+    text-align: left;
+    width: 320px;
+    height: 110px;
+    padding: 18px;
+    margin: 10px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+    transition: 0.3s;
 }
 @media (max-width: 768px) {
     #main-container {
@@ -161,9 +179,10 @@ a {
     overflow-x: hidden; /* Oculta el contenido desbordado horizontalmente */
     transition: 0.5s;
     color: rgb(0, 6, 90); 
+    padding-bottom: 10vh;
 }
 .sidebar-title {
-    margin-top: 7vh;
+    margin-top: 5vh;
     margin-bottom: 5vh;
     font-weight: bolder;
 }
