@@ -19,27 +19,27 @@ $(document).ready(function(event) {
     // Entra el indice del proyecto a mostrar en la tarjeta
     // Devuelve una variable de texto para insertar la en HTML
     function defineCard(index){
-        var text='<div class="card" style="width: 18rem; background-color:' + WorkingProjects[index]["backgroundcolor"] + ';">';
+        var text='<div class="card" style="background-color:' + WorkingProjects[index]["backgroundcolor"] + ';">';
         text +='<img class="card-img-top" src="../assets/' + WorkingProjects[index]["backgroundimage"] + '" alt="Card image cap">';  
         text +='<div class="card-img-overlay">';
         text +='<h5 class="card-title">'+ WorkingProjects[index]["name"];
         if (WorkingProjects[index]["status"]!=1){
             // Si un proyecto esta completado no se puede eliminar.
-            text +='<a href="#" class="btn close-button deteleproject" data="'+ WorkingProjects[index]["id"]+'">❌</a>'; 
+            text +='<a href="#" class="btn close-button deteleproject" data_project="'+ WorkingProjects[index]["id"]+'">❌</a>'; 
         };
         text +='</h5>';
-        text +='<p class="card-text" style="width:100px;overflow-wrap: break-word;">';
+        text +='<p class="card-text">';
         text +=WorkingProjects[index]["description"];
         text +='</p>';
         text +='</div>';
-        text +='<div class="card-footer" style="background-color:' + WorkingProjects[index]["backgroundcolor"] + '">';
+        text +='<div class="card-footer" style="background-color:' + WorkingProjects[index]["backgroundcolor"] + '; z-index=9990">';
         if (WorkingProjects[index]["priority"]==0){
-            text +='<a href="#" class="btn priority" style="position:absolute;left:3px" data_project="'+ WorkingProjects[index]["id"]+'">★</a>';
+            text +='<a href="#" class="btn priority" data_project="'+ WorkingProjects[index]["id"]+'">★</a>';
         }else{
-            text +='<a href="#" class="btn priority" style="position:absolute;left:3px" data_project="'+ WorkingProjects[index]["id"]+'">⭐</a>';
+            text +='<a href="#" class="btn priority" data_project="'+ WorkingProjects[index]["id"]+'">⭐</a>';
         };
-        text +='<a href="#" class="btn editproject" style="position:relative;left:100px" data_project="'+ WorkingProjects[index]["id"]+'">📝</a>';
-        text +='<a href="#" class="btn openproject" style="position:absolute;right:3px"  data_project="'+ WorkingProjects[index]["id"]+'">➠</a>';
+        text +='<a href="#" class="btn editproject" data_project="'+ WorkingProjects[index]["id"]+'">📝</a>';
+        text +='<a href="#" class="btn openproject" data_project="'+ WorkingProjects[index]["id"]+'">➠</a>';
         text +='</div>';
         text +='</div>';
         return text;
@@ -54,28 +54,15 @@ $(document).ready(function(event) {
         v_startdate.setHours(0,0,0,0); // Establece la hora a medianoche
 
         $.each(WorkingProjects, function(index_project, data_project) {
-
-            $.each(WorkingTasks, function(index_task, data_task){
-                // La tarea corresponde al proyecto
-                if ( data_task.project_id == data_project.id ){
-                    // Veamos la fecha de creación de la tarea
-                    var v_enddate = new Date(data_task.startdate);  // Establecemos la fecha de incio del proyecto
-                    var diff = Math.abs(v_startdate-v_enddate); // Diferencia de dias entre la fecha actual y la fecha de inicio del proyecto
-                    var diff_days=diff/(1000*60*60*24); // Lo pasamos a dias
-                    // Si es un proyecto de hace 30 dias o menos lo mostramos como reciente
-                    if (diff_days<=30 && recent==0){
-                        // Añadimos la tarjeta del proyecto a la vista de recientes
-                        recent=1;
-                    }
-                }
-            });
-
-            // Si alguna tarea a cumplido con la condición de ser reciente entonces añadimos el proyecto a la vista de recientes
-            if (recent==1){
-                $('#RecentProjects').append(defineCard(index));
-                recent = 0;
-            }            
-            
+            // Veamos la fecha de creación de la tarea
+            var v_enddate = new Date(data_project.dataAccess);  // Establecemos la fecha de incio del proyecto
+            var diff = Math.abs(v_startdate-v_enddate); // Diferencia de dias entre la fecha actual y la fecha de inicio del proyecto
+            var diff_days=diff/(1000*60*60*24); // Lo pasamos a dias
+            // Si es un proyecto de hace 30 dias o menos lo mostramos como reciente
+            if (diff_days<=30 && recent==0){
+                // Añadimos la tarjeta del proyecto a la vista de recientes
+                $('#RecentProjects').append(defineCard(index_project));
+            }
         });
     };
 
@@ -94,6 +81,82 @@ $(document).ready(function(event) {
             
         });
     };
+
+
+    $("#dialog-confirm").dialog({
+        autoOpen: false,
+        resizable: false,
+        height: "auto",
+        width: 400,
+        modal: true,
+        text: "¿Está seguro de querer realizar esta acción?",
+        buttons: {
+            "Sí": function() {
+                var filterapplied = $(this).data('filterapplied');
+                WorkingProjects.splice(filterapplied,1);
+                var arrayJSON = JSON.stringify(WorkingProjects);
+                sessionStorage.setItem('projectsdb', arrayJSON);
+                allProjects("ALL");
+                recentProjects();
+                $(this).dialog("close");
+            },
+            "No": function() {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+    $("#dialog-priority").dialog({
+        autoOpen: false,
+        resizable: false,
+        height: "auto",
+        width: 400,
+        modal: true,
+        text: "¿Confirma cambiar la prioridad del proyecto?",
+        buttons: {
+            "Sí": function() {
+                var filterapplied = $(this).data('filterapplied');
+                if (WorkingProjects[filterapplied]["priority"] ==  1){
+                    WorkingProjects[filterapplied]["priority"] =  0;
+                } else {
+                    WorkingProjects[filterapplied]["priority"] =  1;
+                }
+                var arrayJSON = JSON.stringify(WorkingProjects);
+                sessionStorage.setItem('projectsdb', arrayJSON);
+                allProjects("ALL");
+                recentProjects();
+                $(this).dialog("close");
+            },
+            "No": function() {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+    $("#dialog-alert").dialog({
+        autoOpen: false,
+        resizable: false,
+        height: "auto",
+        width: 400,
+        modal: true,
+        text: "Alerta!!!!",
+        buttons: {
+            "Aceptar": function() {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+    function returnarrayindex(index) {
+        var foundvalue = -1; // Inicializamos en -1 para indicar que no se encontró el valor
+        $.each(WorkingProjects, function(index_project, data_project) {
+            if (data_project.id == index) {
+                foundvalue = index_project;
+                return false; // Termina el bucle each una vez que se encuentra el valor
+            }
+        });
+        return foundvalue;
+    }
 
     // -----------------------------------------------------------------------------------------------------
     // EVENTOS formularios PROJECTS
@@ -125,15 +188,97 @@ $(document).ready(function(event) {
     $(".openproject").on("click", function(e){
         // Abrimos el proyecto para asignar tareas
         e.preventDefault();
-        var id=$(this).attr("data_project");
-        console.log(id);
+        var id=returnarrayindex($(this).attr("data_project"));
         // Modificamos el objeto session "MyProject" con el valor del proyecto seleccionado.
         sessionStorage.setItem('MyProject', id);
-        //$.session.set("MyProject", id);
         e.stopPropagation();
-
         window.location.href = "interface3.html";
-        
+    });
+    
+    $(".filterproject").on("click", function(e){
+        var filterapplied = $(this).find("a").attr("dataproject");
+        console.log(filterapplied);
+        allProjects(filterapplied);
+    });
+
+    $(".deteleproject").on("click", function(e){
+        e.preventDefault();
+        var filterapplied = returnarrayindex($(this).attr("data_project"));
+        $("#dialog-confirm").dialog("open");
+
+        $("#dialog-confirm").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            text: "¿Está seguro de querer realizar esta acción?",
+            buttons: {
+              "Sí": function() {
+                // Acción si el usuario hace clic en Sí
+                WorkingProjects.splice(filterapplied,1);
+                // Ahora hay que volverlo a subir al objeto de session
+                var arrayJSON = JSON.stringify(WorkingProjects);
+                sessionStorage.setItem('projectsdb', arrayJSON);
+                // Actualizamos los proyectos
+                allProjects("ALL");
+                recentProjects();
+                $(this).dialog("close");
+              },
+              "No": function() {
+                // Acción si el usuario hace clic en No
+                $(this).dialog("close");
+              }
+            }
+          });
+        e.stopPropagation();
+    });
+    
+    $(".priority").on("click", function(e){
+        e.preventDefault();
+        // Hay que tener el indice del array para poder cambiar la prioridad.
+        var filterapplied = returnarrayindex($(this).attr("data_project"));
+        $("#dialog-priority").dialog("open");
+
+        $("#dialog-priority").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            text: "¿Confirma cambiar la prioridad del proyecto?",
+            buttons: {
+              "Sí": function() {
+                // Acción si el usuario hace clic en Sí
+                if (WorkingProjects[filterapplied]["priority"] ==  1){
+                    WorkingProjects[filterapplied]["priority"] =  0;
+                }else{
+                    WorkingProjects[filterapplied]["priority"] =  1;
+                }
+                // Ahora hay que volverlo a subir al objeto de session
+                var arrayJSON = JSON.stringify(WorkingProjects);
+                sessionStorage.setItem('projectsdb', arrayJSON);
+                // Recargamos los proyectos existentes.
+                allProjects("ALL");
+                recentProjects();
+                $(this).dialog("close");
+              },
+              "No": function() {
+                // Acción si el usuario hace clic en No
+                confirmado = false;
+                $(this).dialog("close");
+              }
+            }
+        });
+        e.stopPropagation();
+    });
+    
+    $(".editproject").on("click", function(e){
+        e.preventDefault();
+        // Hay que tener el indice del Array  para poder editarlo
+        var filterapplied = returnarrayindex($(this).attr("data"));
+        alert("Seguro que quieres editarlo");
+        e.stopPropagation();
     });
 
     $('#project').on('submit', function(e) {
@@ -205,81 +350,5 @@ $(document).ready(function(event) {
         };
         e.stopPropagation();        
       });
-    
-    $(".filterproject").on("click", function(e){
-        var filterappliced = $(this).find("a").attr("dataproject");
-        console.log(filterappliced);
-        allProjects(filterappliced);
-    });
 
-    $(".deteleproject").on("click", function(e){
-        e.preventDefault();
-        var filterappliced =$(this).attr("data");
-        console.log(filterappliced);
-        var resultado = $("#dialog-confirm").dialog("open");
-        if (resultado == true){
-            alert("Pues sí");
-        }else{
-            alert("Pues no");
-        }
-        e.stopPropagation();
-    });
-
-    $(".priority").on("click", function(e){
-        e.preventDefault();
-        var filterappliced = $(this).attr("data");
-        console.log(filterappliced);
-        alert("Seguro que quieres cambiar la prioridad");
-        e.stopPropagation();
-    });
-    
-    $(".editproject").on("click", function(e){
-        e.preventDefault();
-        var filterappliced =$(this).attr("data");
-        console.log(filterappliced);
-        alert("Seguro que quieres editarlo");
-        e.stopPropagation();
-    });
-
-
-    $("#myDialog").dialog({
-        autoOpen  : false,
-        modal     : true,
-        title     : "A Dialog Box",
-        buttons   : {
-                  'OK' : function() {
-                      return true;
-                  },
-                  'Close' : function() {
-                      $(this).dialog('close');
-                      return false;
-                  }
-        }
-    });
-
-});
-
-// ----------------------------------------------------------------------
-// Modales de alerta. Con Jquery-UI
-// ----------------------------------------------------------------------
-$(function() {
-    $("#dialog-confirm").dialog({
-      autoOpen: false,
-      resizable: false,
-      height: "auto",
-      width: 400,
-      modal: true,
-      buttons: {
-        "Sí": function() {
-          // Acción si el usuario hace clic en Sí
-          alert("Acción confirmada");
-          $(this).dialog("close");
-        },
-        "No": function() {
-          // Acción si el usuario hace clic en No
-          alert("Acción cancelada");
-          $(this).dialog("close");
-        }
-      }
-    });
 });

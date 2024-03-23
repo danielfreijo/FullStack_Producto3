@@ -4,18 +4,18 @@
         user1 = {"nombre":"Ana López", "pass":"12345678", "active":1, 
                  "rol" : "Jefe de Proyecto de Desarrollo", 
                  "Perfil" : "Profesional, comprometida y organizada con experiencia en gestión de proyectos de desarrollo de software. Es experta en coordinar equipos y cumplir con los plazos.", 
-                 "Responsabilidades" : "Planificar y supervisar el desarrollo de proyectos.<br>Coordinar con el equipo técnico para definir requisitos y funcionalidades.<br>Asignar tareas y recursos eficientemente.<br>Garantizar la calidad del software y la satisfacción del cliente.",
-                 "Desafios" : "Gestionar la complejidad técnica de los proyectos.<br>Mantener comunicación fluida entre equipos.<br>Adaptarse a cambios en los requisitos del proyecto.<br>Cumplir con los plazos establecidos." },
+                 "Responsabilidades" : "Planificar y supervisar el desarrollo de proyectos.;Coordinar con el equipo técnico para definir requisitos y funcionalidades.;Asignar tareas y recursos eficientemente.;Garantizar la calidad del software y la satisfacción del cliente.",
+                 "Desafios" : "Gestionar la complejidad técnica de los proyectos.;Mantener comunicación fluida entre equipos.;Adaptarse a cambios en los requisitos del proyecto.;Cumplir con los plazos establecidos." },
         user2 = {"nombre":"Carlos Martínez", "pass":"12345678", "active":1,
                  "rol" : "Jefe de Proyecto de Marketing", 
                  "Perfil" : "Profesional creativo y estratégico con experiencia en el ámbito del marketing digital. Tiene habilidades analíticas y una visión clara para desarrollar estrategias efectivas.", 
-                 "Responsabilidades" : "Definir estrategias de marketing para promocionar productos o servicios.<br>Coordinar campañas publicitarias en línea y fuera de línea.<br>Analizar métricas y datos para evaluar el rendimiento de las campañas.<br>Colaborar con otros departamentos para alinear iniciativas de marketing con objetivos generales.",
-                 "Desafios" : "Mantenerse actualizado con las últimas tendencias en marketing digital.<br>Competir en un mercado saturado y encontrar formas innovadoras de diferenciar la marca.<br>Adaptarse a cambios en el comportamiento del consumidor.<br>Demostrar el retorno de la inversión de las actividades de marketing." },
+                 "Responsabilidades" : "Definir estrategias de marketing para promocionar productos o servicios.;Coordinar campañas publicitarias en línea y fuera de línea.;Analizar métricas y datos para evaluar el rendimiento de las campañas.;Colaborar con otros departamentos para alinear iniciativas de marketing con objetivos generales.",
+                 "Desafios" : "Mantenerse actualizado con las últimas tendencias en marketing digital.;Competir en un mercado saturado y encontrar formas innovadoras de diferenciar la marca.;Adaptarse a cambios en el comportamiento del consumidor.;Demostrar el retorno de la inversión de las actividades de marketing." },
         user3 = {"nombre":"Laura Gómez", "pass":"12345678", "active":1,
                  "rol" : "Jefe de Proyecto de Diseño", 
                  "Perfil" : "Diseñadora apasionada y detallista con experiencia en la creación de experiencias de usuario intuitivas y atractivas. Tiene una sólida comprensión de los principios de diseño.", 
-                 "Responsabilidades" : "Dirigir el proceso de diseño de productos digitales.<br>Colaborar con equipos multidisciplinarios para definir estética y usabilidad.<br>Crear wireframes, prototipos y diseños finales que cumplan con necesidades del usuario y objetivos del negocio.<br>Supervisar la implementación del diseño y asegurarse de mantener la integridad visual del producto final.",
-                 "Desafios" : "Equilibrar la creatividad con restricciones técnicas y comerciales del proyecto.<br>Recibir y aplicar retroalimentación de múltiples partes interesadas.<br>Mantenerse al tanto de las tendencias de diseño y mejores prácticas en la industria.<br>Adaptarse a cambios en los requisitos del proyecto y ajustar el diseño en consecuencia." },
+                 "Responsabilidades" : "Dirigir el proceso de diseño de productos digitales.;Colaborar con equipos multidisciplinarios para definir estética y usabilidad.;Crear wireframes, prototipos y diseños finales que cumplan con necesidades del usuario y objetivos del negocio.;Supervisar la implementación del diseño y asegurarse de mantener la integridad visual del producto final.",
+                 "Desafios" : "Equilibrar la creatividad con restricciones técnicas y comerciales del proyecto.;Recibir y aplicar retroalimentación de múltiples partes interesadas.;Mantenerse al tanto de las tendencias de diseño y mejores prácticas en la industria.;Adaptarse a cambios en los requisitos del proyecto y ajustar el diseño en consecuencia." },
         user4 = {"nombre":"Daniel", "pass":"12345678", "active":1, 
                  "rol" : "Desarrollador 1", 
                  "Perfil" : "Profesional, comprometido y organizado con experiencia en metodos Agile. Orientado a objetivos y resultados.", 
@@ -35,6 +35,7 @@
                   "department":"Desarrollo",
                   "backgroundcolor":"777799",
                   "backgroundimage":"default.jpg",
+                  "dataAccess":"204-03-04",
                   "priority":0,
                   "status":1},
         project2={"id":1, 
@@ -43,6 +44,7 @@
                   "department":"Marketing",
                   "backgroundcolor":"FF0000",
                   "backgroundimage":"default.jpg",
+                  "dataAccess":"204-03-04",
                   "priority":1,
                   "status":0},
         project3={"id":2, 
@@ -51,6 +53,7 @@
                   "department":"Diseño",
                   "backgroundcolor":"ffffff",
                   "backgroundimage":"default.jpg",
+                  "dataAccess":"204-03-04",
                   "priority":0,
                   "status":1}
     ];
@@ -103,4 +106,3 @@
         sessionStorage.setItem('tasksdb', tempTasks);
         sessionStorage.setItem('usersdb', tempUsers);
     }
-    
