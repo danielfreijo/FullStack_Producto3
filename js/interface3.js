@@ -31,6 +31,49 @@ $(document).ready(function(event) {
     COMPLETEDTask(SelectedProject);
 
     // --------------------------------------------------------------------------
+    // FUNCIONES
+    // --------------------------------------------------------------------------
+    
+    $("#dialog-confirm").dialog({
+        autoOpen: false,
+        resizable: false,
+        height: "auto",
+        width: 400,
+        modal: true,
+        text: "¿Está seguro de querer realizar esta acción?",
+        buttons: {
+            "Sí": function() {
+                var filterapplied = $(this).data('filterapplied');
+                WorkingTasks.splice(filterapplied,1);
+                var arrayJSON = JSON.stringify(WorkingTasks);
+                sessionStorage.setItem('tasksdb', arrayJSON);
+                TODOTask(SelectedProject);
+                ONPROGRESSTask(SelectedProject);
+                COMPLETEDTask(SelectedProject);
+                $(this).dialog("close");
+            },
+            "No": function() {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+    $("#dialog-alert").dialog({
+        autoOpen: false,
+        resizable: false,
+        height: "auto",
+        width: 400,
+        modal: true,
+        text: "Alerta!!!!",
+        buttons: {
+            "Aceptar": function() {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+
+    // --------------------------------------------------------------------------
     // EVENTOS Formularios TAREAS
     // --------------------------------------------------------------------------
 
@@ -67,6 +110,17 @@ $(document).ready(function(event) {
             $("#ModalForm").modal('hide');
             e.stopPropagation();
         });
+
+        function returnarrayindex(index) {
+            var foundvalue = -1; // Inicializamos en -1 para indicar que no se encontró el valor
+            $.each(WorkingTasks, function(index_project, data_project) {
+                if (data_project.id == index) {
+                    foundvalue = index_project;
+                    return false; // Termina el bucle each una vez que se encuentra el valor
+                }
+            });
+            return foundvalue;
+        }
 
     // --------------------------------------------------------------------------
     // TAREAS
@@ -147,5 +201,38 @@ $(document).ready(function(event) {
             }
         });
     };
+
+    $(".deletetask").on("click", function(){
+        var filterapplied = returnarrayindex($(this).attr("taskdata"));
+        $("#dialog-confirm").dialog("open");
+
+        $("#dialog-confirm").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            text: "¿Está seguro de querer realizar esta acción?",
+            buttons: {
+              "Sí": function() {
+                // Acción si el usuario hace clic en Sí
+                WorkingTasks.splice(filterapplied,1);
+                // Ahora hay que volverlo a subir al objeto de session
+                var arrayJSON = JSON.stringify(WorkingTasks);
+                sessionStorage.setItem('tasksdb', arrayJSON);
+                // Actualizamos los proyectos
+                TODOTask(SelectedProject);
+                ONPROGRESSTask(SelectedProject);
+                COMPLETEDTask(SelectedProject);
+                $(this).dialog("close");
+              },
+              "No": function() {
+                // Acción si el usuario hace clic en No
+                $(this).dialog("close");
+              }
+            }
+          });
+        e.stopPropagation();
+    });
 
 });
