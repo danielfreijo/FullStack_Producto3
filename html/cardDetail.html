@@ -67,7 +67,6 @@
                         <div class="form-group mb-4">
                             <label for="taskResponsibles">Responsables:</label>
                             <input type="text" id="taskResponsibles" name="taskResponsibles" class="form-control">
-                        <!-- Aquí podrías usar un campo de entrada múltiple o un campo de selección múltiple -->
                         </div>
                         <div class="form-group mb-4">
                             <label for="taskEndDate">Fecha de Finalización</label>
@@ -81,7 +80,7 @@
                             <label for="taskStatus">Estado</label>
                             <select id="taskStatus" name="taskStatus" class="form-control">
                                 <option value="POR HACER">Por Hacer</option>
-                                <option value="EN PROCESO">En Proceso</option>
+                                <option value="EN PROGRESO">En Progreso</option>
                                 <option value="FINALIZADO">Finalizado</option>
                             </select>
                         </div>
@@ -92,47 +91,90 @@
         </div>
     </div>
 
+    <!-- Modal de editar tarea -->
+    <div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTaskModalLabel">Editar tarea</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body mt-4"> 
+                    <form id="editTaskForm">
+                        <div class="form-group mb-4">
+                            <label for="editTaskTitle">Título</label>
+                            <input type="text" id="editTaskTitle" name="taskTitle" class="form-control" required>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="editTaskDescription">Descripción</label>
+                            <textarea id="editTaskDescription" name="taskDescription" class="form-control" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="editTaskResponsibles">Responsables:</label>
+                            <input type="text" id="editTaskResponsibles" name="taskResponsibles" class="form-control">
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="editTaskEndDate">Fecha de Finalización</label>
+                            <input type="date" id="editTaskEndDate" name="taskEndDate" class="form-control" required>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="editTaskNotes">Notas</label>
+                            <textarea id="editTaskNotes" name="taskNotes" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="editTaskStatus">Estado</label>
+                            <select id="editTaskStatus" name="taskStatus" class="form-control">
+                                <option value="POR HACER">Por Hacer</option>
+                                <option value="EN PROGRESO">En Progreso</option>
+                                <option value="FINALIZADO">Finalizado</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-4 float-end">Guardar Cambios</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!--Contenedor principal del contenido-->
-    <div class="container" id="main-container">
+    <div class="container" id="main-container" >
         
-        <div class="col-4 text-center">
-            <div class="d-flex flex-column align-items-center">
+        <div class="col-4 text-center" id="drop_zone_todo" >
+            <div class="d-flex flex-column align-items-center" >
                 <h5 id="card-title">POR HACER</h5>
-                <div class="task-cards mt-3" data-state="POR HACER" >
+                <ol class="task-cards mt-3" data-state="POR HACER" style="min-height:40px; min-width: 300px;" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <!-- Tarjetas de tareas se agregarán aquí -->
-                </div>
-                <button type="button" class="btn btn-primary mt-2 addCardBtn openModal" data-state="POR HACER" >
-                    <span style="font-size: 20px;">+ </span>Añadir
-                </button>
+                </ol>
             </div>
+            <button type="button" class="btn btn-primary mt-5 addCardBtn openModal" data-state="POR HACER" >
+                <span style="font-size: 20px;">+ </span>Añadir
+            </button>
         </div>
-        <div class="col-4 text-center">
-            <div class="d-flex flex-column align-items-center">
+        <div class="col-4 text-center" id="drop_zone_progress" >
+            <div class="d-flex flex-column align-items-center" >
                 <h5 id="card-title">EN PROGRESO</h5>
-                <div class="task-cards mt-3" data-state="EN PROGRESO">
+                <ol class="task-cards mt-3" data-state="EN PROGRESO" style="min-height:40px; min-width: 300px;" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <!-- Tarjetas de tareas se agregarán aquí -->
-                </div>
-                <button type="button" class="btn btn-primary mt-2 addCardBtn openModal" data-state="EN PROGRESO" >
-                    <span style="font-size: 20px;">+ </span>Añadir
-                </button>
+                </ol> 
             </div>
+            <button type="button" class="btn btn-primary mt-5 addCardBtn openModal" data-state="EN PROGRESO" >
+                <span style="font-size: 20px;">+ </span>Añadir
+            </button>
         </div>
-        <div class="col-4 text-center">
-            <div class="d-flex flex-column align-items-center">
+        <div class="col-4 text-center" id="drop_zone_done">
+            <div class="d-flex flex-column align-items-center" >
                 <h5 id="card-title">FINALIZADO</h5>
-                <div class="task-cards mt-3" data-state="FINALIZADO" ">
+                <ol class="task-cards mt-3" data-state="FINALIZADO"style="min-height:40px; min-width: 300px;" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <!-- Tarjetas de tareas se agregarán aquí -->
-                </div>
-                <button type="button" class="btn btn-primary mt-2 addCardBtn openModal" data-state="FINALIZADO"  >
-                    <span style="font-size: 20px;">+ </span>Añadir
-                </button>
+                </ol>
             </div>
+            <button type="button" class="btn btn-primary mt-5 addCardBtn openModal" data-state="FINALIZADO"  >
+                <span style="font-size: 20px;">+ </span>Añadir
+            </button>
         </div>
       
     </div>
 
-    
     <!--Sidebar para editar proyecto-->
     <div class="sidebar bg-light position-absolute" id="sidebar-menu">
         <div class="sidebar-header m-4">
@@ -213,7 +255,6 @@
             </div>
         </div>
     </div>
-
 
     <!--Scripts para funcionalidades-->
     <script src="../assets/libraries/jquery-3.6.0.min.js" ></script>

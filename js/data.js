@@ -47,7 +47,34 @@ if (!sessionStorage.getItem('projectsdb') || !sessionStorage.getItem('usersdb'))
                         "title": "Tarea 3",
                         "description": "Description of Task 2",
                         "responsible": ["Daniel", "Esteban"],
+                        "enddate": "2024-04-28",
+                        "notes": "Some notes about Task 2",
+                        "status": "FINALIZADO"
+                    },
+                    {
+                        "id": 3,
+                        "title": "Tarea 4",
+                        "description": "Description of Task 1",
+                        "responsible": ["Maria", "Jordi"],
+                        "enddate": "2024-04-15",
+                        "notes": "Some notes about Task 1",
+                        "status": "POR HACER"
+                    },
+                    {
+                        "id": 4,
+                        "title": "Tarea 5",
+                        "description": "Description of Task 2",
+                        "responsible": ["Carlos", "Esteban"],
                         "enddate": "2024-04-20",
+                        "notes": "Some notes about Task 2",
+                        "status": "POR HACER"
+                    },
+                    {
+                        "id": 5,
+                        "title": "Tarea 6",
+                        "description": "Description of Task 2",
+                        "responsible": ["Daniel", "Esteban"],
+                        "enddate": "2024-04-28",
                         "notes": "Some notes about Task 2",
                         "status": "FINALIZADO"
                     },
