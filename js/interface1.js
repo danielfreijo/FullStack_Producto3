@@ -82,7 +82,10 @@ $(document).ready(function(event) {
         });
     };
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     $("#dialog-confirm").dialog({
         autoOpen: false,
         resizable: false,
