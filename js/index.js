@@ -103,7 +103,6 @@ $(document).ready(function() {
       console.log("Tipo de fondo seleccionado fuera de la función:", backgroundType);
     }
   });
-
   $('#backgroundTypeCard').change(function() {
     var backgroundTypeCard = $(this).val(); // Obtener el valor seleccionado del select
     if (backgroundTypeCard === 'color') {
@@ -127,7 +126,6 @@ $(document).ready(function() {
       $('#previewImage').hide();
     }
   });
-
   $('#backgroundImageCard').change(function() {
     var selectedImage = $(this).val();
     if (selectedImage) {

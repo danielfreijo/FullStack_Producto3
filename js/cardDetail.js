@@ -19,6 +19,7 @@ function createTaskCard(task) {
             <input type="checkbox" id="taskCheckbox-${task.id}">
             <label for="taskCheckbox-${task.id}">Finaliza: ${formattedDate}</label>
           </div>
+          <button class="btn btn-primary delete-button" style="display:none;">ELIMINAR</button>
         </div>
       </div>
     </li>
@@ -364,7 +365,36 @@ $(document).ready(function() {
         $('#editTaskModal').modal('hide');
       }
     });
+
+    // Mosrar y ocultar botón de eliminar tarea
+    $(document).on('mouseenter', '.task-card', function() {  
+      $(this).find('.delete-button').show();
+    });
+    $(document).on('mouseleave', '.task-card', function() {
+      $(this).find('.delete-button').hide();
+    });
     
+    // Eliminar una tarea
+    $(document).on('click', '.delete-button', function(event) {
+      event.preventDefault();
+      const taskId = $(this).closest('.task-card-btn').data('task-id');
+      const taskIndex = project.tasks.findIndex(task => task.id.toString() === taskId.toString());
+      console.log('Eliminar tarea con ID:', taskId);
+      console.log('Índice de la tarea:', taskIndex);
+
+      $('#confirmationModal').modal('show');
+
+      $('#confirmDelete').click(function() {
+        project.tasks.splice(taskIndex, 1);
+        sessionStorage.setItem('projectsdb', JSON.stringify(projects));
+        showTasksCards(project.tasks);
+        $('#confirmationModal').modal('hide');
+      });
+
+      return false;
+    });
+
+
 
   }
 });

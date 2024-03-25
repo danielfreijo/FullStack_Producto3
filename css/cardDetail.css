@@ -139,6 +139,7 @@ a {
     list-style-type: none; /* Eliminar los números de la lista */
 }
 .task-card-btn {
+    position: relative;
     color: rgb(0, 6, 90);
     text-align: left;
     width: 320px;
@@ -171,6 +172,19 @@ a {
 }
 .task-end-date {
     margin-top: 20px;
+}
+.delete-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #ff0000 !important;
+    border-color: #ff0000 !important;
+    color: white;
+    font: 600 Montserrat, sans-serif !important;
+    font-size: 10px;
+    padding: 3px;
+    margin-top: 5px;
+    margin-right: 5px;
 }
 @media (max-width: 768px) {
     #main-container {
