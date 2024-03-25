@@ -158,12 +158,12 @@ $(document).ready(function() {
     $('#sidebarDescription').text(project.description)
     $('#sidebarBackgroundColorCard').val(project.backgroundcolorcard)
     if (project.backgroundcard !== "null") {
-      $('#previewImageCard').attr('src', `../assets/BackgroundCards/${project.backgroundcard}`).show();
+      $('#previewImageCard').attr('src', `./assets/BackgroundCards/${project.backgroundcard}`).show();
     }
     $('#sidebarDepartment').val(project.department)
     $('#sidebarBackgroundColor').val(project.backgroundcolor) 
     if (project.backgroundimage !== "null") {
-      $('#previewImage').attr('src', `../assets/BackgroundsProjects/${project.backgroundimage}`).show();
+      $('#previewImage').attr('src', `./assets/BackgroundsProjects/${project.backgroundimage}`).show();
     }
     
     // Mostrar el tipo de fondo seleccionado
@@ -202,7 +202,7 @@ $(document).ready(function() {
     $('#sidebarBackgroundImage').change(function() {
       var selectedImage = $(this).val();
       if (selectedImage !== "null") {
-        $('#previewImage').attr('src', `../assets/BackgroundsProjects/${selectedImage}`).show();
+        $('#previewImage').attr('src', `./assets/BackgroundsProjects/${selectedImage}`).show();
       } else {
         $('#previewImage').hide();
       }
@@ -210,7 +210,7 @@ $(document).ready(function() {
     $('#sidebarBackgroundImageCard').change(function() {
       var selectedImage = $(this).val();
       if (selectedImage !== "null") {
-        $('#previewImageCard').attr('src', `../assets/BackgroundCards/${selectedImage}`).show();
+        $('#previewImageCard').attr('src', `./assets/BackgroundCards/${selectedImage}`).show();
       } else {
         $('#previewImageCard').hide();
       }
@@ -254,7 +254,7 @@ $(document).ready(function() {
 
     // Aplicar el color de fondo al elemento deseado en la página
     if (project.backgroundimage != null) {
-      $('body').css('background-image', `url(../assets/BackgroundsProjects/${project.backgroundimage})`);
+      $('body').css('background-image', `url(./assets/BackgroundsProjects/${project.backgroundimage})`);
       $('body').css('background-size', 'cover');
       $('body').css('background-position', 'center');
       $('body').css('background-repeat', 'no-repeat');
