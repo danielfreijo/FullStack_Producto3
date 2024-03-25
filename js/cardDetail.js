@@ -53,7 +53,6 @@ function showTasksCards (tasks) {
 
 function allowDrop(event) {
   event.preventDefault();
-
 }
 
 function drag(event) {

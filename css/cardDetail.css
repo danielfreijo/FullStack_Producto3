@@ -16,7 +16,8 @@ a {
 }
 .col-4 {
     width: calc(33.33% - 20px); /* Ancho de las columnas teniendo en cuenta el espacio entre ellas */
-    height: 100vh;
+    height: auto;
+    min-height: 100vh;
     background: linear-gradient(to bottom, #999999, #00065A);
     float: left; 
     margin-right: 20px; 
