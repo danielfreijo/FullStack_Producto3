@@ -1,4 +1,4 @@
-document.getElementById("openBtn").addEventListener("click", function() {
+document.getElementById("addproject").addEventListener("click", function() {
     document.getElementById("popup").style.display = "block";
   });
   

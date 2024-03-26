@@ -42,5 +42,14 @@ body {
     background-color: rgba(0, 6, 90, 1);
     color: rgb(255, 255, 255);
   }
-  
 
+  .navbar-nav {
+    margin-left: 80px;
+    display: flex;
+}
+.nav-item{
+    padding-left: 30px;
+    padding-right: 30px;
+    display: flex;
+    text-align: center;
+}

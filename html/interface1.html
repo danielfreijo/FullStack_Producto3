@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/interface1.css">
+</head>
+
+<body>
+    <div class="interface1">
+    <nav class="navbar navbar-expand-md navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="../assets/logo.png" alt="Logo" width="125" height="70" class="d-inline-block">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>                
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">INICIO</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">PROYECTOS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">PROYECTOS<br>PRIORITARIOS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">CONTACTO</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link addbtn" id="addproject">AÑADIR PROYECTO</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+<div>
+    <div class="container proyectoctr">
+    <h2>Proyectos recientes</h2>
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        <div class="col">
+          <div class="card">
+            <img src="../assets/17-lifestyle-people-ordering-sushi-home.jpg" class="card-img-top imagen" alt="...">
+          </div>
+        </div>
+        <div class="col">
+          <div class="card">
+            <img src="../assets/depressing-blue-monday-composition.jpg" class="card-img-top imagen" alt="...">
+          </div>
+        </div>
+        <div class="col">
+          <div class="card">
+            <img src="../assets/group-casually-dressed-business-people-discussing-ideas-office.jpg" class="card-img-top imagen" alt="...">
+          </div>
+        </div>
+        <div class="col">
+          <div class="card">
+            <img src="../assets/representation-user-experience-interface-design.jpg" class="card-img-top imagen" alt="...">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container proyectoctr">
+    <h2>Proyectos</h2>
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        <div class="col">
+          <div class="card">
+            <img src="../assets/shopping-cart-3d-render-icon.jpg" class="card-img-top imagen" alt="...">
+          </div>
+        </div>
+        <div class="col">
+          <div class="card">
+            <img src="../assets/depressing-blue-monday-composition.jpg" class="card-img-top imagen" alt="...">
+          </div>
+        </div>
+        <div class="col">
+          <div class="card">
+            <img src="../assets/group-casually-dressed-business-people-discussing-ideas-office.jpg" class="card-img-top imagen" alt="...">
+          </div>
+        </div>
+        <div class="col">
+          <div class="card">
+            <img src="../assets/representation-user-experience-interface-design.jpg" class="card-img-top imagen" alt="...">
+          </div>
+        </div>
+      </div>
+    </div>
+
+</div>
+</div>
+    <div id="popup" class="popup">
+      <div class="popup-content">
+        <span class="close" id="closeBtn">&times;</span>   
+        <div class="container"> 
+            <h2 class="title2">Crear nuevo proyecto</h2>
+            <form>
+              <div class="form-group">
+                </label><b>Nombre del proyecto</b></label>
+                <input type="text" class="nombre form-control" id="nombreproyecto" placeholder="">
+              </div>
+              <div class="form-group">
+                <label><b>Descripción</b></label>
+                <textarea class="descripcion form-control" id="descripcion" rows="6" cols="80" placeholder=""></textarea>
+              </div>
+              <button type="submit" class="buttonCrear btn-primary float-right">Crear</button>
+            </form>
+        </div> 
+      </div>
+    </div>
+        
+        <script src="../js/newproject.js"></script>  
+</body>
+</html>
