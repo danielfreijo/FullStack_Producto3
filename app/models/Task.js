@@ -1,4 +1,5 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const subjectSchema = new Schema({
     idtask: {
@@ -21,15 +22,15 @@ const subjectSchema = new Schema({
         type: String,
         required: false
     },
+    notes: {
+        type: String,
+        required: false
+    },
     startdate: {
         type: String,
         required: false
     },
     enddate: {
-        type: String,
-        required: false
-    },
-    backgroundcolor: {
         type: String,
         required: false
     },
@@ -42,28 +43,28 @@ const subjectSchema = new Schema({
 
 // Getters
 subjectSchema.methods.getId = function() { return this.id; };
-subjectSchema.methods.getproject_id = function() { return this.project_id; };
-subjectSchema.methods.getuserassigned = function() { return this.userassigned; };
-subjectSchema.methods.getnametask = function() { return this.nametask; };
-subjectSchema.methods.getdescriptiontask = function() { return this.descriptiontask; };
-subjectSchema.methods.getstartdate = function() { return this.startdate; };
-subjectSchema.methods.getenddate = function() { return this.enddate; };
-subjectSchema.methods.getbackgroundcolor = function() { return this.backgroundcolor; };
-subjectSchema.methods.getstatus = function() { return this.status; };
+subjectSchema.methods.getProject_id = function() { return this.project_id; };
+subjectSchema.methods.getUserassigned = function() { return this.userassigned; };
+subjectSchema.methods.getNametask = function() { return this.nametask; };
+subjectSchema.methods.getDescriptiontask = function() { return this.descriptiontask; };
+subjectSchema.methods.getNotes = function() { return this.notes; };
+subjectSchema.methods.getStartDate = function() { return this.startdate; };
+subjectSchema.methods.getEndDate = function() { return this.enddate; };
+subjectSchema.methods.getStatus = function() { return this.status; };
 // Setters
 subjectSchema.methods.setId = function(n) { this.id=n;};
-subjectSchema.methods.setproject_id = function(n) { this.project_id=n;};
-subjectSchema.methods.setuserassigned = function(n) { this.userassigned=n;};
-subjectSchema.methods.setnametask = function(n) { this.nametask=n;};
-subjectSchema.methods.setdescriptiontask = function(n) { this.descriptiontask=n;};
-subjectSchema.methods.setstartdate = function(n) { this.startdate=n;};
-subjectSchema.methods.setenddate = function(n) { this.enddate=n;};
-subjectSchema.methods.setbackgroundcolor = function(n) { this.backgroundcolor=n;};
-subjectSchema.methods.setstatus = function(n) { this.status=n;};
+subjectSchema.methods.setProject_id = function(n) { this.project_id=n;};
+subjectSchema.methods.setUserassigned = function(n) { this.userassigned=n;};
+subjectSchema.methods.setNametask = function(n) { this.nametask=n;};
+subjectSchema.methods.setDescriptiontask = function(n) { this.descriptiontask=n;};
+subjectSchema.methods.setNotes = function(n) { this.notes=n;};
+subjectSchema.methods.setStartDate = function(n) { this.startdate=n;};
+subjectSchema.methods.setEndDate = function(n) { this.enddate=n;};
+subjectSchema.methods.setStatus = function(n) { this.status=n;};
 
 // Listas
 subjectSchema.methods.addTasks = function (h){this.tasks.push(h)};
 subjectSchema.methods.getTasks = function () {return this.tasks}
 
 module.exports = mongoose.model('Subject', subjectSchema);
-
+module.exports = Subject;

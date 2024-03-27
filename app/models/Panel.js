@@ -1,4 +1,5 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const subjectSchema = new Schema({
     id: {
@@ -25,16 +26,24 @@ const subjectSchema = new Schema({
         type: String,
         required: false
     },
-    dataAccess: {
+    backgroundcolorcard: {
         type: String,
+        required: false
+    },
+    backgroundcard: {
+        type: String,
+        required: false
+    },
+    dataAccess: {
+        type: Date,
         required: false
     },
     priority: {
-        type: String,
+        type: integer,
         required: false
     },
     status: {
-        type: String,
+        type: integer,
         required: false
     }
 });
@@ -46,6 +55,8 @@ subjectSchema.methods.getDescription = function() {return this.descripcion;}
 subjectSchema.methods.getDepartment = function() {return this.department;}
 subjectSchema.methods.getBackgroundcolor = function() {return this.backgroundcolor;}
 subjectSchema.methods.getBackgroundimage = function() {return this.backgroundimage;}
+subjectSchema.methods.getBackgroundcolorcard = function() {return this.backgroundcolorcard;}
+subjectSchema.methods.getBackgroundcard = function() {return this.backgroundcard;}
 subjectSchema.methods.getDataAccess = function() {return this.dataAccess;}
 subjectSchema.methods.getPriority = function() {return this.priority;}
 subjectSchema.methods.getStatus = function() {return this.status;}
@@ -57,6 +68,8 @@ subjectSchema.methods.setDescription = function(n) { this.descripcion=n;};
 subjectSchema.methods.setDepartment = function(n) { this.department=n;};
 subjectSchema.methods.setBackgroundcolor = function(n) { this.backgroundcolor=n;};
 subjectSchema.methods.setBackgroundimage = function(n) { this.backgroundimage=n;};
+subjectSchema.methods.setBackgroundcolorcard = function(n) { this.backgroundcolorcard=n;};
+subjectSchema.methods.setBackgroundcard = function(n) { this.backgroundcard=n;};
 subjectSchema.methods.setDataAccess = function(n) { this.dataAccess=n;};
 subjectSchema.methods.setPriority = function(n) { this.priority=n;};
 subjectSchema.methods.setStatus = function(n) { this.status=n;};
@@ -66,5 +79,5 @@ subjectSchema.methods.addProjects = function (h){this.projects.push(h)};
 subjectSchema.methods.getProjects = function () {return this.projects}
 
 module.exports = mongoose.model('Subject', subjectSchema);
-
+module.exports = Subject;
 

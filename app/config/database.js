@@ -1,16 +1,5 @@
 const mongoose = require("mongoose");
 
-//var Schema = mongoose.Schema;
-
-// Create a new Mongoose model from the schema, using the name of the collection as specified in our NodeJS script that calls this file 
-//module.exports = mongoose.model('Category', new Schema({
-    // The categoryName field is required and must be a string with a maximum length of  100 characters
-//    categoryName: {type: String, required: true, maxLength: 100},
-    
-    // The description field is optional and can store text with a maximum length of  500 characters
-//    description: {type: String, maxLength: 500}
-//}));
-
 const Schema = mongoose.Schema;
 
 const DB_connect = async () => {

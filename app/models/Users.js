@@ -1,4 +1,5 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const subjectSchema = new Schema({
     nombre: {
@@ -49,3 +50,4 @@ subjectSchema.methods.addUser = function (h){this.users.push(h)};
 subjectSchema.methods.getUser = function () {return this.users}
 
 module.exports = mongoose.model('Subject', subjectSchema);
+module.exports = Subject;

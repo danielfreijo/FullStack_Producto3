@@ -1,10 +1,10 @@
 // Importar los módulos necesarios
 const express = require('express');
 const router = express.Router();
-const Subject = require('../models/Panel');
+const Subject = require('../models/Users');
 
 // Definir una ruta para el panel
-router.get('/Panel', async (req, res) => {
+router.get('/Users', async (req, res) => {
     try {
         // Obtener los datos del panel desde la base de datos o cualquier otra fuente de datos
         const subjects = await Subject.find().exec();
