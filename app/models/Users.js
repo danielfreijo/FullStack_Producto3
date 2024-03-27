@@ -11,8 +11,8 @@ const subjectSchema = new Schema({
         required: true
     },
     active: {
-        type: String, 
-        required: integer
+        type: Number, 
+        required: false
     },
     Perfil: {
         type: String,
@@ -49,5 +49,5 @@ subjectSchema.methods.setDesafios = function(n) { this.Desafios=n;};
 subjectSchema.methods.addUser = function (h){this.users.push(h)};
 subjectSchema.methods.getUser = function () {return this.users}
 
-module.exports = mongoose.model('Subject', subjectSchema);
-module.exports = Subject;
+module.exports = mongoose.model('Users', subjectSchema);
+module.exports = subjectSchema;

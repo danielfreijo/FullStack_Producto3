@@ -3,11 +3,11 @@ const { Schema } = mongoose;
 
 const subjectSchema = new Schema({
     idtask: {
-        type: integer,
+        type: Number,
         required: true
     },
     project_id: {
-        type: integer, 
+        type: Number, 
         required: true
     },
     userassigned: {
@@ -66,5 +66,5 @@ subjectSchema.methods.setStatus = function(n) { this.status=n;};
 subjectSchema.methods.addTasks = function (h){this.tasks.push(h)};
 subjectSchema.methods.getTasks = function () {return this.tasks}
 
-module.exports = mongoose.model('Subject', subjectSchema);
-module.exports = Subject;
+module.exports = mongoose.model('Task', subjectSchema);
+module.exports = subjectSchema;

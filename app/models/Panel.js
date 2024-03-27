@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const subjectSchema = new Schema({
     id: {
-        type: String,
+        type: Number,
         required: true
     },
     name: {
@@ -39,11 +39,11 @@ const subjectSchema = new Schema({
         required: false
     },
     priority: {
-        type: integer,
+        type: Number,
         required: false
     },
     status: {
-        type: integer,
+        type: Number,
         required: false
     }
 });
@@ -78,6 +78,6 @@ subjectSchema.methods.setStatus = function(n) { this.status=n;};
 subjectSchema.methods.addProjects = function (h){this.projects.push(h)};
 subjectSchema.methods.getProjects = function () {return this.projects}
 
-module.exports = mongoose.model('Subject', subjectSchema);
-module.exports = Subject;
+module.exports = mongoose.model('Panel', subjectSchema);
+module.exports = subjectSchema;
 
