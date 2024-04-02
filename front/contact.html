@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskHub | Proyectos</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap">
+    <link href="./assets/libraries/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+    <!--Menú de navegación-->
+    <nav class="navbar navbar-expand-md navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="./assets/logo.png" alt="Logo" width="125" height="70" class="d-inline-block">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>                
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="./index.html">PROYECTOS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./priorityProjects.html">PROYECTOS PRIORITARIOS</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="./contact.html">CONTACTO</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-btn">
+                        <button class="btn btn-primary" id="openModal" >AÑADIR PROYECTO</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!--Modal para añadir proyecto-->
+    <div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProjectModalLabel">Crear nuevo proyecto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body mt-4">  
+                    <form id="addProjectForm">
+                        <div class="mb-4">
+                            <label for="projectName" class="form-label">Nombre del Proyecto</label>
+                            <input type="text" class="form-control" id="projectName" required>  
+                        </div>
+                        <div class="mb-4">
+                            <label for="description" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="description" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="backgroundTypeCard" class="form-label">Tipo de fondo para la targeta</label>
+                            <select class="form-select" id="backgroundTypeCard" required>
+                                <option value="color">Color</option>
+                                <option value="image">Imagen</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="colorSectionCard">
+                            <label for="backgroundColorCard" class="form-label">Color de fondo del tablero</label>
+                            <input type="color" class="form-control" id="backgroundColorCard" value="#FFFFFF" style="width: 150px;">
+                        </div>
+                        <div class="mb-3" id="imageSectionCard" style="display: none;" >
+                            <label for="backgroundImageCard" class="form-label">Imagen de fondo del tablero</label>
+                            <select class="form-select" id="backgroundImageCard">
+                                <option value="">Seleccionar Imagen</option>
+                                <option value="cafeteria.jpg">imagen 1</option>
+                                <option value="default.jpg">imagen 2</option>
+                                <option value="desarrollo1.jpg">imagen 3</option>
+                                <option value="pasteleria.jpg">imagen 4</option>
+                                <option value="diseño1.jpg">imagen 5</option>
+                                <option value="diseño2.jpg">imagen 6</option>
+                                <option value="marketing1.jpg">imagen 7</option>
+                                <option value="marketing2.jpg">imagen 8</option>
+                            </select>
+                            <img id="previewImageCard" src="#" alt="Vista previa" style="width: 210px; height: 120px; display: none; margin-top: 10px; margin-bottom: 10px; border: 1px solid #000; border-radius: 5px; padding: 5px; background-color: #fff; box-shadow: 0 0 5px #000;">
+                        </div>
+                        <div class="mb-3">
+                            <label for="department" class="form-label">Departamento</label>
+                            <select class="form-select" id="department" required>
+                                <option value="Desarrollo">Desarrollo</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Diseño">Diseño</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="backgroundType" class="form-label">Tipo de fondo para el Tablero</label>
+                            <select class="form-select" id="backgroundType" required>
+                                <option value="color">Color</option>
+                                <option value="image">Imagen</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="colorSection">
+                            <label for="backgroundColor" class="form-label">Color de fondo del tablero</label>
+                            <input type="color" class="form-control" id="backgroundColor" value="#FFFFFF" style="width: 150px;">
+                        </div>
+                        <div class="mb-3" id="imageSection" style="display: none;" >
+                            <label for="backgroundImage" class="form-label">Imagen de fondo del tablero</label>
+                            <!-- <input type="file" class="form-control" id="backgroundImage"> -->
+                            <select class="form-select" id="backgroundImage">
+                                <option value="">Seleccionar Imagen</option>
+                                <option value="animal1.jpg">imagen 1</option>
+                                <option value="animal2.jpg">imagen 2</option>
+                                <option value="espacio1.jpg">imagen 3</option>
+                                <option value="espacio2.jpg">imagen 4</option>
+                                <option value="paisaje1.jpg">imagen 5</option>
+                                <option value="paisaje2.jpg">imagen 6</option>
+                            </select>
+                            <img id="previewImage" src="#" alt="Vista previa" style="width: 210px; height: 120px; display: none; margin-top: 10px; margin-bottom: 10px; border: 1px solid #000; border-radius: 5px; padding: 5px; background-color: #fff; box-shadow: 0 0 5px #000;">
+                        </div>
+                        <div class="mb-3 form-check">
+                            <label for="priority" class="form-check-label" >Marcar como prioritario</label>
+                            <input type="checkbox" class="form-check-input" id="priority"> 
+                        </div>
+                        <button type="submit" class="btn btn-primary float-end">Crear proyecto</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Contenedor principal del contenido-->
+    <div class="container" id="main-container">
+        
+        <!--Formulario de contacto-->
+        <div class="container-fluid" id="contact-container">
+            <h3 class="text-white mb-5">Contacta con nosotros</h3>
+            <h6 class="text-white mb-5">Rellena el siguiente formulario y te responderemos en un máximo de 48 horas.</h6>
+            
+            <form id="contactForm">
+                <div class="row">
+                    <label for="name" class="col-sm-6 col-form-label text-white">Nombre*</label>
+                    <label for="correo" class="col-sm-6 col-form-label text-white">Correo Electrónico*</label>
+                </div>
+                <div class="mb-3 row">
+                    <div class="col-sm-6">
+                        <input type="text" id="nombre" name="nombre" class="form-control" required>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="email" id="correo" name="correo" class="form-control" required>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="motivo" class="col-sm-12 col-form-label text-white">Motivo*</label>
+                    <div class="col-sm-12">
+                        <input type="text" id="motivo" name="motivo" class="form-control" required>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="mensaje" class="col-sm-12 col-form-label text-white">Mensaje*</label>
+                    <div class="col-sm-12">
+                        <textarea id="mensaje" name="mensaje" class="form-control" rows="5" required></textarea>
+                    </div>
+                </div>
+                <div class="text-end mt-5">
+                    <button type="submit" class="btn btn-primary" style="width: 150px;">Enviar</button>
+                </div>
+            </form>
+        </div>
+            
+    </div>
+    
+    <!--Scripts para funcionalidades-->
+    <script src="./assets/libraries/jquery-3.6.0.min.js" ></script>
+    <script src="./assets/libraries/popper.min.js" ></script>
+    <script src="./assets/libraries/bootstrap.bundle.min.js"></script>
+    <script src="./js/index.js"></script>
+        
+</body>
+</html>
