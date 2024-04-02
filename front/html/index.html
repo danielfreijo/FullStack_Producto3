@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link href="../assets/libraries/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    
+</head>
+
+<body>
+     <!-- Contenedor principal con el degradado de fondo -->
+    <div class="container-fluid gradient-bg">
+        <!-- Menú de navegación -->
+        <nav class="navbar navbar-expand-md navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html">
+                    <img src="../assets/logo.png" href="index.html" alt="Logo" width="125" height="70" class="d-inline-block">
+                </a>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <!-- Contenedor <li class="nav-item">
+                            <a class="nav-link" href="index.html">INICIO</a>
+                        </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">PROYECTOS</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="proyectosprioritarios.html">PROYECTOS<br>PRIORITARIOS</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="interface3.html"target="_blank">CONTACTO</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-primary rounded-pill filter-button" name="addproject" id="addproject" href="#">AÑADIR PROYECTO</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+       
+        <!-- Contenido del modal añadir proyecto -->
+        <div id="addProjectModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Encabezado de la ventana modal -->
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="color: black;">Crear nuevo proyecto</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Cuerpo de la ventana modal -->
+                    <div class="modal-body">
+                        <!-- Formulario para agregar proyecto -->
+                        <form id="projectForm">
+                            <div class="mb-3">
+                               
+                                <label for="projectName" class="form-label" style="color: black;">Nombre del Proyecto</label>
+                                <input type="text" class="form-control" id="projectName" placeholder="">
+                            </div>
+                            <div class="mb-3">
+                                <label for="projectDescription" class="form-label"style="color: black;">Descripción del Proyecto</label>
+                                <textarea class="form-control" id="projectDescription" rows="3" placeholder=""></textarea>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Pie de la ventana modal -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="crearProyecto">Crear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Contenedor para mostrar los proyectos -->
+        
+        <div class="container">
+            <h2 class="subtitle">Proyectos Recientes</h2>
+            <h2 class="subtitle">Proyectos</h2>
+            <!-- Botones de filtro -->
+                <div class="filter-buttons"> 
+                    <button class="btn btn-primary rounded-pill filter-button" data-category="todos">Mostrar Todos</button>
+                    <button class="btn btn-primary rounded-pill filter-button" data-category="marketing">Marketing</button>
+                    <button class="btn btn-primary rounded-pill filter-button" data-category="diseño">Diseño</button>
+                    <button class="btn btn-primary rounded-pill filter-button" data-category="desarrollo">Desarrollo</button>
+                </div>
+                <div class="row" id="projectList"></div>
+                 <!-- Botón en la tarjeta para ir a interface2.html -->
+                <div class="item">
+                <!-- Otro contenido del item -->
+            </div>
+            
+        </div>    
+
+    
+    <!--Scripts para funcionalidades-->
+    <script src="../assets/libraries/jquery-3.6.0.min.js" ></script>
+    <script src="../assets/libraries/popper.min.js"></script>
+    <script src="../assets/libraries/bootstrap.bundle.min.js"></script> 
+    <script src="../js/index.js"></script>
+    <script src="../js/data.js"></script>
+    <script src="../js/contacto.js"></script>
+    <script src="../js/interface2.js"></script>
+    <script src="../js/proyectosprioritarios.js"></script>
+    <script src="../js/interface3.js"></script>
+    <script>
+        // Obtener los datos del proyecto 1
+        var project1 = projects[0]; // Suponiendo que el proyecto 1 está en la primera posición del array
+    
+    </script>
+
+
+
+</body>
+</html>
