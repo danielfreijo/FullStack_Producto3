@@ -1,0 +1,271 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+body{
+    font-family: "Montserrat", sans-serif;
+}
+
+.navbar {
+    background-color: rgb(0, 6, 90);
+    display:felx;
+    
+}
+
+
+.d-inline-block{
+    float:left;
+    padding:8px;
+
+}
+
+.navbar-brand {
+    margin-right: 10px; /* Ajusta el espacio entre el logo y el menú */
+}
+
+/*Elementos para centrar el contenido de la barra del menu*/
+.navbar-nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center; 
+    list-style-type: none;
+    margin-left: 100px; 
+    padding: 0; 
+    
+}
+
+
+.nav-item {
+    padding: 0 5%;
+    box-sizing: border-box; 
+    list-style: none;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 0px;
+    display:gird;
+    grid-auto-flow:column;
+    grid-auto-columns:max-content;
+    gap: 2em;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1); 
+}
+
+.gradient-bg {
+    height: 100vh; 
+    background-image: linear-gradient(to bottom, #878894 40%, rgb(0, 6, 90) );
+    background-size: cover; 
+    color: white; 
+    --bs-gutter-x:0px;
+}
+ 
+ :root{
+    --padding-conteiner:100px 0;
+    --color-title:white;
+ }
+
+ /*Pagina principal*/ 
+
+ .container{
+    width:90%;
+    margin: auto;
+    overflow:hidden;
+    padding: var(--padding-conteiner);
+    display: gird;
+    gap: 1 em; 
+    grid-template-columns: repeat(auto-fit,minmax(260px,auto));
+    
+ }
+
+ .projects-recents{
+    padding-top: 100px;
+    display: grid;
+    gap: 1em;
+    justify-items: center;
+    width:260px;
+    overflow:hieden;
+    margin:0 auto;
+ }
+
+
+ /*Tarjeta proyectos*/
+
+ .card-title{
+    color:white;
+    font-weight: 600;
+    
+ }
+
+ .card-body{
+    background-image: linear-gradient( rgba(170, 169, 169, 0.7), rgba(170, 169, 169, 0.7));
+    border-radius: 10px; 
+ }
+
+/*Icono estrella marcar y desmarcar*/
+ .favorite-icon.favorited {
+    color: #F48598; 
+  }
+
+
+
+/*Botones rosas navegacion y página principal*/
+
+.btn {
+    background-color: #F48598;
+    border-color: #F48598;
+    margin-bottom: 20px; 
+    margin-top: 20px;
+    padding: 2, 20px; 
+    border-radius: 20px; 
+    font-size: 15px; 
+    color: white; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+
+.btn:hover {
+    background-color: #D8566B; 
+    color: #FFFFFF; 
+    border-color: #F48598;
+   
+}
+
+.filter-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-between; 
+}
+
+.filter-buttons .btn {
+  flex-grow: 0.5; 
+  margin-right: 5px;
+  margin-left: 5px; 
+}
+
+
+/*Interdaz 3*/
+
+/* Estilos generales del contenedor del formulario */
+.contenedor-contacto {
+    max-width: 600px;
+    margin:  auto;
+    overflow:hidden;
+    display: gird;
+    margin-top: 50px;
+    padding: 20px;
+}
+
+/* Estilos para el título del formulario */
+.contact-Form {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+/* Estilos para el mensaje de respuesta */
+.respond-contact {
+    font: size 20px;
+}
+
+/* Estilos para los elementos del formulario */
+.contenedor-contacto form div {
+    margin-bottom: 10px;
+}
+
+.contenedor-contacto form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.contenedor-contacto form input[type="text"],
+.contenedor-contacto form input[type="email"],
+.contenedor-contacto form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid rgb(0, 6, 90,0.6);
+    background-color: rgb(0, 6, 90,0.6) ;
+    border-radius: 30px;
+}
+
+/* Estilos para los botones del formulario */
+.contenedor-contacto form button[type="submit"] {
+    background-color: #F48598; 
+    color: #FFFFFF; 
+    border-color: #F48598;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
+}
+.contenedor-contacto form button[type="submit"]:hover {
+    background-color: #D8566B;
+}
+
+
+/*Interface2 */
+
+/* Estilos para la interfaz 3 - To-Do List */
+
+/* Estilos generales del contenedor de la interfaz 3 */
+.container-interface3 {
+    display: flex;
+    justify-content: space-around;
+    margin: 50px auto;
+    max-width: 1000px;
+}
+
+/* Estilos para las columnas de tareas */
+.column1-interface3,
+.column2-interface3,
+.column3-interface3 {
+    width: 30%;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para las tareas */
+.task {
+    background-color: #ffffff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para los títulos de las tareas */
+.task h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+/* Estilos para las descripciones de las tareas */
+.task p {
+    margin: 5px 0;
+    color: #6c757d;
+}
+
+/* Estilos para los botones "Añadir Tarea" */
+.btn-add-task {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border: none; /* Eliminar el borde */
+    border-radius: 5px;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
+}
+
+.btn-add-task:hover {
+    color: #ffffff; 
+    text-decoration: none; 
+}
