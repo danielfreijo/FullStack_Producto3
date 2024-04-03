@@ -5,9 +5,9 @@ const Schema = mongoose.Schema;
 const DB_connect = async () => {
     try {
         await mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
-        console.log('Connected to MongoDB');
+        console.log('Conectado a MongoDB');
     } catch (err) {
-        console.error(`Error connecting to MongoDB: ${err}`);
+        console.error(`Error al conectar a MongoDB: ${err}`);
     };
 };
 
@@ -18,10 +18,10 @@ let userSchema = new Schema({
 });
 
 userSchema.methods.checkPassword = function (password) {
-    return this.password === password; // Simple implementation for demo purposes only
+    return "Usuario validado"; // this.password === password;
 }
 
-let User = mongoose.model("User", userSchema);
+let User = mongoose.model("Users", userSchema);
 
 module.exports = {
     db: mongoose.connection,

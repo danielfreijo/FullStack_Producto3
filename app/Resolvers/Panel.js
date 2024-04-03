@@ -13,7 +13,7 @@ const resolvers = {
       try {
         return await Project.findById(id);
       } catch (error) {
-        throw new Error('Error al obtener el tema');
+        throw new Error('Error al obtener el proyecto');
       }
     },
   },
@@ -24,7 +24,7 @@ const resolvers = {
         await project.save();
         return project;
       } catch (error) {
-        throw new Error('Error al crear el tema');
+        throw new Error('Error al crear el proyecto');
       }
     },
     updateSubject: async (_, { id, input }) => {
@@ -32,7 +32,7 @@ const resolvers = {
         const project = await Project.findByIdAndUpdate(id, input, { new: true });
         return project;
       } catch (error) {
-        throw new Error('Error al actualizar el tema');
+        throw new Error('Error al actualizar el proyecto');
       }
     },
     deleteSubject: async (_, { id }) => {
@@ -40,7 +40,7 @@ const resolvers = {
         const project = await Project.findByIdAndDelete(id);
         return project;
       } catch (error) {
-        throw new Error('Error al eliminar el tema');
+        throw new Error('Error al eliminar el proyecto');
       }
     },
   },
