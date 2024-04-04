@@ -1,38 +1,61 @@
 const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
+const { ApolloServer, gql } = require('apollo-server-express');
+const path = require('path');
 // ------------------------------------------------------------------------
 const mongoose = require('mongoose');
-const Panel = require('./models/Panel');
-const Tasks = require('./models/Task');
-const Users = require('./models/Users');
-// ------------------------------------------------------------------------
-//const typeDefs = require('./Schema'); // Importa el esquema GraphQL
-//const resolvers = require('./Resolvers'); // Importa los resolvers GraphQL
 
-const bodyParser = require('body-parser');
-const app = express();
+// --------------------------------------------------------------------------
+const typeDefs = gql`
+  type Query {
+    hello: String
+  }
+`;
 
-// Conectar a la base de datos MongoDB
-mongoose.connect('mongodb+srv://cespigol:VYbSdNxX9kD1BFD5@fullstack.mfvrneg.mongodb.net/')
-.then(() => console.log('Conexión exitosa a MongoDB'))
-.catch(err => console.error('Error de conexión a MongoDB:', err));
+const resolvers = {
+  Query: {
+    hello: () => 'Hello world!',
+  },
+};
+// --------------------------------------------------------------------------
 
-// Middleware para analizar solicitudes JSON
-app.use(express.json());
-// Ruta para manejar la solicitud POST a /api/create
-app.post('/api/create', (req, res) => {
-    // Aquí puedes agregar la lógica para manejar la solicitud
-    // Por ejemplo, puedes guardar los datos recibidos en una base de datos
-  
-    // Envía una respuesta de ejemplo
-    res.status(200).json({ message: 'Solicitud POST recibida en /api/create' });
-  });
+async function main() {
+  const uri = "mongodb+srv://cespigol:VYbSdNxX9kD1BFD5@fullstack.mfvrneg.mongodb.net/";
+  try {
+    mongoose.connect(uri);
+    console.log("Connected to MongoDB server");
 
-// Iniciar el servidor
-//const PORT = 3000;
-//app.listen(PORT, () => {
-//  console.log(`Servidor escuchando en el puerto ${PORT}`);
-//});
+    // Iniciamos la aplicación Express
+    const app = express(); 
+    app.use(express.urlencoded({ extended: false}));
+    app.use(express.json());
+
+    // Iniciamos Apollo Server
+ 
+    const server = new ApolloServer({
+      typeDefs,
+      resolvers,
+    });
+
+    await server.start();
+    // Redirigir las solicitudes a /graphql al archivo index.html
+    app.get('/graphql', (req, res) => {
+      res.sendFile(path.join(__dirname, 'front/html/index.html'));
+    });
+
+    server.applyMiddleware({ app });
+
+    const PORT = process.env.PORT || 3030;
+    app.listen(PORT, () => {
+      console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`);
+    });
+
+  }  catch (err) {
+    console.error(err);
+  };
+};
+
+main().catch(console.err);
+
 
 // Ejecútalo con:
 // node server.js
