@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
-const taskSchema = new mongoose.Schema({
-    _id: Schema.Types.ObjectId, //esto es agregado automaticamente por Mongoose
+const taskSchema = Schema({
+    /*_id: Schema.Types.ObjectId, esto es agregado automaticamente por Mongoose*/
     project_id: {
         type: Schema.Types.ObjectId,
         ref: 'Project',

@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
-const projectSchema = new mongoose.Schema({
-    _id: Schema.Types.ObjectId, //esto es agregado automaticamente por Mongoose
+const projectSchema = new Schema({
+    /*_id: Schema.Types.ObjectId, esto es agregado automaticamente por Mongoose*/
     name: {
         type: String,
         required: true,

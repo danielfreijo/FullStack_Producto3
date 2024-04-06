@@ -1,7 +1,7 @@
 const { gql } = require('apollo-server-express');
 const { TaskModel } = require('../models/task');
 
-const typeDefs = gql`
+const taskTypeDefs = gql`
 
     type Task {
         id: ID!
@@ -9,9 +9,9 @@ const typeDefs = gql`
         title: String!
         description: String!
         responsible: [String]
-        enddate: Date!
+        enddate: String!
         notes: String
-        status: String!
+        status: String
     }
 
     input TaskInput {
@@ -19,14 +19,14 @@ const typeDefs = gql`
         title: String!
         description: String!
         responsible: [String]
-        enddate: Date!
+        enddate: String!
         notes: String
-        status: String!
+        status: String
     }
 
     type Query {
-        tasks: [Task]
-        task(id: ID!): Task
+        getTasks: [Task]
+        getTask(id: ID!): Task
     }       
 
     type Mutation {
@@ -35,7 +35,7 @@ const typeDefs = gql`
         deleteTask(id: ID!): String
     }
 `;
-const resolvers = { 
+const taskResolvers = { 
     Query: {
         getTasks: async () => {
             return await TaskModel.find({});
@@ -60,7 +60,7 @@ const resolvers = {
             }
         },
         updateTask: async (_, { id, input }) => {
-            if (input.title.trim() === '' || input.description.trim() === '') {
+            if (input.title.trim() === '' || input.description.trim() === '' || input.enddate.trim() === '') {
                 throw new Error('Este campo de la tarea no puede estar vacío.');
             }
             try {
@@ -80,4 +80,4 @@ const resolvers = {
     }   
 };
 
-module.exports = { typeDefs, resolvers };
+module.exports = { taskTypeDefs, taskResolvers };

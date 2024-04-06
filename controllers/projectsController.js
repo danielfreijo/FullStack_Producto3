@@ -1,7 +1,7 @@
 const { gql } = require('apollo-server-express');
 const { ProjectModel } = require('../models/project');
 
-const typeDefs = gql`
+const projectTypeDefs = gql`
 
     type Project {
         id: ID!
@@ -13,7 +13,7 @@ const typeDefs = gql`
         backgroundcolorcard: String
         backgroundcard: String
         priority: Boolean
-        dateAccess: Date
+        dateAccess: String
     }
 
     input ProjectInput {
@@ -28,8 +28,8 @@ const typeDefs = gql`
     }
 
     type Query {
-        projects: [Project]
-        project(id: ID!): Project
+        getProjects: [Project]
+        getProject(id: ID!): Project
     }
 
     type Mutation {
@@ -39,7 +39,7 @@ const typeDefs = gql`
     }
 `;
 
-const resolvers = {
+const projectResolvers = {
     Query: {
         getProjects: async () => {
             return await ProjectModel.find({});
@@ -84,4 +84,4 @@ const resolvers = {
     },
 };
 
-module.exports = { typeDefs, resolvers };
+module.exports = { projectTypeDefs, projectResolvers };

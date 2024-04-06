@@ -1,4 +1,4 @@
-/*
+
 function createProjectCard(project) {
   const projectNameUpperCase = project.name.toUpperCase();
   let backgroundStyle = '';
@@ -23,7 +23,7 @@ function createProjectCard(project) {
   </a>
   `;
 }
-
+/*
 function showRecentProjects(projects) {
   const recentProjects = $('#recentProjects');
   recentProjects.empty();
@@ -74,21 +74,22 @@ function showPriorityProjects(projects) {
     priorityProjects.append(cardHTML);
   });
 }
-
+*/
 $(document).ready(function() {
   // Cargamos el array de Session
   var arrayJSON_Projects = sessionStorage.getItem('projectsdb');
   var projects = JSON.parse(arrayJSON_Projects);
   //console.log("proyectos:", projects);
-
+/*
   // Mostrar los proyectos
   showRecentProjects(projects);
   showAllProjects(projects);
   showPriorityProjects(projects);
-
+*/
   // Función para abrir el modal
   $('#openModal').click(function() {
     $('#addProjectModal').modal('show');
+    console.log("Modal abierto");
   });
   
   // Función para cambiar la sección de fondo
@@ -301,15 +302,5 @@ $(document).ready(function() {
 
 });
 
-*/
 
-const express = require('express');
-const app = express();
 
-app.get('/', (req, res) => {
-  res.send('Hello, world!');
-});
-
-app.listen(3000, () => {
-  console.log('Servidor corriendo en http://localhost:3000');
-});
