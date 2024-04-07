@@ -35,7 +35,7 @@ const projectSchema = new Schema({
         type: Boolean,
         default: false, 
     },
-    dateAccess: {
+    dateaccess: {
         type: Date,
         default: Date.now,
     },

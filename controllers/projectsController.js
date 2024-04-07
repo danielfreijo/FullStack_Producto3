@@ -1,5 +1,5 @@
 const { gql } = require('apollo-server-express');
-const { ProjectModel } = require('../models/project');
+const Project = require('../models/project');
 
 const projectTypeDefs = gql`
 
@@ -13,12 +13,12 @@ const projectTypeDefs = gql`
         backgroundcolorcard: String
         backgroundcard: String
         priority: Boolean
-        dateAccess: String
+        dateaccess: String
     }
 
     input ProjectInput {
-        name: String!
-        description: String!
+        name: String
+        description: String
         department: String
         backgroundcolor: String
         backgroundimage: String
@@ -42,10 +42,10 @@ const projectTypeDefs = gql`
 const projectResolvers = {
     Query: {
         getProjects: async () => {
-            return await ProjectModel.find({});
+            return await Project.find({});
         },
         getProject: async (_, { id }) => {
-            return await ProjectModel.findById(id);
+            return await Project.findById(id);
         },
     },
     
@@ -55,7 +55,7 @@ const projectResolvers = {
                 throw new Error('Este campo del proyecto no puede estar vacío.');
             }
             try {
-                const newProject = new ProjectModel({ ...input });
+                const newProject = new Project({ ...input });
                 return await newProject.save();
             } catch (error) {
                 throw new Error('Error al crear el proyecto: ' + error.message);
@@ -63,11 +63,8 @@ const projectResolvers = {
         },
 
         updateProject: async (_, { id, input }) => {
-            if (input.name.trim() === '' || input.description.trim() === '') {
-                throw new Error('Este campo del proyecto no puede estar vacío.');
-            }
             try {
-                return await ProjectModel.findByIdAndUpdate(id, {...input }, { new: true });
+                return await Project.findByIdAndUpdate(id, {...input }, { new: true });
             }catch (error) {
                 throw new Error('Error al actualizar el proyecto: ' + error.message);
             }
@@ -75,7 +72,7 @@ const projectResolvers = {
 
         deleteProject: async (_, { id }) => {
             try{
-                await ProjectModel.findByIdAndDelete(id);
+                await Project.findByIdAndDelete(id);
                 return 'Proyecto eliminado correctamente.';
             }catch (error) {
                 throw new Error('Error al eliminar el proyecto: ' + error.message);

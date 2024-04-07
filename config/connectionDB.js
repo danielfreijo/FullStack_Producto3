@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // Conexión a la base de datos
 const connection = async () => {
-    const url = 'mongodb+srv://dfreijo:root@fullstack.jrtitnm.mongodb.net/';
+    const url = 'mongodb+srv://dfreijo:root@fullstack.jrtitnm.mongodb.net/FullStack_P2';
 
     try {
         await mongoose.connect(url);

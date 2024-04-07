@@ -1,20 +1,61 @@
+let projects = [];
 
+// 1. Definiciones de Funciones Asíncronas para interactuar con la API
+async function getProjects() {
+  const response = await fetch('/api', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    }, 
+    body: JSON.stringify({
+      query: `
+        query {
+          getProjects {
+            id
+            name
+            description
+            department
+            backgroundcolor
+            backgroundimage
+            backgroundcolorcard
+            backgroundcard
+            priority
+            dateaccess
+          }
+        }
+      `,
+    }),
+  });
+
+  const responseBody = await response.text(); 
+  //console.log("Respuesta del servidor:", responseBody);
+  try {
+    const { data } = JSON.parse(responseBody);
+    return data.getProjects;
+  } catch (error) {
+    console.error("Error al parsear la respuesta:", responseBody);
+    throw new Error(`Error al obtener los proyectos: ${error}`);
+  }
+  
+}
+
+// 2. Funciones para manipulación del DOM 
 function createProjectCard(project) {
   const projectNameUpperCase = project.name.toUpperCase();
   let backgroundStyle = '';
   if (!project.backgroundcard) {
     backgroundStyle = `background-color: ${project.backgroundcolorcard};`;
   } else{
-    const backgroundUrl = `./assets/BackgroundCards/${project.backgroundcard}`; 
+    const backgroundUrl = `/assets/BackgroundCards/${project.backgroundcard}`; 
     backgroundStyle = `background-image: url('${backgroundUrl}');`;
   }
   //console.log("backgroundStyle:", backgroundStyle);
-  const starIcon = project.priority === 1 
-  ? '<img src="./assets/estrellaM.png" alt="prioridad" style="width: 22px; height: 22px;">' 
-  : '<img src="./assets/estrellaV.png" alt="sin prioridad" style="width: 22px; height: 22px;">';
+  const starIcon = project.priority === true 
+  ? '<img src="/assets/estrellaM.png" alt="prioridad" style="width: 22px; height: 22px;">' 
+  : '<img src="/assets/estrellaV.png" alt="sin prioridad" style="width: 22px; height: 22px;">';
 
   return `
-  <a class="card" href="./cardDetail.html?id=${project.id}" data-id="${project.id}" style="${backgroundStyle};">
+  <a class="card" href="/cardDetail.html?id=${project.id}" data-id="${project.id}" style="${backgroundStyle};">
       <div class="card-body">
         <h5 class="card-title">${projectNameUpperCase}</h5>
         <button class="btn btn-primary delete-button" style="display:none;" >ELIMINAR</button>
@@ -23,7 +64,6 @@ function createProjectCard(project) {
   </a>
   `;
 }
-/*
 function showRecentProjects(projects) {
   const recentProjects = $('#recentProjects');
   recentProjects.empty();
@@ -39,11 +79,10 @@ function showRecentProjects(projects) {
     recentProjects.append(cardHTML);
   });
 }
-
 function showAllProjects(projects, category = 'all') {
   const allProjects = $('#allProjects');
   allProjects.empty();
-  //console.log('Categoría seleccionada:', category); 
+  console.log('Categoría seleccionada:', category); 
 
   let filteredProjects;
   
@@ -52,7 +91,7 @@ function showAllProjects(projects, category = 'all') {
   } else {
     filteredProjects = projects.filter(project => project.department === category);
   }
-  //console.log('Proyectos filtrados:', filteredProjects); 
+  console.log('Proyectos filtrados:', filteredProjects); 
 
   // Ordenar los proyectos por su ID de manera ascendente
   filteredProjects.sort((a, b) => a.id - b.id);
@@ -62,30 +101,31 @@ function showAllProjects(projects, category = 'all') {
     allProjects.append(cardHTML);
   });
 }
-
 function showPriorityProjects(projects) {
   const priorityProjects = $('#priorityProjects');
   priorityProjects.empty();
 
-  const priorityProjectsArray = projects.filter(project => project.priority === 1);
+  const priorityProjectsArray = projects.filter(project => project.priority === true);
 
   priorityProjectsArray.forEach(project => {
     const cardHTML = createProjectCard(project);
     priorityProjects.append(cardHTML);
   });
 }
-*/
-$(document).ready(function() {
-  // Cargamos el array de Session
-  var arrayJSON_Projects = sessionStorage.getItem('projectsdb');
-  var projects = JSON.parse(arrayJSON_Projects);
-  //console.log("proyectos:", projects);
-/*
-  // Mostrar los proyectos
-  showRecentProjects(projects);
-  showAllProjects(projects);
-  showPriorityProjects(projects);
-*/
+
+// 3. Bloque de inicialización $(document).ready
+$(document).ready(async function() {
+  try {
+    projects = await getProjects();
+    showRecentProjects(projects);
+    showAllProjects(projects);
+    showPriorityProjects(projects);
+    console.log('Proyectos obtenidos:', projects);
+
+  } catch (error) { 
+    console.error('Error al obtener los proyectos:', error);
+  }
+
   // Función para abrir el modal
   $('#openModal').click(function() {
     $('#addProjectModal').modal('show');
@@ -123,7 +163,7 @@ $(document).ready(function() {
     var selectedImage = $(this).val();
     if (selectedImage) {
       console.log("Imagen seleccionada:", selectedImage);
-      $('#previewImage').attr('src', './assets/BackgroundsProjects/' + selectedImage).show();
+      $('#previewImage').attr('src', '/assets/BackgroundsProjects/' + selectedImage).show();
     } else {
       $('#previewImage').hide();
     }
@@ -132,30 +172,29 @@ $(document).ready(function() {
     var selectedImage = $(this).val();
     if (selectedImage) {
       console.log("Imagen seleccionada:", selectedImage);
-      $('#previewImageCard').attr('src', './assets/BackgroundCards/' + selectedImage).show();
+      $('#previewImageCard').attr('src', '/assets/BackgroundCards/' + selectedImage).show();
     } else {
       $('#previewImageCard').hide();
     }
   });
 
   // Evento para agregar un proyecto
-  $('#addProjectForm').submit(function(event) {
+  $('#addProjectForm').submit(async function(event) {
     event.preventDefault(); 
     console.log("Formulario de proyecto enviado"); 
     
     // Obtener los valores del formulario
-    var projectName = $('#projectName').val();
-    var projectDescription = $('#description').val();
-    var projectDepartment = $('#department').val();
-    var projectPriority = $('#priority').prop('checked') ? 1 : 0; 
+    const projectName = $('#projectName').val();
+    const projectDescription = $('#description').val();
+    const projectDepartment = $('#department').val();
+    const projectPriority = $('#priority').prop('checked') ? true : false; 
 
-    var projectBackgroundColorCard;
-    var projectBackgroundImageCard;
+    let projectBackgroundColorCard;
+    let projectBackgroundImageCard;
     
     // Verificar el tipo de fondo seleccionado para la tarjeta
-    var backgroundTypeCard = $('#backgroundTypeCard').val();
-    console.log("Tipo de fondo seleccionado:", backgroundType); 
-
+    const backgroundTypeCard = $('#backgroundTypeCard').val();
+     
     if (backgroundTypeCard === 'color') {
       projectBackgroundColorCard = $('#backgroundColorCard').val();
       projectBackgroundImageCard = null; 
@@ -164,12 +203,11 @@ $(document).ready(function() {
       projectBackgroundImageCard = $('#backgroundImageCard').val();
     }
 
-    var projectBackgroundColor;
-    var projectBackgroundImage;
+    let projectBackgroundColor;
+    let projectBackgroundImage;
     
     // Verificar el tipo de fondo seleccionado pora el proyecto
-    var backgroundType = $('#backgroundType').val();
-    console.log("Tipo de fondo seleccionado:", backgroundType); 
+    const backgroundType = $('#backgroundType').val();
 
     if (backgroundType === 'color') {
       projectBackgroundColor = $('#backgroundColor').val();
@@ -179,38 +217,67 @@ $(document).ready(function() {
       projectBackgroundImage = $('#backgroundImage').val();
     }
 
-    // Agregar el proyecto al array projects
-    var newProject = {
-      "id": projects.length, 
-      "name": projectName,
-      "description": projectDescription,
-      "department": projectDepartment,
-      "backgroundcolor": projectBackgroundColor,
-      "backgroundimage": projectBackgroundImage,
-      "backgroundcolorcard": projectBackgroundColorCard,
-      "backgroundcard": projectBackgroundImageCard,
-      "priority": projectPriority,
-      "status": 1,
-      "dateAccess": new Date().toString()
+    const mutation = `
+      mutation CreateProject($input: ProjectInput!) {
+        createProject(input: $input) {
+          id
+          name
+          description
+          department
+          backgroundcolor
+          backgroundimage
+          backgroundcolorcard
+          backgroundcard
+          priority
+          dateaccess
+        }
+      }
+    `;
+
+    // Prepara el cuerpo de la solicitud, incluyendo la mutación y las variables
+    const requestBody = {
+      query: mutation,
+      variables: {
+        input: {
+          name: projectName,
+          description: projectDescription,
+          department: projectDepartment,
+          backgroundcolor: projectBackgroundColor,
+          backgroundimage: projectBackgroundImage,
+          backgroundcolorcard: projectBackgroundColorCard,
+          backgroundcard: projectBackgroundImageCard,
+          priority: projectPriority,
+        },
+      },
     };
-    console.log("Nuevo proyecto creado:", newProject); 
-    console.log("imagen guardada:", newProject.backgroundimage);
-    projects.push(newProject); 
-    
-    // Guardar el proyecto en Storage
-    sessionStorage.setItem('projectsdb', JSON.stringify(projects)); 
-    console.log("Proyecto guardado en localStorage:", projects);
 
-    // Actualizar la variable projects después de guardar los datos en el almacenamiento local
-    arrayJSON_Projects = sessionStorage.getItem('projectsdb');
-    projects = JSON.parse(arrayJSON_Projects);
-    console.log("localstorage::", arrayJSON_Projects);
+    try {
+      // Envía la solicitud al servidor GraphQL
+      const response = await fetch('/api', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
 
-    $('#addProjectForm').trigger('reset');
-    $('#addProjectModal').modal('hide');
+      const responseBody = await response.json();
+      if (responseBody.errors) {
+        console.error("Error al crear proyecto:", responseBody.errors);
+        
+      } else {
+        console.log("Proyecto creado exitosamente:", responseBody.data.createProject);
+        projects.push(responseBody.data.createProject);
 
-    showRecentProjects(projects);
-    showAllProjects(projects);
+        showAllProjects(projects); 
+        showRecentProjects(projects);
+        showPriorityProjects(projects);
+        
+        $('#addProjectModal').modal('hide');
+      }
+    } catch (error) {
+      console.error("Error al realizar la solicitud a GraphQL:", error);
+    }
   });
 
   // Función para filtrar los proyectos
@@ -229,7 +296,7 @@ $(document).ready(function() {
   });
 
   // Evento para cambiar la prioridad del proyecto
-  $(document).on('click', '.priority-button', function(event) {
+  $(document).on('click', '.priority-button', async function(event) {
     event.preventDefault();
     event.stopPropagation();
     console.log('Se hizo clic en el botón de prioridad.');
@@ -237,22 +304,56 @@ $(document).ready(function() {
     const card = $(this).closest('.card');
     const projectId = card.data('id');
     const project = projects.find(project => project.id === projectId)
+    const newPriority = !project.priority;
 
-    // Cambiar la prioridad del proyecto
-    project.priority = project.priority === 1 ? 0 : 1;
-    isPriority = project.priority === 1; // Actualizar el estado de la prioridad
+    // Preparar la mutación de GraphQL
+    const mutation = `
+      mutation UpdateProjectPriority($id: ID!, $priority: Boolean!) {
+          updateProject(id: $id, input: { priority: $priority }) {
+              id
+              priority
+          }
+      }
+    `;
 
-    // Actualizar la imagen del botón
-    if (isPriority) {
-      $(this).find('img').attr('src', './assets/estrellaM.png');
-      $(this).find('img').attr('alt', 'prioridad');
-    } else {
-      $(this).find('img').attr('src', './assets/estrellaV.png');
-      $(this).find('img').attr('alt', 'sin prioridad');
+    // Preparar el cuerpo de la solicitud
+    const requestBody = {
+      query: mutation,
+      variables: {
+          id: projectId,
+          priority: newPriority,
+      },
+    };
+
+    try {
+      // Envía la solicitud al servidor GraphQL
+      const response = await fetch('/api', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      const responseBody = await response.json();
+      if (responseBody.errors) {
+        console.error("Error al actualizar la prioridad del proyecto:", responseBody.errors);
+        // Maneja los errores aquí, mostrando un mensaje al usuario si es necesario
+      } else {
+        console.log("Prioridad del proyecto actualizada con éxito", responseBody.data.updateProject);
+        
+        // Actualizar la imagen del botón
+        $(this).find('img').attr('src', newPriority ? '/assets/estrellaM.png' : '/assets/estrellaV.png');
+        $(this).find('img').attr('alt', newPriority ? 'prioridad' : 'sin prioridad');
+        
+        // Actualiza el estado local del proyecto
+        project.priority = newPriority;
+
+        showPriorityProjects(projects);
+      }
+    } catch (error) {
+      console.error("Error al realizar la solicitud a GraphQL:", error);
     }
-
-    sessionStorage.setItem('projectsdb', JSON.stringify(projects)); 
-    showPriorityProjects(projects);
   });
 
   // Función para mostrar el botón de eliminación y prioridad
@@ -280,22 +381,47 @@ $(document).ready(function() {
     $('#confirmationModal').modal('show');
 
     // Manejar el evento de confirmación
-    $('#confirmDelete').click(function() {
+    $('#confirmDelete').click( async function() {
 
-      // Filtrar los proyectos para eliminar el proyecto con el ID correspondiente
-      projects = projects.filter(project => project.id !== projectId);
-      //console.log("Proyectos después de la eliminación:", projects);
+      const mutation = `
+        mutation DeleteProject($id: ID!) {
+          deleteProject(id: $id)
+        }
+      `;
 
-      // Actualizar el sessionStorage con los proyectos filtrados
-      sessionStorage.setItem('projectsdb', JSON.stringify(projects));
-      //console.log("Proyectos guardados en sessionStorage:", sessionStorage.getItem('projectsdb'));
+      const requestBody = {
+        query: mutation,
+        variables: {
+          id: projectId,
+        },
+      };
 
-      // Mostrar los proyectos actualizados
-      showRecentProjects(projects);
-      showAllProjects(projects);
-      showPriorityProjects(projects);
+      try {
+        const response = await fetch('/api', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+        });
 
-      $('#confirmationModal').modal('hide');
+        const responseBody = await response.json();
+        if (responseBody.errors) {
+          console.error("Error al eliminar el proyecto:", responseBody.errors);
+          
+        } else {
+          console.log("Proyecto eliminado con éxito", responseBody.data.deleteProject);
+
+          projects = projects.filter(project => project.id !== projectId);
+          showRecentProjects(projects); 
+          showAllProjects(projects);
+          showPriorityProjects(projects);
+
+          $('#confirmationModal').modal('hide');
+        }
+      } catch (error) { 
+        console.error("Error al realizar la solicitud a GraphQL:", error);
+      }
     });
     return false; // Evita el comportamiento predeterminado del enlace
   });

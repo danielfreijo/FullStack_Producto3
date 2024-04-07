@@ -1,5 +1,5 @@
 const { gql } = require('apollo-server-express');
-const { TaskModel } = require('../models/task');
+const task = require('../models/task');
 
 const taskTypeDefs = gql`
 
@@ -38,10 +38,10 @@ const taskTypeDefs = gql`
 const taskResolvers = { 
     Query: {
         getTasks: async () => {
-            return await TaskModel.find({});
+            return await task.find({});
         },
         getTask: async (_, { id }) => {
-            return await TaskModel
+            return await task
                 .findById(id)
                 .populate('project_id');    
         }
@@ -53,7 +53,7 @@ const taskResolvers = {
                 throw new Error('Este campo de la tarea no puede estar vacío.');
             }
             try {
-                const newTask = new TaskModel({ ...input });
+                const newTask = new task({ ...input });
                 return await newTask.save();
             } catch (error) {
                 throw new Error('Error al crear la tarea.');
@@ -64,14 +64,14 @@ const taskResolvers = {
                 throw new Error('Este campo de la tarea no puede estar vacío.');
             }
             try {
-                return await TaskModel.findByIdAndUpdate(id, input, { new: true });
+                return await task.findByIdAndUpdate(id, input, { new: true });
             } catch (error) {
                 throw new Error('Error al actualizar la tarea.');
             }
         },
         deleteTask: async (_, { id }) => {
             try {
-                await TaskModel.findByIdAndDelete(id);
+                await task.findByIdAndDelete(id);
                 return 'Tarea eliminada correctamente.';
             } catch (error) {
                 throw new Error('Error al eliminar la tarea.');
