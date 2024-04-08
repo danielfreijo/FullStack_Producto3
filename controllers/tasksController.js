@@ -15,11 +15,11 @@ const taskTypeDefs = gql`
     }
 
     input TaskInput {
-        project_id: ID!
-        title: String!
-        description: String!
+        project_id: ID
+        title: String
+        description: String
         responsible: [String]
-        enddate: String!
+        enddate: String
         notes: String
         status: String
     }
@@ -53,16 +53,17 @@ const taskResolvers = {
                 throw new Error('Este campo de la tarea no puede estar vacío.');
             }
             try {
+                //console.log(input);
+                //console.log("entrado en el try");
                 const newTask = new task({ ...input });
                 return await newTask.save();
             } catch (error) {
+                console.log(error);
+                //console.log("entrado en el catch");
                 throw new Error('Error al crear la tarea.');
             }
         },
         updateTask: async (_, { id, input }) => {
-            if (input.title.trim() === '' || input.description.trim() === '' || input.enddate.trim() === '') {
-                throw new Error('Este campo de la tarea no puede estar vacío.');
-            }
             try {
                 return await task.findByIdAndUpdate(id, input, { new: true });
             } catch (error) {

@@ -23,7 +23,7 @@ const taskSchema = Schema({
     notes: String,
     status: {
         type: String,
-        enum: ['por hacer', 'en progreso', 'finalizado'], 
+        enum: ['POR HACER', 'EN PROGRESO', 'FINALIZADO'], 
         required: true,   
     },
 });

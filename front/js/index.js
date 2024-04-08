@@ -31,6 +31,7 @@ async function getProjects() {
   //console.log("Respuesta del servidor:", responseBody);
   try {
     const { data } = JSON.parse(responseBody);
+    //console.log("Datos obtenidos:", data);
     return data.getProjects;
   } catch (error) {
     console.error("Error al parsear la respuesta:", responseBody);
@@ -82,7 +83,7 @@ function showRecentProjects(projects) {
 function showAllProjects(projects, category = 'all') {
   const allProjects = $('#allProjects');
   allProjects.empty();
-  console.log('Categoría seleccionada:', category); 
+  //console.log('Categoría seleccionada:', category); 
 
   let filteredProjects;
   
@@ -91,7 +92,7 @@ function showAllProjects(projects, category = 'all') {
   } else {
     filteredProjects = projects.filter(project => project.department === category);
   }
-  console.log('Proyectos filtrados:', filteredProjects); 
+  //console.log('Proyectos filtrados:', filteredProjects); 
 
   // Ordenar los proyectos por su ID de manera ascendente
   filteredProjects.sort((a, b) => a.id - b.id);
@@ -309,10 +310,10 @@ $(document).ready(async function() {
     // Preparar la mutación de GraphQL
     const mutation = `
       mutation UpdateProjectPriority($id: ID!, $priority: Boolean!) {
-          updateProject(id: $id, input: { priority: $priority }) {
-              id
-              priority
-          }
+        updateProject(id: $id, input: { priority: $priority }) {
+          id
+          priority
+        }
       }
     `;
 
@@ -320,8 +321,8 @@ $(document).ready(async function() {
     const requestBody = {
       query: mutation,
       variables: {
-          id: projectId,
-          priority: newPriority,
+        id: projectId,
+        priority: newPriority,
       },
     };
 
@@ -330,7 +331,7 @@ $(document).ready(async function() {
       const response = await fetch('/api', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(requestBody),
       });
@@ -338,7 +339,6 @@ $(document).ready(async function() {
       const responseBody = await response.json();
       if (responseBody.errors) {
         console.error("Error al actualizar la prioridad del proyecto:", responseBody.errors);
-        // Maneja los errores aquí, mostrando un mensaje al usuario si es necesario
       } else {
         console.log("Prioridad del proyecto actualizada con éxito", responseBody.data.updateProject);
         

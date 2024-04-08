@@ -163,7 +163,7 @@ a {
     transform: scale(1.05); 
 }
 .card-body {
-    display: flex;
+    display: grid;
     align-items: center; 
 }
 .card-title {

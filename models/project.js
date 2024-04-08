@@ -21,7 +21,7 @@ const projectSchema = new Schema({
     },
     backgroundimage: {
         type: String,
-        default: null,
+        default: "",
     },
     backgroundcolorcard: {
         type: String,
@@ -29,7 +29,7 @@ const projectSchema = new Schema({
     },
     backgroundcard: {
         type: String,
-        default: null,
+        default: "",
     },  
     priority: {
         type: Boolean,

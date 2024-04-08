@@ -54,11 +54,15 @@ const projectResolvers = {
             if (input.name.trim() === '' || input.description.trim() === '') {
                 throw new Error('Este campo del proyecto no puede estar vacío.');
             }
+            console.log("entrada de datos", input);
             try {
+                console.log("entrada de datos", input);
                 const newProject = new Project({ ...input });
                 return await newProject.save();
             } catch (error) {
+                console.log("entrada de datos", input);
                 throw new Error('Error al crear el proyecto: ' + error.message);
+                
             }
         },
 
