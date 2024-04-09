@@ -25,7 +25,7 @@ const taskTypeDefs = gql`
     }
 
     type Query {
-        getTasks: [Task]
+        getTasksByProjectId(projectId: ID!): [Task]
         getTask(id: ID!): Task
     }       
 
@@ -37,8 +37,8 @@ const taskTypeDefs = gql`
 `;
 const taskResolvers = { 
     Query: {
-        getTasks: async () => {
-            return await task.find({});
+        getTasksByProjectId: async (_, { projectId }) => {
+            return await task.find({ project_id: projectId});
         },
         getTask: async (_, { id }) => {
             return await task

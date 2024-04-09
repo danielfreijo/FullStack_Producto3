@@ -42,11 +42,10 @@ async function getProjectById(id) {
     console.error("Error en la solicitud:", error);
   } 
 }
-
 async function getTasksByProjectId(projectId) {
   const query = `
-    query GetTasks($projectId: ID!) {
-      getTasks(projectId: $projectId) {
+    query GetTasksByProjectId($projectId: ID!) {
+      getTasksByProjectId(projectId: $projectId) {
         id
         project_id
         title
@@ -87,11 +86,14 @@ async function getTasksByProjectId(projectId) {
 
 // Funcionalidades para la vista de detalle de una tarjeta
 function formatDate(dateString) {
+  //console.log('Fecha:', dateString);
+  const date = new Date(parseInt(dateString, 10));
+  //console.log('Fecha Parseada:', date);
+
   const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
-  const parts = dateString.split('-');
-  const year = parts[0];
-  const month = months[parseInt(parts[1], 10) - 1];
-  const day = parts[2];
+  const year = date.getFullYear();
+  const month = months[date.getMonth()];
+  const day = date.getDate();
 
   return `${day} de ${month} ${year}`;
 }
@@ -112,7 +114,7 @@ function createTaskCard(task) {
     </li>
   `;
 }
-function showTasksCards (tasks) {
+function showTasksCards(tasks) {
   const taskCardsContainer = $('.task-cards'); 
   taskCardsContainer.empty();
 
@@ -217,6 +219,7 @@ $(document).ready(async function() {
     $('#projectName').text(project.name.toUpperCase());
 
     const tasks = await getTasksByProjectId(projectId);
+    //console.log('Tareas encontradas:', tasks);
     if (tasks) {
       showTasksCards(tasks);
     }
@@ -392,18 +395,25 @@ $(document).ready(async function() {
       $("#sidebar-menu").css("width", "0");
     });
 
-    // Mostrar las tarjetas de las tareas
-    showTasksCards();
+    $(document).on('click', '.task-end-date input[type="checkbox"], .task-end-date label', function(event) {
+      event.stopPropagation();
+    
+      if($(event.target).is('input[type="checkbox"]')) {
+        $(event.target).closest('.task-end-date').toggleClass('green-background', $(event.target).prop('checked'));
+      }
+    });
+
 
     // evento al hacer clic en una tarea
     $(document).on('click', '.task-card-btn', function(event) {
       event.stopPropagation(); 
+      
       const taskId = $(this).data('task-id');
-      const isChecked = $(this).find('.task-end-date input[type="checkbox"]').prop('checked');
-      $(this).find('.task-end-date').toggleClass('green-background', isChecked);
-      console.log(`Tarea ${taskId} :`, !isChecked);
-
-      const taskToEdit = project.tasks.find(task => task.id.toString() === taskId.toString());
+      console.log('ID de la tarea:', taskId);
+    
+      const taskToEdit = tasks.find(task => task.id.toString() === taskId.toString());
+      console.log('Tarea a editar:', taskToEdit);
+      
 
       // Si se encuentra la tarea, llena el modal de edición con los datos de la tarea
       if (taskToEdit) {
