@@ -10,6 +10,7 @@ const taskTypeDefs = gql`
         description: String!
         responsible: [String]
         enddate: String!
+        ended: Boolean
         notes: String
         status: String
     }
@@ -20,6 +21,7 @@ const taskTypeDefs = gql`
         description: String
         responsible: [String]
         enddate: String
+        ended: Boolean
         notes: String
         status: String
     }

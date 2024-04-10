@@ -19,28 +19,28 @@ async function getProjectById(id) {
 
   const requestBody = JSON.stringify({
     query: query,
-    variables: { id: id }
+    variables: { id: id },
   });
 
   try {
-    const response = await fetch('/api', {
-      method: 'POST',
+    const response = await fetch("/api", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: requestBody
+      body: requestBody,
     });
 
     const responseBody = await response.json();
     if (responseBody.errors) {
       console.error("Error en GraphQL:", responseBody.errors);
       throw new Error("Error al obtener el proyecto por ID");
-    } else {  
+    } else {
       return responseBody.data.getProject;
-    } 
+    }
   } catch (error) {
     console.error("Error en la solicitud:", error);
-  } 
+  }
 }
 async function getTasksByProjectId(projectId) {
   const query = `
@@ -52,6 +52,7 @@ async function getTasksByProjectId(projectId) {
         description
         responsible
         enddate
+        ended
         notes
         status
       }
@@ -60,16 +61,16 @@ async function getTasksByProjectId(projectId) {
 
   const requestBody = JSON.stringify({
     query: query,
-    variables: { projectId: projectId }
+    variables: { projectId: projectId },
   });
 
   try {
-    const response = await fetch('/api', {
-      method: 'POST',
+    const response = await fetch("/api", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: requestBody
+      body: requestBody,
     });
 
     const responseBody = await response.json();
@@ -77,10 +78,11 @@ async function getTasksByProjectId(projectId) {
       console.error("Error en GraphQL:", responseBody.errors);
       throw new Error("Error al obtener las tareas por ID de proyecto");
     } else {
+      console.log("Tareas encontradas:", responseBody.data.getTasksByProjectId);
       return responseBody.data.getTasksByProjectId;
     }
   } catch (error) {
-    console.error("Error en la solicitud:", error); 
+    console.error("Error en la solicitud:", error);
   }
 }
 
@@ -88,9 +90,7 @@ async function getTasksByProjectId(projectId) {
 function formatDate(dateString) {
   //console.log('Fecha:', dateString);
   const date = new Date(parseInt(dateString, 10));
-  //console.log('Fecha Parseada:', date);
-
-  const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+  const months = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic",];
   const year = date.getFullYear();
   const month = months[date.getMonth()];
   const day = date.getDate();
@@ -99,13 +99,15 @@ function formatDate(dateString) {
 }
 function createTaskCard(task) {
   const formattedDate = formatDate(task.enddate);
+  const isEnded = task.ended ? "green-background" : "";
+
   return `
     <li class="btn btn-light task-card-btn " data-task-id="${task.id}" draggable="true" ondragstart="drag(event)" ondragover="return false;">  
       <div class="task-card mb-2">
         <div class="task-details">
           <h6 class="task-title">${task.title}</h6>
-          <div class="task-end-date">
-            <input type="checkbox" id="taskCheckbox-${task.id}">
+          <div class="task-end-date ${isEnded}">
+            <input type="checkbox" id="taskCheckbox-${task.id}" ${task.ended ? 'checked' : ''}>
             <label for="taskCheckbox-${task.id}">Finaliza: ${formattedDate}</label>
           </div>
           <button class="btn btn-primary delete-button" style="display:none;">ELIMINAR</button>
@@ -115,22 +117,22 @@ function createTaskCard(task) {
   `;
 }
 function showTasksCards(tasks) {
-  const taskCardsContainer = $('.task-cards'); 
+  const taskCardsContainer = $(".task-cards");
   taskCardsContainer.empty();
 
-  tasks.forEach(task => {
-    const taskCardHtml = createTaskCard(task); 
-    const taskStatus = task.status.toUpperCase(); 
+  tasks.forEach((task) => {
+    const taskCardHtml = createTaskCard(task);
+    const taskStatus = task.status.toUpperCase();
 
     // Agrega la tarjeta al contenedor correspondiente según el estado de la tarea
     switch (taskStatus) {
-      case 'POR HACER':
+      case "POR HACER":
         $('.task-cards[data-state="POR HACER"]').append(taskCardHtml);
         break;
-      case 'EN PROGRESO':
+      case "EN PROGRESO":
         $('.task-cards[data-state="EN PROGRESO"]').append(taskCardHtml);
         break;
-      case 'FINALIZADO':
+      case "FINALIZADO":
         $('.task-cards[data-state="FINALIZADO"]').append(taskCardHtml);
         break;
       default:
@@ -144,7 +146,7 @@ function allowDrop(event) {
   event.preventDefault();
 }
 function drag(event) {
-  const taskId = event.target.getAttribute('data-task-id');
+  const taskId = event.target.getAttribute("data-task-id");
   event.dataTransfer.setData("text/plain", taskId);
   //console.log('Elemento arrastrado:', taskId);
 }
@@ -155,164 +157,179 @@ function drop(event) {
 
   // Verificar si el elemento arrastrado es válido
   if (draggedElement) {
-    var targetColumn = event.target.closest('.col-4'); // Encuentra la columna más cercana al punto de soltar 
-    var targetContainer = targetColumn.querySelector('.task-cards');
+    var targetColumn = event.target.closest(".col-4"); // Encuentra la columna más cercana al punto de soltar
+    var targetContainer = targetColumn.querySelector(".task-cards");
 
     // Verificar si el contenedor de destino es válido
     if (targetContainer) {
       targetContainer.appendChild(draggedElement);
-      var targetState = targetContainer.getAttribute('data-state');
+      var targetState = targetContainer.getAttribute("data-state");
       draggedElement.dataset.state = targetState;
       updateTaskStateInProject(data, targetState);
-
     } else {
-      console.error('No se pudo encontrar el contenedor de tarjetas dentro de la columna.');
+      console.error(
+        "No se pudo encontrar el contenedor de tarjetas dentro de la columna."
+      );
     }
   } else {
-    console.error('No se pudo encontrar el elemento arrastrado con el ID:', data);
+    console.error(
+      "No se pudo encontrar el elemento arrastrado con el ID:",
+      data
+    );
   }
 }
 
 // Función para actualizar el estado de una tarea en el proyecto
 function updateTaskStateInProject(taskId, newState) {
   const urlParams = new URLSearchParams(window.location.search);
-  const projectId = urlParams.get('id');
-  var projectsJSON = sessionStorage.getItem('projectsdb');
+  const projectId = urlParams.get("id");
+  var projectsJSON = sessionStorage.getItem("projectsdb");
   var projects = JSON.parse(projectsJSON);
 
   // Buscar el proyecto por ID
-  const projectIndex = projects.findIndex(project => project.id.toString() === projectId);
+  const projectIndex = projects.findIndex(
+    (project) => project.id.toString() === projectId
+  );
   if (projectIndex !== -1) {
     const project = projects[projectIndex];
 
     // Buscar la tarea por ID y actualizar su estado
-    const taskIndex = project.tasks.findIndex(task => task.id.toString() === taskId);
+    const taskIndex = project.tasks.findIndex(
+      (task) => task.id.toString() === taskId
+    );
     if (taskIndex !== -1) {
       project.tasks[taskIndex].status = newState;
 
       // Guardar los cambios en sessionStorage
-      sessionStorage.setItem('projectsdb', JSON.stringify(projects));
+      sessionStorage.setItem("projectsdb", JSON.stringify(projects));
     } else {
-      console.error('No se pudo encontrar la tarea con ID:', taskId);
+      console.error("No se pudo encontrar la tarea con ID:", taskId);
     }
   } else {
-    console.error('No se pudo encontrar el proyecto con ID:', projectId);
+    console.error("No se pudo encontrar el proyecto con ID:", projectId);
   }
 }
 
-$(document).ready(async function() {
-  
+$(document).ready(async function () {
   // Obtener el ID del proyecto de la URL
   const urlParams = new URLSearchParams(window.location.search);
-  const projectId = urlParams.get('id');
-  console.log('ID del proyecto:', projectId);
+  const projectId = urlParams.get("id");
+  console.log("ID del proyecto:", projectId);
 
   const project = await getProjectById(projectId);
-  console.log('Proyecto encontrado:', project);
-
+  console.log("Proyecto encontrado:", project);
 
   if (project) {
     // Actualizar el campo dateAcces
     project.dateaccess = new Date().toString();
 
     // Mostrar el nombre del proyecto en la barra de navegación
-    $('#projectName').text(project.name.toUpperCase());
+    $("#projectName").text(project.name.toUpperCase());
 
     const tasks = await getTasksByProjectId(projectId);
     //console.log('Tareas encontradas:', tasks);
     if (tasks) {
       showTasksCards(tasks);
     }
-    
+
     // Abrir el modal de nueva tarea
-    $('.addCardBtn').click(function() { 
-      var defaultState = $(this).data('state');
-      console.log('Estado por defecto:', defaultState);
-      $('#taskStatus').val(defaultState);
-      $('#addTaskModal').modal('show');
+    $(".addCardBtn").click(function () {
+      var defaultState = $(this).data("state");
+      console.log("Estado por defecto:", defaultState);
+      $("#taskStatus").val(defaultState);
+      $("#addTaskModal").modal("show");
     });
 
     /****************************************************************************************************** */
     /* SIDEBAR */
-    /****************************************************************************************************** */    
-    
+    /****************************************************************************************************** */
+
     // Mostrar INFO del proyecto en el sidebar y hacerlos editables
-    $('#sidebarProjectName').text(project.name.toUpperCase())
-    $('#sidebarProjectNameEdit').val(project.name)
-    $('#sidebarDescription').text(project.description)
-    $('#sidebarBackgroundColorCard').val(project.backgroundcolorcard)
+    $("#sidebarProjectName").text(project.name.toUpperCase());
+    $("#sidebarProjectNameEdit").val(project.name);
+    $("#sidebarDescription").text(project.description);
+    $("#sidebarBackgroundColorCard").val(project.backgroundcolorcard);
     if (project.backgroundcard !== "") {
-      $('#previewImageCard').attr('src', `/assets/BackgroundCards/${project.backgroundcard}`).show();
+      $("#previewImageCard")
+        .attr("src", `/assets/BackgroundCards/${project.backgroundcard}`)
+        .show();
     }
-    $('#sidebarDepartment').val(project.department)
-    $('#sidebarBackgroundColor').val(project.backgroundcolor) 
+    $("#sidebarDepartment").val(project.department);
+    $("#sidebarBackgroundColor").val(project.backgroundcolor);
     if (project.backgroundimage !== "") {
-      $('#previewImage').attr('src', `/assets/BackgroundsProjects/${project.backgroundimage}`).show();
+      $("#previewImage")
+        .attr("src", `/assets/BackgroundsProjects/${project.backgroundimage}`)
+        .show();
     }
-    
+
     // Mostrar el tipo de fondo seleccionado
-    $('#sidebarBackgroundType').change(function() {
+    $("#sidebarBackgroundType").change(function () {
       var selectedType = $(this).val();
       if (selectedType === "color") {
-        $('#colorSection').show();
-        $('#imageSection').hide();
-        $('#sidebarBackgroundImage').val('');
+        $("#colorSection").show();
+        $("#imageSection").hide();
+        $("#sidebarBackgroundImage").val("");
         //console.log('Imagen de fondo:', $('#sidebarBackgroundImage').val());
       } else {
-        $('#colorSection').hide();
-        $('#imageSection').show();
-        $('#sidebarBackgroundColor').val('#ffffff');
+        $("#colorSection").hide();
+        $("#imageSection").show();
+        $("#sidebarBackgroundColor").val("#ffffff");
         //console.log('Color de fondo:', $('#sidebarBackgroundColor').val());
       }
       //console.log('Tipo de fondo:', selectedType);
     });
-    $('#sidebarBackgroundTypeCard').change(function() {
+    $("#sidebarBackgroundTypeCard").change(function () {
       var selectedType = $(this).val();
       if (selectedType === "color") {
-        $('#colorSectionCard').show();
-        $('#imageSectionCard').hide();
-        $('#sidebarBackgroundImageCard').val('');
+        $("#colorSectionCard").show();
+        $("#imageSectionCard").hide();
+        $("#sidebarBackgroundImageCard").val("");
         //console.log('Imagen de fondo:', $('#sidebarBackgroundImageCard').val());
       } else {
-        $('#colorSectionCard').hide();
-        $('#imageSectionCard').show();
-        $('#sidebarBackgroundColorCard').val('#ffffff');
+        $("#colorSectionCard").hide();
+        $("#imageSectionCard").show();
+        $("#sidebarBackgroundColorCard").val("#ffffff");
         //console.log('Color de fondo:', $('#sidebarBackgroundColorCard').val());
       }
       //console.log('Tipo de fondo:', selectedType);
     });
 
     // Mostrar la vista previa de la imagen seleccionada
-    $('#sidebarBackgroundImage').change(function() {
+    $("#sidebarBackgroundImage").change(function () {
       var selectedImage = $(this).val();
-      console.log('Imagen de fondo:', selectedImage);
+      console.log("Imagen de fondo:", selectedImage);
       if (selectedImage !== "") {
-        $('#previewImage').attr('src', `/assets/BackgroundsProjects/${selectedImage}`).show();
+        $("#previewImage")
+          .attr("src", `/assets/BackgroundsProjects/${selectedImage}`)
+          .show();
       } else {
-        $('#previewImage').hide();
+        $("#previewImage").hide();
       }
     });
-    $('#sidebarBackgroundImageCard').change(function() {
+    $("#sidebarBackgroundImageCard").change(function () {
       var selectedImage = $(this).val();
-      console.log('Imagen de fondo:', selectedImage);
+      console.log("Imagen de fondo:", selectedImage);
       if (selectedImage !== "") {
-        $('#previewImageCard').attr('src', `/assets/BackgroundCards/${selectedImage}`).show();
+        $("#previewImageCard")
+          .attr("src", `/assets/BackgroundCards/${selectedImage}`)
+          .show();
       } else {
-        $('#previewImageCard').hide();
+        $("#previewImageCard").hide();
       }
     });
 
     // Guardar los cambios cuando se hace clic en el botón "Guardar Cambios"
-    $('#saveChangesBtn').click(async function() {
-      const projectId = new URLSearchParams(window.location.search).get('id'); 
-      const newName = $('#sidebarProjectNameEdit').val();
-      const newDescription = $('#sidebarDescription').val();
-      const newDepartment = $('#sidebarDepartment').val();
-      const newBackgroundColor = $('#sidebarBackgroundColor').val();
-      const newBackgroundImage = $('#sidebarBackgroundImage').val() || "";
-      const newBackgroundColorCard = $('#sidebarBackgroundColorCard').val();
-      const newBackgroundImageCard = $('#sidebarBackgroundImageCard').val() || "";
-      
+    $("#saveChangesBtn").click(async function () {
+      const projectId = new URLSearchParams(window.location.search).get("id");
+      const newName = $("#sidebarProjectNameEdit").val();
+      const newDescription = $("#sidebarDescription").val();
+      const newDepartment = $("#sidebarDepartment").val();
+      const newBackgroundColor = $("#sidebarBackgroundColor").val();
+      const newBackgroundImage = $("#sidebarBackgroundImage").val() || "";
+      const newBackgroundColorCard = $("#sidebarBackgroundColorCard").val();
+      const newBackgroundImageCard =
+        $("#sidebarBackgroundImageCard").val() || "";
+
       // Si se selecciona un color como fondo, establecer backgroundImage como ""
       if (newBackgroundImage === "") {
         newBackgroundImage = "";
@@ -348,18 +365,18 @@ $(document).ready(async function() {
             backgroundimage: newBackgroundImage,
             backgroundcolorcard: newBackgroundColorCard,
             backgroundcard: newBackgroundImageCard,
-          }
-        }
+          },
+        },
       };
       //console.log('Cuerpo de la solicitud:', requestBody);
 
       try {
-        const response = await fetch('/api', {
-          method: 'POST',
+        const response = await fetch("/api", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(requestBody)
+          body: JSON.stringify(requestBody),
         });
         //console.log('Respuesta de la API:', response);
 
@@ -377,78 +394,155 @@ $(document).ready(async function() {
 
     // Aplicar el color de fondo al elemento deseado en la página
     if (project.backgroundimage != "") {
-      $('body').css('background-image', `url(/assets/BackgroundsProjects/${project.backgroundimage})`);
-      $('body').css('background-size', 'cover');
-      $('body').css('background-position', 'center');
-      $('body').css('background-repeat', 'no-repeat');
-      //console.log('Imagen de fondo:', project.backgroundimage); 
+      $("body").css(
+        "background-image",
+        `url(/assets/BackgroundsProjects/${project.backgroundimage})`
+      );
+      $("body").css("background-size", "cover");
+      $("body").css("background-position", "center");
+      $("body").css("background-repeat", "no-repeat");
+      //console.log('Imagen de fondo:', project.backgroundimage);
     } else {
-      $('body').css('background-color', `${project.backgroundcolor}`);
+      $("body").css("background-color", `${project.backgroundcolor}`);
       //console.log('Color de fondo:', project.backgroundcolor);
     }
-    
+
     // Abrir y cerrar el menú lateral al hacer clic en el botón "INFORMACIÓN"
-    $('#board-menu').click(function() {
-      $('#sidebar-menu').css('width', '380px');
+    $("#board-menu").click(function () {
+      $("#sidebar-menu").css("width", "380px");
     });
-    $("#close-sidebar").click(function() {
+    $("#close-sidebar").click(function () {
       $("#sidebar-menu").css("width", "0");
     });
 
-    $(document).on('click', '.task-end-date input[type="checkbox"], .task-end-date label', function(event) {
+    // Evento para señalar la fecha de finalización de una tarea
+    $(document).on("click", '.task-end-date input[type="checkbox"], .task-end-date label', function (event) {
       event.stopPropagation();
-    
-      if($(event.target).is('input[type="checkbox"]')) {
-        $(event.target).closest('.task-end-date').toggleClass('green-background', $(event.target).prop('checked'));
+
+      if ($(event.target).is('input[type="checkbox"]')) {
+        $(event.target).closest(".task-end-date").toggleClass("green-background", $(event.target).prop("checked"));
       }
     });
 
+    // Evento al hacer clic en una tarea
+    $(document).on("click", ".task-card-btn", function (event) {
+      event.stopPropagation();
 
-    // evento al hacer clic en una tarea
-    $(document).on('click', '.task-card-btn', function(event) {
-      event.stopPropagation(); 
-      
-      const taskId = $(this).data('task-id');
-      console.log('ID de la tarea:', taskId);
-    
-      const taskToEdit = tasks.find(task => task.id.toString() === taskId.toString());
-      console.log('Tarea a editar:', taskToEdit);
-      
+      const taskId = $(this).data("task-id");
+      console.log("ID de la tarea:", taskId);
+      const taskToEdit = tasks.find(
+        (task) => task.id.toString() === taskId.toString()
+      );
+      console.log("Tarea a editar:", taskToEdit);
+
+      const editDate = new Date(parseInt(taskToEdit.enddate, 10));
+      const year = editDate.getFullYear();
+      const month = editDate.getMonth() + 1;
+      const day = editDate.getDate();
+      const formattedDate = `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
 
       // Si se encuentra la tarea, llena el modal de edición con los datos de la tarea
       if (taskToEdit) {
-        $('#editTaskTitle').val(taskToEdit.title);
-        $('#editTaskDescription').val(taskToEdit.description);
-        $('#editTaskResponsibles').val(taskToEdit.responsible.join(', ')); // Asume que es un array y lo convierte a string
-        $('#editTaskEndDate').val(taskToEdit.enddate);
-        $('#editTaskNotes').val(taskToEdit.notes);
-        $('#editTaskStatus').val(taskToEdit.status);
+        $("#editTaskTitle").val(taskToEdit.title);
+        $("#editTaskDescription").val(taskToEdit.description);
+        $("#editTaskResponsibles").val(taskToEdit.responsible.join(", "));
+        $("#editTaskEndDate").val(formattedDate);
+        $("#editTaskNotes").val(taskToEdit.notes);
+        $("#editTaskStatus").val(taskToEdit.status);
 
         // Guarda el id de la tarea en un lugar accesible para cuando se guarde el formulario
-        $('#editTaskForm').data('task-id', taskToEdit.id);
+        $("#editTaskForm").data("task-id", taskToEdit.id);
 
         // Muestra el modal
-        $('#editTaskModal').modal('show');
+        $("#editTaskModal").modal("show");
       }
     });
 
-    // Agregar una nueva tarea al proyecto
-    $('#addTaskForm').submit(async function(event) {
-      event.preventDefault(); 
+    // Editar una tarea
+    $("#editTaskForm").submit(async function (event) {
+      event.preventDefault();
+      const taskId = $(this).data("task-id");
+      const title = $("#editTaskTitle").val();
+      const description = $("#editTaskDescription").val();
+      const responsible = $("#editTaskResponsibles").val().split(", ");
+      const enddate = $("#editTaskEndDate").val();
+      const notes = $("#editTaskNotes").val();
+      const status = $("#editTaskStatus").val();
+     
+      const mutation = `
+        mutation UpdateTask($updateTaskId: ID!, $input: TaskInput!) {
+          updateTask(id: $updateTaskId, input: $input) {
+            id
+            project_id
+            title
+            description
+            responsible
+            enddate
+            notes
+            status
+          }
+        }
+      `;
+      const requestBody = { 
+        query: mutation,
+        variables: {
+          updateTaskId: taskId,
+          input: {
+            title: title,
+            description: description,
+            responsible: responsible,
+            enddate: enddate,
+            notes: notes,
+            status: status,
+          },
+        },
+      };
 
-      const projectId = new URLSearchParams(window.location.search).get('id');
+      try { 
+        const response = await fetch("/api", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
+
+        const responseBody = await response.json();
+        if (responseBody.errors) {
+          console.error("Error en GraphQL:", responseBody.errors);
+          throw new Error("Error al actualizar la tarea");
+        } else {
+          console.log("Tarea actualizada:", responseBody.data.updateTask);
+          window.location.reload();
+        }
+        
+      } catch (error) {
+        console.error("Error en la solicitud:", error);
+      }
+    
+      // Cierra el modal
+      $("#editTaskModal").modal("hide");
+      
+    });
+
+    // Agregar una nueva tarea al proyecto
+    $("#addTaskForm").submit(async function (event) {
+      event.preventDefault();
+
+      const projectId = new URLSearchParams(window.location.search).get("id");
 
       // Crea un nuevo objeto de tarea con los datos del formulario
-      const taskData   = {
-          project_id: projectId,
-          title: $('#taskTitle').val(),
-          description: $('#taskDescription').val(),
-          responsible: $('#taskResponsibles').val().split(','), // Suponiendo que los responsables se separan por comas
-          enddate: $('#taskEndDate').val(),
-          notes: $('#taskNotes').val(),
-          status: $('#taskStatus').val(),
+      const taskData = {
+        project_id: projectId,
+        title: $("#taskTitle").val(),
+        description: $("#taskDescription").val(),
+        responsible: $("#taskResponsibles").val().split(","), // Suponiendo que los responsables se separan por comas
+        enddate: $("#taskEndDate").val(),
+        notes: $("#taskNotes").val(),
+        status: $("#taskStatus").val(),
       };
-      //console.log('Datos de la tarea:', taskData);
+      console.log("Datos de la tarea:", taskData);
+      //console.log('Fecha', taskData.enddate);
 
       const mutation = `
         mutation CreateTask($input: TaskInput!) { 
@@ -468,15 +562,15 @@ $(document).ready(async function() {
       const requestBody = {
         query: mutation,
         variables: {
-          input: taskData
-        }
+          input: taskData,
+        },
       };
 
       try {
-        const response = await fetch('/api', {
-          method: 'POST',
+        const response = await fetch("/api", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(requestBody),
         });
@@ -489,68 +583,42 @@ $(document).ready(async function() {
           console.error("Error en GraphQL:", responseBody.errors);
           throw new Error("Error al crear la tarea");
         } else {
-          console.log('Nueva tarea:', taskData);
-        
-          $('#addTaskModal').modal('hide');
-          $('#addTaskForm')[0].reset();
+          console.log("Nueva tarea:", taskData);
+
+          $("#addTaskModal").modal("hide");
+          $("#addTaskForm")[0].reset();
         }
+        getTasksByProjectId(projectId);
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }
     });
 
-    // Editar una tarea
-    $('#editTaskForm').submit(function(event) {
-      event.preventDefault();
-    
-      // Obtén el id de la tarea desde los datos almacenados
-      const taskId = $(this).data('task-id');
-      // Encuentra la tarea en el array de tareas del proyecto
-      const taskIndex = project.tasks.findIndex(task => task.id.toString() === taskId.toString());
-    
-      // Actualiza la tarea con los nuevos valores
-      if (taskIndex !== -1) {
-        project.tasks[taskIndex].title = $('#editTaskTitle').val();
-        project.tasks[taskIndex].description = $('#editTaskDescription').val();
-        project.tasks[taskIndex].responsible = $('#editTaskResponsibles').val().split(', '); // Convierte el string a un array
-        project.tasks[taskIndex].enddate = $('#editTaskEndDate').val();
-        project.tasks[taskIndex].notes = $('#editTaskNotes').val();
-        project.tasks[taskIndex].status = $('#editTaskStatus').val();
-    
-        // Actualiza sessionStorage
-        sessionStorage.setItem('projectsdb', JSON.stringify(projects));
-    
-        // Actualiza las tarjetas mostradas
-        showTasksCards(project.tasks);
-
-        // Cierra el modal
-        $('#editTaskModal').modal('hide');
-      }
-    });
-
     // Mosrar y ocultar botón de eliminar tarea
-    $(document).on('mouseenter', '.task-card', function() {  
-      $(this).find('.delete-button').show();
+    $(document).on("mouseenter", ".task-card", function () {
+      $(this).find(".delete-button").show();
     });
-    $(document).on('mouseleave', '.task-card', function() {
-      $(this).find('.delete-button').hide();
+    $(document).on("mouseleave", ".task-card", function () {
+      $(this).find(".delete-button").hide();
     });
-    
+
     // Eliminar una tarea
-    $(document).on('click', '.delete-button', function(event) {
+    $(document).on("click", ".delete-button", function (event) {
       event.preventDefault();
-      const taskId = $(this).closest('.task-card-btn').data('task-id');
-      const taskIndex = project.tasks.findIndex(task => task.id.toString() === taskId.toString());
-      console.log('Eliminar tarea con ID:', taskId);
-      console.log('Índice de la tarea:', taskIndex);
+      const taskId = $(this).closest(".task-card-btn").data("task-id");
+      const taskIndex = project.tasks.findIndex(
+        (task) => task.id.toString() === taskId.toString()
+      );
+      console.log("Eliminar tarea con ID:", taskId);
+      console.log("Índice de la tarea:", taskIndex);
 
-      $('#confirmationModal').modal('show');
+      $("#confirmationModal").modal("show");
 
-      $('#confirmDelete').click(function() {
+      $("#confirmDelete").click(function () {
         project.tasks.splice(taskIndex, 1);
-        sessionStorage.setItem('projectsdb', JSON.stringify(projects));
+        sessionStorage.setItem("projectsdb", JSON.stringify(projects));
         showTasksCards(project.tasks);
-        $('#confirmationModal').modal('hide');
+        $("#confirmationModal").modal("hide");
       });
 
       return false;
