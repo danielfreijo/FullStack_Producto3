@@ -412,7 +412,8 @@ $(document).ready(async function() {
         } else {
           console.log("Proyecto eliminado con éxito", responseBody.data.deleteProject);
 
-          projects = projects.filter(project => project.id !== projectId);
+          projects = projects.filter(project => project.id !== projectId); //mirar esto para tareas
+          
           showRecentProjects(projects); 
           showAllProjects(projects);
           showPriorityProjects(projects);

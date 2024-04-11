@@ -1,3 +1,5 @@
+let tasks
+
 // Funcionwa asincornas para obtener los datos del proyecto por ID desde la API
 async function getProjectById(id) {
   const query = `
@@ -80,6 +82,45 @@ async function getTasksByProjectId(projectId) {
     } else {
       console.log("Tareas encontradas:", responseBody.data.getTasksByProjectId);
       return responseBody.data.getTasksByProjectId;
+    }
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+  }
+}
+async function updateTaskEndDate(taskId, newEndDate) {
+  const mutation = `
+    mutation UpdateTask($input: TaskInput!, $updateTaskId: ID!) {
+      updateTask(input: $input, id: $updateTaskId) {
+        id
+        ended
+      }
+    }
+  `;
+  const requestBody = {
+    query: mutation,
+    variables: {
+      updateTaskId: taskId,
+      input: {
+        ended: newEndDate,
+      },
+    },  
+  };
+
+  try {
+    const response = await fetch("/api", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    const responseBody = await response.json();
+    if (responseBody.errors) {
+      console.error("Error en GraphQL:", responseBody.errors);
+      throw new Error("Error al actualizar la tarea");
+    } else {
+      console.log("Tarea actualizada:", responseBody.data.updateTask);
     }
   } catch (error) {
     console.error("Error en la solicitud:", error);
@@ -179,7 +220,7 @@ function drop(event) {
   }
 }
 
-// Función para actualizar el estado de una tarea en el proyecto
+// Funciones para actualizar el estado de una tarea en el proyecto
 function updateTaskStateInProject(taskId, newState) {
   const urlParams = new URLSearchParams(window.location.search);
   const projectId = urlParams.get("id");
@@ -225,11 +266,15 @@ $(document).ready(async function () {
 
     // Mostrar el nombre del proyecto en la barra de navegación
     $("#projectName").text(project.name.toUpperCase());
-
-    const tasks = await getTasksByProjectId(projectId);
-    //console.log('Tareas encontradas:', tasks);
-    if (tasks) {
-      showTasksCards(tasks);
+    
+    try {
+      tasks = await getTasksByProjectId(projectId);
+      //console.log('Tareas encontradas:', tasks);
+      if (tasks) {
+        showTasksCards(tasks);
+      }
+    } catch (error) {
+      console.error("Error al obtener las tareas:", error);
     }
 
     // Abrir el modal de nueva tarea
@@ -330,13 +375,13 @@ $(document).ready(async function () {
       const newBackgroundImageCard =
         $("#sidebarBackgroundImageCard").val() || "";
 
-      // Si se selecciona un color como fondo, establecer backgroundImage como ""
+      /* Si se selecciona un color como fondo, establecer backgroundImage como ""
       if (newBackgroundImage === "") {
         newBackgroundImage = "";
       }
       if (newBackgroundImageCard === "") {
         newBackgroundImageCard = "";
-      }
+      }*/
 
       const mutation = `
         mutation UpdateProject($updateProjectId: ID!, $input: ProjectInput!) {
@@ -418,10 +463,17 @@ $(document).ready(async function () {
     // Evento para señalar la fecha de finalización de una tarea
     $(document).on("click", '.task-end-date input[type="checkbox"], .task-end-date label', function (event) {
       event.stopPropagation();
+      let isChecked = $(event.target).prop("checked");
 
-      if ($(event.target).is('input[type="checkbox"]')) {
-        $(event.target).closest(".task-end-date").toggleClass("green-background", $(event.target).prop("checked"));
+      if ($(event.target).is('label')) {
+        const checkboxId = $(event.target).attr("for");
+        const checkbox = $(`#${checkboxId}`);
+        isChecked = checkbox.prop("checked");
       }
+      const taskId = $(this).closest(".task-card-btn").data("task-id");
+      $(event.target).closest(".task-end-date").toggleClass("green-background", isChecked);
+
+      updateTaskEndDate(taskId, isChecked);
     });
 
     // Evento al hacer clic en una tarea
@@ -429,7 +481,7 @@ $(document).ready(async function () {
       event.stopPropagation();
 
       const taskId = $(this).data("task-id");
-      console.log("ID de la tarea:", taskId);
+      //console.log("ID de la tarea:", taskId);
       const taskToEdit = tasks.find(
         (task) => task.id.toString() === taskId.toString()
       );
@@ -513,13 +565,13 @@ $(document).ready(async function () {
           throw new Error("Error al actualizar la tarea");
         } else {
           console.log("Tarea actualizada:", responseBody.data.updateTask);
-          window.location.reload();
+          tasks = await getTasksByProjectId(projectId);
+          showTasksCards(tasks);
         }
-        
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }
-    
+      
       // Cierra el modal
       $("#editTaskModal").modal("hide");
       
@@ -528,7 +580,6 @@ $(document).ready(async function () {
     // Agregar una nueva tarea al proyecto
     $("#addTaskForm").submit(async function (event) {
       event.preventDefault();
-
       const projectId = new URLSearchParams(window.location.search).get("id");
 
       // Crea un nuevo objeto de tarea con los datos del formulario
@@ -584,11 +635,11 @@ $(document).ready(async function () {
           throw new Error("Error al crear la tarea");
         } else {
           console.log("Nueva tarea:", taskData);
-
+          tasks = await getTasksByProjectId(projectId);
+          showTasksCards(tasks);
           $("#addTaskModal").modal("hide");
           $("#addTaskForm")[0].reset();
         }
-        getTasksByProjectId(projectId);
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }
@@ -606,19 +657,47 @@ $(document).ready(async function () {
     $(document).on("click", ".delete-button", function (event) {
       event.preventDefault();
       const taskId = $(this).closest(".task-card-btn").data("task-id");
-      const taskIndex = project.tasks.findIndex(
-        (task) => task.id.toString() === taskId.toString()
-      );
       console.log("Eliminar tarea con ID:", taskId);
-      console.log("Índice de la tarea:", taskIndex);
-
+      
       $("#confirmationModal").modal("show");
 
-      $("#confirmDelete").click(function () {
-        project.tasks.splice(taskIndex, 1);
-        sessionStorage.setItem("projectsdb", JSON.stringify(projects));
-        showTasksCards(project.tasks);
-        $("#confirmationModal").modal("hide");
+      $("#confirmDelete").click(async function () {
+        const mutation = `
+          mutation DeleteTask($deleteTaskId: ID!) {
+            deleteTask(id: $deleteTaskId)
+          }
+        `;    
+        
+        const requestBody = {
+          query: mutation,
+          variables: {
+            deleteTaskId: taskId,
+          },
+        };  
+        
+        const response = await fetch("/api", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
+        
+        const responseBody = await response.json(); 
+        try {
+          if (responseBody.errors) {
+            console.error("Error en GraphQL:", responseBody.errors);
+            throw new Error("Error al eliminar la tarea");
+          } else {
+            console.log("Tarea eliminada:", responseBody.data.deleteTask);
+            
+            const updatedTasks = await getTasksByProjectId(projectId);
+            showTasksCards(updatedTasks);
+            $("#confirmationModal").modal("hide");  
+          }
+        } catch (error) {
+          console.error("Error en la solicitud:", error);
+        }
       });
 
       return false;
