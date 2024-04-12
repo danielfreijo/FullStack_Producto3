@@ -118,7 +118,6 @@ a {
     width: auto;
     display: block; 
     padding: 0%; 
-    margin-bottom: 160px;
 }
 #card-title {
     margin-top: 6vh;
@@ -137,7 +136,8 @@ a {
 }
 .task-cards {
     padding: 0;
-    list-style-type: none; /* Eliminar los números de la lista */
+    list-style-type: none; 
+    transition: tranasform 0.4s ease;
 }
 .task-card-btn {
     position: relative;
@@ -152,6 +152,7 @@ a {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
     transition: 0.3s;
 }
+
 .task-checkbox label {
     display: inline-block;
     width: 20px;

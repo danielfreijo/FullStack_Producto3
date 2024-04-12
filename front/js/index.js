@@ -68,12 +68,13 @@ function createProjectCard(project) {
 function showRecentProjects(projects) {
   const recentProjects = $('#recentProjects');
   recentProjects.empty();
+  const projectsCopy = [...projects];
 
   // Ordenar los proyectos por fecha de acceso de manera descendente
-  projects.sort((a, b) => new Date(b.dateAccess) - new Date(a.dateAccess));
-
+  projectsCopy.sort((a, b) => +b.dateaccess - +a.dateaccess);
+  
   // Tomar los 4 proyectos más recientes
-  const projectsToShow = projects.slice(0, 4);
+  const projectsToShow = projectsCopy.slice(0, 4);
 
   projectsToShow.forEach(project => {
     const cardHTML = createProjectCard(project);

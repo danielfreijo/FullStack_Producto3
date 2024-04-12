@@ -155,41 +155,41 @@
 
     <!--Contenedor principal del contenido-->
     <div class="container" id="main-container" >
-        
-        <div class="col-4 text-center" id="drop_zone_todo" >
-            <div class="d-flex flex-column align-items-center" >
-                <h5 id="card-title">POR HACER</h5>
-                <ol class="task-cards mt-3" data-state="POR HACER" style="min-height:40px; min-width: 300px;" ondrop="drop(event)" ondragover="allowDrop(event)">
-                    <!-- Tarjetas de tareas se agregarán aquí -->
-                </ol>
+        <div class="row">
+            <div class="col-4 text-center" id="drop_zone_todo" >
+                <div class="d-flex flex-column align-items-center" >
+                    <h5 id="card-title">POR HACER</h5>
+                    <ol class="task-cards flex-grow-1 mt-3" data-state="POR HACER" style="min-height:40px; min-width: 300px;" ondrop="drop(event)" ondragover="allowDrop(event)">
+                        <!-- Tarjetas de tareas se agregarán aquí -->
+                    </ol>
+                </div>
+                <button type="button" class="btn btn-primary mt-5 addCardBtn openModal" data-state="POR HACER" style="margin-bottom: 50px;">
+                    <span style="font-size: 20px;">+ </span>Añadir
+                </button>
             </div>
-            <button type="button" class="btn btn-primary mt-5 addCardBtn openModal" data-state="POR HACER" >
-                <span style="font-size: 20px;">+ </span>Añadir
-            </button>
-        </div>
-        <div class="col-4 text-center" id="drop_zone_progress" >
-            <div class="d-flex flex-column align-items-center" >
-                <h5 id="card-title">EN PROGRESO</h5>
-                <ol class="task-cards mt-3" data-state="EN PROGRESO" style="min-height:40px; min-width: 300px;" ondrop="drop(event)" ondragover="allowDrop(event)">
-                    <!-- Tarjetas de tareas se agregarán aquí -->
-                </ol> 
+            <div class="col-4 text-center" id="drop_zone_progress" >
+                <div class="d-flex flex-column align-items-center" >
+                    <h5 id="card-title">EN PROGRESO</h5>
+                    <ol class="task-cards flex-grow-1 mt-3" data-state="EN PROGRESO" style="min-height:40px; min-width: 300px;" ondrop="drop(event)" ondragover="allowDrop(event)">
+                        <!-- Tarjetas de tareas se agregarán aquí -->
+                    </ol> 
+                </div>
+                <button type="button" class="btn btn-primary mt-5 addCardBtn openModal" data-state="EN PROGRESO" style="margin-bottom: 50px;" >
+                    <span style="font-size: 20px;">+ </span>Añadir
+                </button>
             </div>
-            <button type="button" class="btn btn-primary mt-5 addCardBtn openModal" data-state="EN PROGRESO" >
-                <span style="font-size: 20px;">+ </span>Añadir
-            </button>
-        </div>
-        <div class="col-4 text-center" id="drop_zone_done">
-            <div class="d-flex flex-column align-items-center" >
-                <h5 id="card-title">FINALIZADO</h5>
-                <ol class="task-cards mt-3" data-state="FINALIZADO"style="min-height:40px; min-width: 300px;" ondrop="drop(event)" ondragover="allowDrop(event)">
-                    <!-- Tarjetas de tareas se agregarán aquí -->
-                </ol>
+            <div class="col-4 text-center" id="drop_zone_done">
+                <div class="d-flex flex-column align-items-center" >
+                    <h5 id="card-title">FINALIZADO</h5>
+                    <ol class="task-cards flex-grow-1 mt-3" data-state="FINALIZADO"style="min-height:40px; min-width: 300px;" ondrop="drop(event)" ondragover="allowDrop(event)">
+                        <!-- Tarjetas de tareas se agregarán aquí -->
+                    </ol>
+                </div>
+                <button type="button" class="btn btn-primary mt-5 addCardBtn openModal" data-state="FINALIZADO" style="margin-bottom: 50px;">
+                    <span style="font-size: 20px;">+ </span>Añadir
+                </button>
             </div>
-            <button type="button" class="btn btn-primary mt-5 addCardBtn openModal" data-state="FINALIZADO"  >
-                <span style="font-size: 20px;">+ </span>Añadir
-            </button>
         </div>
-      
     </div>
 
     <!--Sidebar para editar proyecto-->

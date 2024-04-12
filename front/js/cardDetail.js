@@ -1,6 +1,6 @@
 let tasks
 
-// Funcionwa asincornas para obtener los datos del proyecto por ID desde la API
+// Funciones asincronas 
 async function getProjectById(id) {
   const query = `
     query GetProjectById($id: ID!) {
@@ -126,6 +126,89 @@ async function updateTaskEndDate(taskId, newEndDate) {
     console.error("Error en la solicitud:", error);
   }
 }
+async function updateTaskStateInProject(taskId, newState) {
+  const mutation = `
+    mutation UpdateTask($updateTaskId: ID!, $input: TaskInput!) {
+      updateTask(id: $updateTaskId, input: $input) {
+        id
+        status
+      }
+    }
+  `;
+
+  const requestBody = {
+    query: mutation,
+    variables: {
+      updateTaskId: taskId,
+      input: {
+        status: newState,
+      },
+    },
+  };
+
+  try {
+    const response = await fetch("/api", {
+      method:'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    const responseBody = await response.json();
+    if (responseBody.errors) {
+      console.error('Error en GraphQL:', responseBody.errors);
+      throw new Error('Error al actualizar la tarea');
+    } else {
+      console.log('Tarea actualizada:', responseBody.data.updateTask);
+    }
+  } catch (error) {
+    console.error('Error en la solicitud:', error);
+  }
+}
+async function updateDateAccessProject(projectId) {
+  const mutation = `
+    mutation UpdateProject($updateProjectId: ID!, $input: ProjectInput!) {
+      updateProject(id: $updateProjectId, input: $input) {
+        id
+        dateaccess
+      }
+    }
+  `;
+
+  const requestBody = {
+    query: mutation,
+    variables: {
+      updateProjectId: projectId,
+      input: {
+        dateaccess: new Date().toString(),
+      },
+    },
+  };
+  console.log("Cuerpo de la solicitud:", requestBody);
+  console.log("Fecha de acceso:", new Date().toString());
+
+  try {
+    const response = await fetch("/api", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+    console.log("Respuesta de la API:", response);
+
+    const responseBody = await response.json();
+    if (responseBody.errors) {
+      console.error("Error en GraphQL:", responseBody.errors);
+      throw new Error("Error al actualizar la fecha de acceso del proyecto");
+    } else {
+      console.log("Proyecto actualizado:", responseBody.data.updateProject);
+    }
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+  }
+}
 
 // Funcionalidades para la vista de detalle de una tarjeta
 function formatDate(dateString) {
@@ -189,12 +272,13 @@ function allowDrop(event) {
 function drag(event) {
   const taskId = event.target.getAttribute("data-task-id");
   event.dataTransfer.setData("text/plain", taskId);
-  //console.log('Elemento arrastrado:', taskId);
 }
 function drop(event) {
   event.preventDefault();
   var data = event.dataTransfer.getData("text");
+  //console.log("Elemento soltado:", data);
   var draggedElement = document.querySelector('[data-task-id="' + data + '"]');
+  //console.log("Elemento arrastrado:", draggedElement);
 
   // Verificar si el elemento arrastrado es válido
   if (draggedElement) {
@@ -220,37 +304,7 @@ function drop(event) {
   }
 }
 
-// Funciones para actualizar el estado de una tarea en el proyecto
-function updateTaskStateInProject(taskId, newState) {
-  const urlParams = new URLSearchParams(window.location.search);
-  const projectId = urlParams.get("id");
-  var projectsJSON = sessionStorage.getItem("projectsdb");
-  var projects = JSON.parse(projectsJSON);
-
-  // Buscar el proyecto por ID
-  const projectIndex = projects.findIndex(
-    (project) => project.id.toString() === projectId
-  );
-  if (projectIndex !== -1) {
-    const project = projects[projectIndex];
-
-    // Buscar la tarea por ID y actualizar su estado
-    const taskIndex = project.tasks.findIndex(
-      (task) => task.id.toString() === taskId
-    );
-    if (taskIndex !== -1) {
-      project.tasks[taskIndex].status = newState;
-
-      // Guardar los cambios en sessionStorage
-      sessionStorage.setItem("projectsdb", JSON.stringify(projects));
-    } else {
-      console.error("No se pudo encontrar la tarea con ID:", taskId);
-    }
-  } else {
-    console.error("No se pudo encontrar el proyecto con ID:", projectId);
-  }
-}
-
+// Funciones para el manejo de eventos
 $(document).ready(async function () {
   // Obtener el ID del proyecto de la URL
   const urlParams = new URLSearchParams(window.location.search);
@@ -262,7 +316,8 @@ $(document).ready(async function () {
 
   if (project) {
     // Actualizar el campo dateAcces
-    project.dateaccess = new Date().toString();
+    updateDateAccessProject(projectId);
+    console.log("Fecha de acceso:", project.dateaccess);
 
     // Mostrar el nombre del proyecto en la barra de navegación
     $("#projectName").text(project.name.toUpperCase());

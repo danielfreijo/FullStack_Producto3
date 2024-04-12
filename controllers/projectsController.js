@@ -25,6 +25,7 @@ const projectTypeDefs = gql`
         backgroundcolorcard: String
         backgroundcard: String
         priority: Boolean
+        dateaccess: String
     }
 
     type Query {
