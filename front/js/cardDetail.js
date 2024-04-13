@@ -127,6 +127,8 @@ async function updateTaskEndDate(taskId, newEndDate) {
   }
 }
 async function updateTaskStateInProject(taskId, newState) {
+  const projectId = new URLSearchParams(window.location.search).get("id");
+  
   const mutation = `
     mutation UpdateTask($updateTaskId: ID!, $input: TaskInput!) {
       updateTask(id: $updateTaskId, input: $input) {
@@ -161,6 +163,8 @@ async function updateTaskStateInProject(taskId, newState) {
       throw new Error('Error al actualizar la tarea');
     } else {
       console.log('Tarea actualizada:', responseBody.data.updateTask);
+      tasks = await getTasksByProjectId(projectId);
+      showTasksCards(tasks);
     }
   } catch (error) {
     console.error('Error en la solicitud:', error);
@@ -185,8 +189,6 @@ async function updateDateAccessProject(projectId) {
       },
     },
   };
-  console.log("Cuerpo de la solicitud:", requestBody);
-  console.log("Fecha de acceso:", new Date().toString());
 
   try {
     const response = await fetch("/api", {
@@ -196,7 +198,6 @@ async function updateDateAccessProject(projectId) {
       },
       body: JSON.stringify(requestBody),
     });
-    console.log("Respuesta de la API:", response);
 
     const responseBody = await response.json();
     if (responseBody.errors) {
@@ -317,7 +318,6 @@ $(document).ready(async function () {
   if (project) {
     // Actualizar el campo dateAcces
     updateDateAccessProject(projectId);
-    console.log("Fecha de acceso:", project.dateaccess);
 
     // Mostrar el nombre del proyecto en la barra de navegación
     $("#projectName").text(project.name.toUpperCase());
@@ -547,6 +547,8 @@ $(document).ready(async function () {
       const month = editDate.getMonth() + 1;
       const day = editDate.getDate();
       const formattedDate = `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+
+      console.log('Estado:', taskToEdit.status);
 
       // Si se encuentra la tarea, llena el modal de edición con los datos de la tarea
       if (taskToEdit) {
