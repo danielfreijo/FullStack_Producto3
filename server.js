@@ -4,9 +4,11 @@ const { ApolloServer} = require('apollo-server-express');
 const { projectTypeDefs, projectResolvers } = require('./controllers/projectsController');
 const { taskTypeDefs, taskResolvers } = require('./controllers/tasksController');
 const { connection} = require('./config/connectionDB');
-
+const socketIO = require('socket.io');
+const multer = require('multer');
 
 const app = express();
+const upload = multer();
 connection();
 
 const publicPath = path.join(__dirname, "front");
@@ -44,6 +46,22 @@ async function startServer() {
     console.log(`Servidor corriendo en http://localhost:${PORT}`)
     //console.log(`Servidor corriendo en http://localhost:${PORT}${server.graphqlPath}`)
   );
+
+  const io = socketIO(server);
+
+  io.on('connection', (socket) => {
+    console.log('Cliente conectado');
+
+    // Manejar el evento 'mensaje' enviado por el cliente
+    socket.on('mensaje', (mensaje) => {
+        console.log('Mensaje recibido:', mensaje);
+        // Emitir el mensaje a todos los clientes conectados
+        io.emit('mensaje', mensaje);
+    });
+  });
 }
+
+
+
 
 startServer();

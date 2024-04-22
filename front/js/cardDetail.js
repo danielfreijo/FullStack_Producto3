@@ -1,4 +1,5 @@
 let tasks
+const socket = io("http://localhost:4000");
 
 // Funciones asincronas 
 async function getProjectById(id) {
@@ -211,6 +212,15 @@ async function updateDateAccessProject(projectId) {
   }
 }
 
+// Escuchar mensajes del servidor y mostrarlos en la lista
+socket.on('mensaje', (mensaje) => {
+  const listaMensajes = document.getElementById('mensajes');
+  const nuevoMensaje = document.createElement('li');
+  nuevoMensaje.textContent = mensaje;
+  listaMensajes.appendChild(nuevoMensaje);
+});
+
+
 // Funcionalidades para la vista de detalle de una tarjeta
 function formatDate(dateString) {
   //console.log('Fecha:', dateString);
@@ -240,6 +250,7 @@ function createTaskCard(task) {
       </div>
     </li>
   `;
+  socket.emit('mensaje', "Tarjeta creada");
 }
 function showTasksCards(tasks) {
   const taskCardsContainer = $(".task-cards");
@@ -485,6 +496,7 @@ $(document).ready(async function () {
           console.error("Error en GraphQL:", responseBody.errors);
           throw new Error("Error al actualizar el proyecto");
         } else {
+          socket.emit('mensaje', "Tarjeta actualizada");
           location.reload();
         }
       } catch (error) {
@@ -529,6 +541,7 @@ $(document).ready(async function () {
       $(event.target).closest(".task-end-date").toggleClass("green-background", isChecked);
 
       updateTaskEndDate(taskId, isChecked);
+      socket.emit('mensaje', "Tarjeta cerrada");
     });
 
     // Evento al hacer clic en una tarea
@@ -631,6 +644,7 @@ $(document).ready(async function () {
       
       // Cierra el modal
       $("#editTaskModal").modal("hide");
+      socket.emit('mensaje', "Tarjeta Modificada");
       
     });
 
@@ -696,6 +710,7 @@ $(document).ready(async function () {
           showTasksCards(tasks);
           $("#addTaskModal").modal("hide");
           $("#addTaskForm")[0].reset();
+          socket.emit('mensaje', "Tarjeta creada");
         }
       } catch (error) {
         console.error("Error en la solicitud:", error);
@@ -751,6 +766,7 @@ $(document).ready(async function () {
             const updatedTasks = await getTasksByProjectId(projectId);
             showTasksCards(updatedTasks);
             $("#confirmationModal").modal("hide");  
+            socket.emit('mensaje', "Tarjeta eliminada");
           }
         } catch (error) {
           console.error("Error en la solicitud:", error);
