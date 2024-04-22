@@ -45,7 +45,7 @@
             </div>
         </div>
     </nav>
-
+    <ul id="mensajes"></ul>
     <!-- Modal de agregar tarea -->
     <div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -83,6 +83,10 @@
                                 <option value="EN PROGRESO">En Progreso</option>
                                 <option value="FINALIZADO">Finalizado</option>
                             </select>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="taskStatus">Cargar fichero</label>
+                            <input type="file" name="taskfile" id="taskfile">
                         </div>
                         <button type="submit" class="btn btn-primary mt-4 float-end">Agregar Tarea</button>
                     </form>
@@ -278,6 +282,7 @@
     <script src="/assets/libraries/popper.min.js" ></script>
     <script src="/assets/libraries/bootstrap.bundle.min.js"></script>
     <script src="/js/cardDetail.js"></script>
-
+    <script src="/assets/libraries/socket.io/socket.io.js"></script>
+    
 </body>
 </html>
