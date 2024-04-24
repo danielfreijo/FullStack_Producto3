@@ -1,5 +1,0 @@
-# Ignorar directorio .codesandbox
-.codesandbox/
-
-# Ignorar directorio devcontainer
-devcontainer/
