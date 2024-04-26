@@ -561,7 +561,7 @@ $(document).ready(async function () {
 
         // Guarda el id de la tarea en un lugar accesible para cuando se guarde el formulario
         $("#editTaskForm").data("task-id", taskToEdit.id);
-
+        document.getElementById('editTaskFile').value = '';
         // Muestra el modal
         $("#editTaskModal").modal("show");
       }
@@ -623,7 +623,14 @@ $(document).ready(async function () {
         } else {
           console.log("Tarea actualizada:", responseBody.data.updateTask);
           tasks = await getTasksByProjectId(projectId);
+          //subir archivo
+          await subirArchivo('#editTaskFile');
+          // Emitir un mensaje de socket.io
+          // Después de crear la tarea...
+          const socket = io();
+          socket.emit('taskUpdated', { message: 'La tarea se ha actualizado.' });
           showTasksCards(tasks);
+
         }
       } catch (error) {
         console.error("Error en la solicitud:", error);
@@ -692,7 +699,7 @@ $(document).ready(async function () {
           throw new Error("Error al crear la tarea");
         } else {
 
-          await subirArchivo();
+          await subirArchivo('#taskFile');
           console.log("Nueva tarea:", taskData);
           tasks = await getTasksByProjectId(projectId);
           showTasksCards(tasks);
@@ -766,22 +773,22 @@ $(document).ready(async function () {
       return false;
     });
   }
-// subir archivo
-  async function subirArchivo() {
+  // subir archivo
+  async function subirArchivo(selector) {
     var formData = new FormData();
-    var fileField = document.querySelector('#taskFile');
+    var fileField = document.querySelector(selector);
     formData.append('file', fileField.files[0]);
 
     try {
-        const response = await fetch('/upload', {
-            method: 'POST',
-            body: formData
-        });
+      const response = await fetch('/upload', {
+        method: 'POST',
+        body: formData
+      });
 
-        const result = await response.json();
-        console.log('Success:', result);
+      const result = await response.json();
+      console.log('Success:', result);
     } catch (error) {
-        console.error('Error:', error);
+      console.error('Error:', error);
     }
-}
+  }
 });
