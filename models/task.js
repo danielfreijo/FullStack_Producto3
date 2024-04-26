@@ -30,6 +30,8 @@ const taskSchema = Schema({
         enum: ['POR HACER', 'EN PROGRESO', 'FINALIZADO'], 
         required: true,   
     },
+    pathfile: String,
+    status: String,
 });
 
 module.exports = model('Task', taskSchema);

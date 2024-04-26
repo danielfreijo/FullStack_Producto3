@@ -40,7 +40,30 @@ socket.on('mensaje', (mensaje) => {
   
   // Agregar la tarjeta de alerta al contenedor
   container.appendChild(alertDiv);
+  Prueba();
+
 });
+
+/*
+{
+    "id": "662bc2021495ac5c3db15bc1",
+    "name": "Proyecto de prueba 2",
+    "description": "dsfbhdfnb",
+    "department": "Desarrollo",
+    "backgroundcolor": "#ffffff",
+    "backgroundimage": null,
+    "backgroundcolorcard": "#feb4b4",
+    "backgroundcard": null,
+    "priority": false,
+    "dateaccess": "1714146688000"
+}
+*/
+
+async function Prueba(){
+  tasks = await getTasksByProjectId("662bc2021495ac5c3db15bc1");
+  showTasksCards(tasks);
+}
+
 
 // Funciones asincronas 
 async function getProjectById(id) {
@@ -252,15 +275,6 @@ async function updateDateAccessProject(projectId) {
     console.error("Error en la solicitud:", error);
   }
 }
-
-// Escuchar mensajes del servidor y mostrarlos en la lista
-socket.on('mensaje', (mensaje) => {
-  const listaMensajes = document.getElementById('mensajes');
-  const nuevoMensaje = document.createElement('li');
-  nuevoMensaje.textContent = mensaje;
-  listaMensajes.appendChild(nuevoMensaje);
-});
-
 
 // Funcionalidades para la vista de detalle de una tarjeta
 function formatDate(dateString) {
@@ -747,8 +761,8 @@ $(document).ready(async function () {
           throw new Error("Error al crear la tarea");
         } else {
           console.log("Nueva tarea:", taskData);
-          tasks = await getTasksByProjectId(projectId);
-          showTasksCards(tasks);
+          //tasks = await getTasksByProjectId(projectId);
+          //showTasksCards(tasks);
           $("#addTaskModal").modal("hide");
           $("#addTaskForm")[0].reset();
           socket.emit('mensaje', "Tarjeta creada");
