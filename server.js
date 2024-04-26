@@ -4,23 +4,28 @@ const { ApolloServer} = require('apollo-server-express');
 const { projectTypeDefs, projectResolvers } = require('./controllers/projectsController');
 const { taskTypeDefs, taskResolvers } = require('./controllers/tasksController');
 const { connection} = require('./config/connectionDB');
+const multer = require ('multer');
+const logger = require ('morgan');
 const socketIO = require('socket.io');
-const multer = require('multer');
 
+// Crea la aplicación Express
 const app = express();
 const upload = multer();
 connection();
 
+// Define el directorio público
 const publicPath = path.join(__dirname, "front");
 
+// Configura la aplicación Express para servir archivos estáticos
 app.use(express.static(path.join( publicPath )));
 
+// Ruta para la página de inicio
 app.get("/", (req, res) => {
   res.sendFile(path.join(publicPath, "index.html"));
 });
 
 async function startServer() {
-  const server = new ApolloServer({
+  const apolloServer = new ApolloServer({
     typeDefs: [projectTypeDefs, taskTypeDefs],
     resolvers: {
       Query: {
@@ -34,34 +39,28 @@ async function startServer() {
     }
   });
 
-  await server.start();
-  server.applyMiddleware({ app, path: '/api'});
+  await apolloServer.start();
+  apolloServer.applyMiddleware({ app, path: '/api' });
 
-  app.use((req, res, next) => {
-    res.status(404).send('Error 404');
+  // Iniciar el servidor de Socket.IO
+  const httpServer = app.listen(4000, () => {
+    console.log(`Servidor corriendo en http://localhost:4000`);
   });
 
-  const PORT = process.env.PORT || 4000;
-  app.listen(PORT, () =>
-    console.log(`Servidor corriendo en http://localhost:${PORT}`)
-    //console.log(`Servidor corriendo en http://localhost:${PORT}${server.graphqlPath}`)
-  );
+  const io = socketIO(httpServer);
 
-  const io = socketIO(server);
-
+  // Maneja el evento 'connection' de Socket.IO
   io.on('connection', (socket) => {
     console.log('Cliente conectado');
 
-    // Manejar el evento 'mensaje' enviado por el cliente
+    // Maneja el evento 'mensaje' enviado por el cliente
     socket.on('mensaje', (mensaje) => {
-        console.log('Mensaje recibido:', mensaje);
-        // Emitir el mensaje a todos los clientes conectados
-        io.emit('mensaje', mensaje);
+      console.log('Mensaje recibido:', mensaje);
+      // Emitir el mensaje a todos los clientes conectados
+      io.emit('mensaje', mensaje);
     });
   });
+
 }
-
-
-
 
 startServer();

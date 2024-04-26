@@ -1,5 +1,46 @@
 let tasks
-const socket = io("http://localhost:4000");
+const socket = io();
+
+// Escuchar mensajes del servidor y mostrarlos en la lista
+socket.on('mensaje', (mensaje) => {
+  // Borramos lo que contenga el container de las alertas
+  const container_borrar = document.getElementById('container');
+  container_borrar.innerHTML = '';
+
+  const alertDiv = document.createElement('div');
+  alertDiv.classList.add('alert', 'alert-success', 'alert-dismissible');
+  
+  // Botón de cierre
+  const closeButton = document.createElement('button');
+  closeButton.setAttribute('type', 'button');
+  closeButton.classList.add('btn-close');
+  closeButton.setAttribute('data-bs-dismiss', 'alert');
+  
+  // Contenido de la tarjeta de alerta
+  const strongTag = document.createElement('strong');
+  strongTag.textContent = 'Alerta:';
+  
+  // Div para el mensaje
+  const mensajeDiv = document.createElement('div');
+  mensajeDiv.setAttribute('name', 'mensajeDiv');
+  mensajeDiv.setAttribute('id', 'mensajeDiv');
+  
+  // Agregar el contenido al mensajeDiv
+  mensajeDiv.textContent = mensaje;
+  
+  // Agregar el botón de cierre a la tarjeta de alerta
+  alertDiv.appendChild(closeButton);
+  
+  // Agregar el texto fuerte y el mensajeDiv a la tarjeta de alerta
+  alertDiv.appendChild(strongTag);
+  alertDiv.appendChild(mensajeDiv);
+  
+  // Obtener el contenedor donde se agregará la tarjeta de alerta
+  const container = document.getElementById('container');
+  
+  // Agregar la tarjeta de alerta al contenedor
+  container.appendChild(alertDiv);
+});
 
 // Funciones asincronas 
 async function getProjectById(id) {
@@ -766,7 +807,7 @@ $(document).ready(async function () {
             const updatedTasks = await getTasksByProjectId(projectId);
             showTasksCards(updatedTasks);
             $("#confirmationModal").modal("hide");  
-            socket.emit('mensaje', "Tarjeta eliminada");
+            socket.emit('mensaje', "Tarjeta eliminada_____________....");
           }
         } catch (error) {
           console.error("Error en la solicitud:", error);
