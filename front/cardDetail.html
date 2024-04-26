@@ -84,6 +84,10 @@
                                 <option value="FINALIZADO">Finalizado</option>
                             </select>
                         </div>
+                        <div class="form-group mb-4">
+                            <label for="taskFile">Archivo</label>
+                            <input type="file" id="taskFile" name="taskFile" class="form-control">
+                        </div>
                         <button type="submit" class="btn btn-primary mt-4 float-end">Agregar Tarea</button>
                     </form>
                 </div>
@@ -277,6 +281,7 @@
     <script src="/assets/libraries/jquery-3.6.0.min.js" ></script>
     <script src="/assets/libraries/popper.min.js" ></script>
     <script src="/assets/libraries/bootstrap.bundle.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="/js/cardDetail.js"></script>
 
 </body>

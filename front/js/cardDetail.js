@@ -103,7 +103,7 @@ async function updateTaskEndDate(taskId, newEndDate) {
       input: {
         ended: newEndDate,
       },
-    },  
+    },
   };
 
   try {
@@ -128,7 +128,7 @@ async function updateTaskEndDate(taskId, newEndDate) {
 }
 async function updateTaskStateInProject(taskId, newState) {
   const projectId = new URLSearchParams(window.location.search).get("id");
-  
+
   const mutation = `
     mutation UpdateTask($updateTaskId: ID!, $input: TaskInput!) {
       updateTask(id: $updateTaskId, input: $input) {
@@ -150,7 +150,7 @@ async function updateTaskStateInProject(taskId, newState) {
 
   try {
     const response = await fetch("/api", {
-      method:'POST',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -215,7 +215,7 @@ async function updateDateAccessProject(projectId) {
 function formatDate(dateString) {
   //console.log('Fecha:', dateString);
   const date = new Date(parseInt(dateString, 10));
-  const months = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic",];
+  const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic",];
   const year = date.getFullYear();
   const month = months[date.getMonth()];
   const day = date.getDate();
@@ -321,7 +321,7 @@ $(document).ready(async function () {
 
     // Mostrar el nombre del proyecto en la barra de navegación
     $("#projectName").text(project.name.toUpperCase());
-    
+
     try {
       tasks = await getTasksByProjectId(projectId);
       //console.log('Tareas encontradas:', tasks);
@@ -577,7 +577,7 @@ $(document).ready(async function () {
       const enddate = $("#editTaskEndDate").val();
       const notes = $("#editTaskNotes").val();
       const status = $("#editTaskStatus").val();
-     
+
       const mutation = `
         mutation UpdateTask($updateTaskId: ID!, $input: TaskInput!) {
           updateTask(id: $updateTaskId, input: $input) {
@@ -592,7 +592,7 @@ $(document).ready(async function () {
           }
         }
       `;
-      const requestBody = { 
+      const requestBody = {
         query: mutation,
         variables: {
           updateTaskId: taskId,
@@ -607,7 +607,7 @@ $(document).ready(async function () {
         },
       };
 
-      try { 
+      try {
         const response = await fetch("/api", {
           method: "POST",
           headers: {
@@ -628,10 +628,10 @@ $(document).ready(async function () {
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }
-      
+
       // Cierra el modal
       $("#editTaskModal").modal("hide");
-      
+
     });
 
     // Agregar una nueva tarea al proyecto
@@ -691,11 +691,17 @@ $(document).ready(async function () {
           console.error("Error en GraphQL:", responseBody.errors);
           throw new Error("Error al crear la tarea");
         } else {
+
+          await subirArchivo();
           console.log("Nueva tarea:", taskData);
           tasks = await getTasksByProjectId(projectId);
           showTasksCards(tasks);
           $("#addTaskModal").modal("hide");
           $("#addTaskForm")[0].reset();
+          // Emitir un mensaje de socket.io
+          // Después de crear la tarea...
+          const socket = io();
+          socket.emit('taskCreated', { message: 'La tarea se ha creado.' });
         }
       } catch (error) {
         console.error("Error en la solicitud:", error);
@@ -715,7 +721,7 @@ $(document).ready(async function () {
       event.preventDefault();
       const taskId = $(this).closest(".task-card-btn").data("task-id");
       console.log("Eliminar tarea con ID:", taskId);
-      
+
       $("#confirmationModal").modal("show");
 
       $("#confirmDelete").click(async function () {
@@ -723,15 +729,15 @@ $(document).ready(async function () {
           mutation DeleteTask($deleteTaskId: ID!) {
             deleteTask(id: $deleteTaskId)
           }
-        `;    
-        
+        `;
+
         const requestBody = {
           query: mutation,
           variables: {
             deleteTaskId: taskId,
           },
-        };  
-        
+        };
+
         const response = await fetch("/api", {
           method: "POST",
           headers: {
@@ -739,18 +745,18 @@ $(document).ready(async function () {
           },
           body: JSON.stringify(requestBody),
         });
-        
-        const responseBody = await response.json(); 
+
+        const responseBody = await response.json();
         try {
           if (responseBody.errors) {
             console.error("Error en GraphQL:", responseBody.errors);
             throw new Error("Error al eliminar la tarea");
           } else {
             console.log("Tarea eliminada:", responseBody.data.deleteTask);
-            
+
             const updatedTasks = await getTasksByProjectId(projectId);
             showTasksCards(updatedTasks);
-            $("#confirmationModal").modal("hide");  
+            $("#confirmationModal").modal("hide");
           }
         } catch (error) {
           console.error("Error en la solicitud:", error);
@@ -760,4 +766,22 @@ $(document).ready(async function () {
       return false;
     });
   }
+// subir archivo
+  async function subirArchivo() {
+    var formData = new FormData();
+    var fileField = document.querySelector('#taskFile');
+    formData.append('file', fileField.files[0]);
+
+    try {
+        const response = await fetch('/upload', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+        console.log('Success:', result);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
 });
