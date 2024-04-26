@@ -13,6 +13,7 @@ const taskTypeDefs = gql`
         ended: Boolean
         notes: String
         status: String
+        pathFile: String
     }
 
     input TaskInput {
@@ -24,6 +25,7 @@ const taskTypeDefs = gql`
         ended: Boolean
         notes: String
         status: String
+        pathFile: String
     }
 
     type Query {

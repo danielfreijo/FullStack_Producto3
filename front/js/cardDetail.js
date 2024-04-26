@@ -1,4 +1,5 @@
 let tasks
+let uploadedFilePath = null; // Variable para almacenar la ruta del archivo subido ya que se utiliza en varios lugares
 
 // Funciones asincronas 
 async function getProjectById(id) {
@@ -57,6 +58,7 @@ async function getTasksByProjectId(projectId) {
         ended
         notes
         status
+        pathFile
       }
     }
   `;
@@ -559,9 +561,23 @@ $(document).ready(async function () {
         $("#editTaskNotes").val(taskToEdit.notes);
         $("#editTaskStatus").val(taskToEdit.status);
 
+
         // Guarda el id de la tarea en un lugar accesible para cuando se guarde el formulario
         $("#editTaskForm").data("task-id", taskToEdit.id);
         document.getElementById('editTaskFile').value = '';
+        console.log('Ruta del archivo al editar:', taskToEdit.pathFile);
+        // Actualiza el enlace del archivo
+        if (taskToEdit.pathFile) {
+          $("#editTaskFileLink").attr("href", taskToEdit.pathFile).show();
+          // Obtiene el nombre del archivo de la ruta del archivo
+          const fileName = taskToEdit.pathFile.split('/').pop();
+
+          // Actualiza el texto del enlace de descarga
+          $("#editTaskFileLink").text(`Descargar archivo: ${fileName}`);
+        } else {
+          $("#editTaskFileLink").hide();
+        }
+
         // Muestra el modal
         $("#editTaskModal").modal("show");
       }
@@ -578,6 +594,12 @@ $(document).ready(async function () {
       const notes = $("#editTaskNotes").val();
       const status = $("#editTaskStatus").val();
 
+
+      // Subir archivo
+      const uploadedFilePath = await subirArchivo('#editTaskFile', taskId);
+
+      // Si la subida fue exitosa, uploadedFilePath debería contener la ruta del archivo en el servidor
+      const pathFile = uploadedFilePath || null;
       const mutation = `
         mutation UpdateTask($updateTaskId: ID!, $input: TaskInput!) {
           updateTask(id: $updateTaskId, input: $input) {
@@ -589,6 +611,7 @@ $(document).ready(async function () {
             enddate
             notes
             status
+            pathFile
           }
         }
       `;
@@ -603,6 +626,7 @@ $(document).ready(async function () {
             enddate: enddate,
             notes: notes,
             status: status,
+            
           },
         },
       };
@@ -623,8 +647,7 @@ $(document).ready(async function () {
         } else {
           console.log("Tarea actualizada:", responseBody.data.updateTask);
           tasks = await getTasksByProjectId(projectId);
-          //subir archivo
-          await subirArchivo('#editTaskFile');
+
           // Emitir un mensaje de socket.io
           // Después de crear la tarea...
           const socket = io();
@@ -655,6 +678,7 @@ $(document).ready(async function () {
         enddate: $("#taskEndDate").val(),
         notes: $("#taskNotes").val(),
         status: $("#taskStatus").val(),
+        // pathFile: uploadedFilePath,
       };
       console.log("Datos de la tarea:", taskData);
       //console.log('Fecha', taskData.enddate);
@@ -669,7 +693,7 @@ $(document).ready(async function () {
             responsible
             enddate
             notes
-            status
+            status            
           }
         } 
       `;
@@ -698,8 +722,12 @@ $(document).ready(async function () {
           console.error("Error en GraphQL:", responseBody.errors);
           throw new Error("Error al crear la tarea");
         } else {
+          console.log("Nueva ID DE LA tarea:", responseBody.data.createTask);
+          // Si la creación de la tarea tiene éxito, sube el archivo
+          // obteniendo el id de la tarea creada
+          const taskId = responseBody.data.createTask.id;
+          await subirArchivo('#taskFile', taskId);
 
-          await subirArchivo('#taskFile');
           console.log("Nueva tarea:", taskData);
           tasks = await getTasksByProjectId(projectId);
           showTasksCards(tasks);
@@ -713,6 +741,7 @@ $(document).ready(async function () {
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }
+
     });
 
     // Mosrar y ocultar botón de eliminar tarea
@@ -774,21 +803,93 @@ $(document).ready(async function () {
     });
   }
   // subir archivo
-  async function subirArchivo(selector) {
-    var formData = new FormData();
-    var fileField = document.querySelector(selector);
-    formData.append('file', fileField.files[0]);
-
-    try {
-      const response = await fetch('/upload', {
-        method: 'POST',
-        body: formData
-      });
-
-      const result = await response.json();
-      console.log('Success:', result);
-    } catch (error) {
-      console.error('Error:', error);
-    }
+ async function subirArchivo(selector, taskId = null) {
+  var fileField = document.querySelector(selector);
+  console.log('Campo de archivo:', fileField);
+  // Si no hay archivo seleccionado, establece uploadedFilePath en null y retorna
+  if (fileField.files.length === 0) {
+    uploadedFilePath = null;
+    return;
   }
+  var formData = new FormData();
+  // Agrega el archivo seleccionado al objeto FormData
+  formData.append('file', fileField.files[0]);
+
+  try {
+    const response = await fetch('/upload', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      uploadedFilePath = result.path; // Guarda la ruta del archivo en la variable
+      // Luego, actualiza la tarea con la ruta del archivo si taskId tiene un valor truthy
+      console.log("que le pasa a taskId", taskId);
+      
+      if (taskId) {
+        await updateTaskWithFilePath(taskId, uploadedFilePath);
+      }
+    } else {
+      console.error('Error:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+async function updateTaskWithFilePath(taskId, filePath) {
+  console.log('Ruta del archivo:', filePath);
+  console.log('ID de la tarea:', taskId);
+
+  // Si filePath es null, no realizar ninguna actualización
+  if (filePath === null) {
+    console.log('No se seleccionó ningún archivo, no se realiza ninguna actualización');
+    return;
+  }
+
+  const serverUrl = 'http://localhost:4000'; // Reemplaza esto con la URL base de tu servidor
+  // Elimina 'front\' de la ruta del archivo
+  const adjustedFilePath = filePath.replace('front\\', '');
+
+  const downloadUrl = `${serverUrl}/${adjustedFilePath.replace(/\\/g, '/')}`;
+  console.log('URL de descarga:', downloadUrl);
+  const mutation = `
+    mutation UpdateTask($id: ID!, $input: TaskInput!) { 
+      updateTask(id: $id, input: $input) {
+        id
+        pathFile
+      }
+    } 
+  `;
+
+  const requestBody = {
+    query: mutation,
+    variables: {
+      id: taskId,
+      input: {
+        pathFile: downloadUrl,
+      },
+    },
+  };
+
+  try {
+    const response = await fetch("/api", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    const responseBody = await response.json();
+    if (responseBody.errors) {
+      console.error("Error en GraphQL:", responseBody.errors);
+      throw new Error("Error al actualizar la tarea");
+    } else {
+      console.log("Tarea actualizada:", responseBody.data.updateTask);
+    }
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+  }
+}
 });

@@ -20,17 +20,12 @@ const taskSchema = Schema({
         type: Date,
         required: true,
     },
-    ended: {
-        type: Boolean,
-        default: false,
-    },
     notes: String,
     status: {
         type: String,
         enum: ['POR HACER', 'EN PROGRESO', 'FINALIZADO'], 
         required: true,   
     },
-    pathFile: String,
 });
 
 module.exports = model('Task', taskSchema);

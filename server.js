@@ -1,17 +1,17 @@
 const express = require('express');
 const http = require('http');
 const path = require('path');
-const { ApolloServer} = require('apollo-server-express');
+const { ApolloServer } = require('apollo-server-express');
 const { projectTypeDefs, projectResolvers } = require('./controllers/projectsController');
 const { taskTypeDefs, taskResolvers } = require('./controllers/tasksController');
-const { connection} = require('./config/connectionDB');
+const { connection } = require('./config/connectionDB');
 
 const multer = require('multer');
 const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
+  destination: function (req, file, cb) {
     cb(null, 'front/documents') // Cambia 'uploads/' a 'front/documents'
   },
-  filename: function(req, file, cb) {
+  filename: function (req, file, cb) {
     cb(null, file.originalname + '-' + Date.now() + path.extname(file.originalname))
   }
 })
@@ -27,7 +27,7 @@ const publicPath = path.join(__dirname, "front");
 
 
 
-app.use(express.static(path.join( publicPath )));
+app.use(express.static(path.join(publicPath)));
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(publicPath, "index.html"));
@@ -51,7 +51,7 @@ async function startServer() {
   });
 
   await server.start();
-  server.applyMiddleware({ app, path: '/api'});
+  server.applyMiddleware({ app, path: '/api' });
 
   app.use((req, res, next) => {
     res.status(404).send('Error 404');
@@ -64,7 +64,7 @@ async function startServer() {
   );
 }
 // Mensajes de socket.io
-io.on('connection', (socket) => { 
+io.on('connection', (socket) => {
   console.log('Usuario conectado, mensaje por socket.io');
   socket.on('taskCreated', (data) => {
     console.log(data.message);
@@ -72,7 +72,7 @@ io.on('connection', (socket) => {
   socket.on('taskUpdated', (data) => {
     console.log(data.message);
   });
-  
+
 
   socket.on('disconnect', () => {
     console.log('Usuario desconectado, mensaje por socket.io');
@@ -82,7 +82,10 @@ io.on('connection', (socket) => {
 
 
 app.post('/upload', upload.single('file'), (req, res) => {
-  res.json({ message: 'Archivo subido con éxito.' });
+  res.json({
+    message: 'Archivo subido con éxito.',
+    path: req.file.path
+  });
 });
 
 
