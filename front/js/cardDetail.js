@@ -60,7 +60,8 @@ socket.on('mensaje', (mensaje) => {
 */
 
 async function Prueba(){
-  tasks = await getTasksByProjectId("662bc2021495ac5c3db15bc1");
+  const projectId = new URLSearchParams(window.location.search).get("id");
+  tasks = await getTasksByProjectId(projectId);
   showTasksCards(tasks);
 }
 
@@ -358,6 +359,7 @@ function drop(event) {
       var targetState = targetContainer.getAttribute("data-state");
       draggedElement.dataset.state = targetState;
       updateTaskStateInProject(data, targetState);
+      socket.emit('mensaje', "Tarjeta ha cambiado de estado : "+targetState);
     } else {
       console.error(
         "No se pudo encontrar el contenedor de tarjetas dentro de la columna."
@@ -551,7 +553,7 @@ $(document).ready(async function () {
           console.error("Error en GraphQL:", responseBody.errors);
           throw new Error("Error al actualizar el proyecto");
         } else {
-          socket.emit('mensaje', "Tarjeta actualizada");
+          socket.emit('mensaje', "Tarjeta [ " + newName + " ] --> Actualizada");
           location.reload();
         }
       } catch (error) {
@@ -596,7 +598,7 @@ $(document).ready(async function () {
       $(event.target).closest(".task-end-date").toggleClass("green-background", isChecked);
 
       updateTaskEndDate(taskId, isChecked);
-      socket.emit('mensaje', "Tarjeta cerrada");
+      socket.emit('mensaje', "Tarjeta Finalizada.");
     });
 
     // Evento al hacer clic en una tarea
@@ -699,7 +701,7 @@ $(document).ready(async function () {
       
       // Cierra el modal
       $("#editTaskModal").modal("hide");
-      socket.emit('mensaje', "Tarjeta Modificada");
+      socket.emit('mensaje', "Tarjeta [ "+title+" ] -->Modificada");
       
     });
 
@@ -765,7 +767,7 @@ $(document).ready(async function () {
           //showTasksCards(tasks);
           $("#addTaskModal").modal("hide");
           $("#addTaskForm")[0].reset();
-          socket.emit('mensaje', "Tarjeta creada");
+          socket.emit('mensaje', "Nueva tarjeta creada");
         }
       } catch (error) {
         console.error("Error en la solicitud:", error);
@@ -821,7 +823,7 @@ $(document).ready(async function () {
             const updatedTasks = await getTasksByProjectId(projectId);
             showTasksCards(updatedTasks);
             $("#confirmationModal").modal("hide");  
-            socket.emit('mensaje', "Tarjeta eliminada_____________....");
+            socket.emit('mensaje', "Tarjeta eliminada.");
           }
         } catch (error) {
           console.error("Error en la solicitud:", error);
