@@ -40,7 +40,15 @@ socket.on('mensaje', (mensaje) => {
   
   // Agregar la tarjeta de alerta al contenedor
   container.appendChild(alertDiv);
+
   Prueba();
+
+  setTimeout(() => {
+    Prueba();
+    container_borrar.innerHTML = '';
+    container_borrar.classList.remove('fade-out'); // Remover la clase de desvanecimiento
+  }, 5000); // Remover el mensaje después de 5 segundos
+
 
 });
 
