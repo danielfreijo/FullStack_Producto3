@@ -1,4 +1,59 @@
 let tasks
+const socket = io();
+
+socket.on('connect', () => {
+  console.log('Conectado al servidor de Socket.io');
+ 
+  socket.on('taskCreated', async function(newTask) {
+    console.log('Nueva TAREA recibido EN EL FRONTAL:', newTask);
+    let projectId = new URLSearchParams(window.location.search).get("id");
+    tasks = await getTasksByProjectId(projectId);
+    showTasksCards(tasks);
+  });
+  
+  socket.on('projectUpdated', async function(updatedProject) {
+    console.log('Proyecto actualizado recibido EN EL FRONTAL:', updatedProject);
+    
+    // Actualiza la UI sin recargar la página
+    if (updatedProject) {
+      $('#projectName').text(updatedProject.name);
+      $('#sidebarProjectName').text(updatedProject.name);
+      $('#sidebarDescription').text(updatedProject.description);
+      $('#sidebarDepartment').val(updatedProject.department);
+      $('#sidebarBackgroundColor').val(updatedProject.backgroundcolor);
+      if (updatedProject.backgroundimage) {
+          $('body').css("background-image", `url(/assets/BackgroundsProjects/${updatedProject.backgroundimage})`);
+      } else {
+          $('body').css("background-color", updatedProject.backgroundcolor);
+      }
+}
+  });
+
+  socket.on('taskUpdated', async function(updatedTask) {
+    console.log('Tarea actualizada recibido EN EL FRONTAL:', updatedTask);
+    let task = tasks.find((t) => t.id === updatedTask._id);
+    let projectId = new URLSearchParams(window.location.search).get("id");
+
+    if (task) {
+      task.title = updatedTask.title;
+      task.description = updatedTask.description;
+      task.responsible = updatedTask.responsible; 
+      task.enddate = updatedTask.enddate;
+      task.notes = updatedTask.notes; 
+      task.status = updatedTask.status;
+      tasks = await getTasksByProjectId(projectId);
+      showTasksCards(tasks);
+    }
+  });
+
+  socket.on('taskDeleted', async function(taskId) {
+    console.log('tarea eliminada recibido EN EL FRONTAL:', taskId);
+
+    let projectId = new URLSearchParams(window.location.search).get("id");
+    tasks = await getTasksByProjectId(projectId);
+    showTasksCards(tasks);
+  });
+});
 
 // Funciones asincronas 
 async function getProjectById(id) {
@@ -18,7 +73,6 @@ async function getProjectById(id) {
       }
     }
   `;
-
   const requestBody = JSON.stringify({
     query: query,
     variables: { id: id },
@@ -60,7 +114,6 @@ async function getTasksByProjectId(projectId) {
       }
     }
   `;
-
   const requestBody = JSON.stringify({
     query: query,
     variables: { projectId: projectId },
@@ -80,7 +133,7 @@ async function getTasksByProjectId(projectId) {
       console.error("Error en GraphQL:", responseBody.errors);
       throw new Error("Error al obtener las tareas por ID de proyecto");
     } else {
-      console.log("Tareas encontradas:", responseBody.data.getTasksByProjectId);
+      //console.log("Tareas encontradas:", responseBody.data.getTasksByProjectId);
       return responseBody.data.getTasksByProjectId;
     }
   } catch (error) {
@@ -120,15 +173,17 @@ async function updateTaskEndDate(taskId, newEndDate) {
       console.error("Error en GraphQL:", responseBody.errors);
       throw new Error("Error al actualizar la tarea");
     } else {
-      console.log("Tarea actualizada:", responseBody.data.updateTask);
+      //console.log("FECHA actualizada:", responseBody.data.updateTask);
+
+      // Enviar la tarea actualizada a través de Socket.io
+      socket.emit('taskEndedUpdated', {id: taskId, ended: newEndDate});
     }
   } catch (error) {
     console.error("Error en la solicitud:", error);
   }
 }
 async function updateTaskStateInProject(taskId, newState) {
-  const projectId = new URLSearchParams(window.location.search).get("id");
-  
+
   const mutation = `
     mutation UpdateTask($updateTaskId: ID!, $input: TaskInput!) {
       updateTask(id: $updateTaskId, input: $input) {
@@ -162,9 +217,10 @@ async function updateTaskStateInProject(taskId, newState) {
       console.error('Error en GraphQL:', responseBody.errors);
       throw new Error('Error al actualizar la tarea');
     } else {
-      console.log('Tarea actualizada:', responseBody.data.updateTask);
-      tasks = await getTasksByProjectId(projectId);
-      showTasksCards(tasks);
+      //console.log('Tarea actualizada:', responseBody.data.updateTask);
+
+      // Enviar la tarea actualizada a través de Socket.io
+      socket.emit('taskStateUpdated', responseBody.data.updateTask);
     }
   } catch (error) {
     console.error('Error en la solicitud:', error);
@@ -204,7 +260,10 @@ async function updateDateAccessProject(projectId) {
       console.error("Error en GraphQL:", responseBody.errors);
       throw new Error("Error al actualizar la fecha de acceso del proyecto");
     } else {
-      console.log("Proyecto actualizado:", responseBody.data.updateProject);
+      //console.log("Proyecto actualizado:", responseBody.data.updateProject);
+
+      // Enviar el proyecto actualizado a través de Socket.io
+      socket.emit('projectDateAccessUpdated', responseBody.data.updateProject);
     }
   } catch (error) {
     console.error("Error en la solicitud:", error);
@@ -307,13 +366,12 @@ function drop(event) {
 
 // Funciones para el manejo de eventos
 $(document).ready(async function () {
+  
   // Obtener el ID del proyecto de la URL
   const urlParams = new URLSearchParams(window.location.search);
   const projectId = urlParams.get("id");
-  console.log("ID del proyecto:", projectId);
 
   const project = await getProjectById(projectId);
-  console.log("Proyecto encontrado:", project);
 
   if (project) {
     // Actualizar el campo dateAcces
@@ -362,10 +420,13 @@ $(document).ready(async function () {
         .show();
     }
 
+    $("#colorSection, #imageSection, #colorSectionCard, #imageSectionCard").hide();
     // Mostrar el tipo de fondo seleccionado
     $("#sidebarBackgroundType").change(function () {
       var selectedType = $(this).val();
-      if (selectedType === "color") {
+      console.log("Tipo de fondo:", selectedType);
+      
+       if (selectedType === "color") {
         $("#colorSection").show();
         $("#imageSection").hide();
         $("#sidebarBackgroundImage").val("");
@@ -380,6 +441,7 @@ $(document).ready(async function () {
     });
     $("#sidebarBackgroundTypeCard").change(function () {
       var selectedType = $(this).val();
+  
       if (selectedType === "color") {
         $("#colorSectionCard").show();
         $("#imageSectionCard").hide();
@@ -427,16 +489,7 @@ $(document).ready(async function () {
       const newBackgroundColor = $("#sidebarBackgroundColor").val();
       const newBackgroundImage = $("#sidebarBackgroundImage").val() || "";
       const newBackgroundColorCard = $("#sidebarBackgroundColorCard").val();
-      const newBackgroundImageCard =
-        $("#sidebarBackgroundImageCard").val() || "";
-
-      /* Si se selecciona un color como fondo, establecer backgroundImage como ""
-      if (newBackgroundImage === "") {
-        newBackgroundImage = "";
-      }
-      if (newBackgroundImageCard === "") {
-        newBackgroundImageCard = "";
-      }*/
+      const newBackgroundImageCard = $("#sidebarBackgroundImageCard").val() || "";
 
       const mutation = `
         mutation UpdateProject($updateProjectId: ID!, $input: ProjectInput!) {
@@ -452,7 +505,6 @@ $(document).ready(async function () {
           }
         }
       `;
-
       const requestBody = {
         query: mutation,
         variables: {
@@ -468,7 +520,6 @@ $(document).ready(async function () {
           },
         },
       };
-      //console.log('Cuerpo de la solicitud:', requestBody);
 
       try {
         const response = await fetch("/api", {
@@ -478,7 +529,6 @@ $(document).ready(async function () {
           },
           body: JSON.stringify(requestBody),
         });
-        //console.log('Respuesta de la API:', response);
 
         const responseBody = await response.json();
         if (responseBody.errors) {
@@ -486,6 +536,9 @@ $(document).ready(async function () {
           throw new Error("Error al actualizar el proyecto");
         } else {
           location.reload();
+
+          // Enviar el proyecto actualizado a través de Socket.io
+          socket.emit('projectUpdated', responseBody.data.updateProject);
         }
       } catch (error) {
         console.error("Error en la solicitud:", error);
@@ -540,15 +593,14 @@ $(document).ready(async function () {
       const taskToEdit = tasks.find(
         (task) => task.id.toString() === taskId.toString()
       );
-      console.log("Tarea a editar:", taskToEdit);
+      //console.log("Tarea a editar:", taskToEdit.enddate);
 
       const editDate = new Date(parseInt(taskToEdit.enddate, 10));
       const year = editDate.getFullYear();
       const month = editDate.getMonth() + 1;
       const day = editDate.getDate();
       const formattedDate = `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
-
-      console.log('Estado:', taskToEdit.status);
+      //console.log('Estado:', taskToEdit.status);
 
       // Si se encuentra la tarea, llena el modal de edición con los datos de la tarea
       if (taskToEdit) {
@@ -577,6 +629,7 @@ $(document).ready(async function () {
       const enddate = $("#editTaskEndDate").val();
       const notes = $("#editTaskNotes").val();
       const status = $("#editTaskStatus").val();
+      console.log("fecha en la funcion:", enddate);
      
       const mutation = `
         mutation UpdateTask($updateTaskId: ID!, $input: TaskInput!) {
@@ -621,9 +674,11 @@ $(document).ready(async function () {
           console.error("Error en GraphQL:", responseBody.errors);
           throw new Error("Error al actualizar la tarea");
         } else {
-          console.log("Tarea actualizada:", responseBody.data.updateTask);
-          tasks = await getTasksByProjectId(projectId);
-          showTasksCards(tasks);
+          console.log("Tarea actualizada en la funcion:", responseBody.data.updateTask);
+          
+
+          // Enviar la tarea actualizada a través de Socket.io
+          socket.emit('taskUpdated', responseBody.data.updateTask);
         }
       } catch (error) {
         console.error("Error en la solicitud:", error);
@@ -631,7 +686,6 @@ $(document).ready(async function () {
       
       // Cierra el modal
       $("#editTaskModal").modal("hide");
-      
     });
 
     // Agregar una nueva tarea al proyecto
@@ -649,8 +703,6 @@ $(document).ready(async function () {
         notes: $("#taskNotes").val(),
         status: $("#taskStatus").val(),
       };
-      console.log("Datos de la tarea:", taskData);
-      //console.log('Fecha', taskData.enddate);
 
       const mutation = `
         mutation CreateTask($input: TaskInput!) { 
@@ -666,7 +718,6 @@ $(document).ready(async function () {
           }
         } 
       `;
-
       const requestBody = {
         query: mutation,
         variables: {
@@ -685,15 +736,15 @@ $(document).ready(async function () {
 
         const responseBody = await response.json();
         if (responseBody.errors) {
-          //console.log('Respuesta de la API:', response);
-          //console.log('Cuerpo de la solicitud:', requestBody);
-          //console.log('Respuesta del cuerpo:', responseBody);
           console.error("Error en GraphQL:", responseBody.errors);
           throw new Error("Error al crear la tarea");
         } else {
-          console.log("Nueva tarea:", taskData);
-          tasks = await getTasksByProjectId(projectId);
-          showTasksCards(tasks);
+          /*tasks = await getTasksByProjectId(projectId);
+          showTasksCards(tasks);*/
+
+          // Enviar la tarea creada a través de Socket.io
+          socket.emit('taskCreated', responseBody.data.createTask);
+
           $("#addTaskModal").modal("hide");
           $("#addTaskForm")[0].reset();
         }
@@ -748,8 +799,12 @@ $(document).ready(async function () {
           } else {
             console.log("Tarea eliminada:", responseBody.data.deleteTask);
             
-            const updatedTasks = await getTasksByProjectId(projectId);
-            showTasksCards(updatedTasks);
+            /*const updatedTasks = await getTasksByProjectId(projectId);
+            showTasksCards(updatedTasks); */
+
+            // Enviar el ID de la tarea eliminada a través de Socket.io
+            socket.emit('taskDeleted', taskId);
+
             $("#confirmationModal").modal("hide");  
           }
         } catch (error) {

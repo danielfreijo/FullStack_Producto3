@@ -37,6 +37,7 @@ const taskTypeDefs = gql`
         deleteTask(id: ID!): String
     }
 `;
+
 const taskResolvers = { 
     Query: {
         getTasksByProjectId: async (_, { projectId }) => {
@@ -50,32 +51,44 @@ const taskResolvers = {
     },
 
     Mutation: { 
-        createTask: async (_, { input }) => {
+        createTask: async (_, { input }, { io })  => {
             if (input.title.trim() === '' || input.description.trim() === '') {
                 throw new Error('Este campo de la tarea no puede estar vacío.');
             }
             try {
-                //console.log(input);
-                //console.log("entrado en el try");
                 const newTask = new task({ ...input });
-                return await newTask.save();
+                const savedTask = await newTask.save();
+                io.emit('taskCreated', savedTask);
+                console.log("nueva tarea CONTROLLER", savedTask);
+                return savedTask;
             } catch (error) {
                 console.log(error);
                 //console.log("entrado en el catch");
                 throw new Error('Error al crear la tarea.');
             }
         },
-        updateTask: async (_, { id, input }) => {
+
+        updateTask: async (_, { id, input }, { io }) => {
             try {
-                return await task.findByIdAndUpdate(id, input, { new: true });
+                const updatedTask =  await task.findByIdAndUpdate(id, input, { new: true });
+                io.emit('taskUpdated', updatedTask);
+                console.log("tarea actualizada CONTROLLER", updatedTask);
+                return updatedTask;
             } catch (error) {
                 throw new Error('Error al actualizar la tarea.');
             }
         },
-        deleteTask: async (_, { id }) => {
+
+        deleteTask: async (_, { id }, { io }) => {
             try {
-                await task.findByIdAndDelete(id);
-                return 'Tarea eliminada correctamente.';
+                const deletedTask = await task.findByIdAndDelete(id);
+                if (deletedTask) {
+                    io.emit('taskDeleted', { id });
+                    console.log("tarea eliminada CONTROLLER", id);
+                    return 'Tarea eliminada correctamente.';
+                } else {
+                    throw new Error('Error al eliminar la tarea.');
+                }
             } catch (error) {
                 throw new Error('Error al eliminar la tarea.');
             }

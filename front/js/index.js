@@ -14,11 +14,13 @@ socket.on('connect', () => {
   
   });
   
-  socket.on('projectUpdated', function(updatedProject) {
-    console.log('Proyecto actualizado recibido EN EL FRONTAL:', updatedProject._id);
+  socket.on('projectUpdated', async function(updatedProject) {
+    console.log('Proyecto actualizado recibido EN EL FRONTAL:', updatedProject);
     let project = projects.find(p => p.id === updatedProject._id);
+    
     if (project) {
-      project.priority = updatedProject.priority;
+      projects = await getProjects();
+      project.priority = updatedProject.priority; 
       showRecentProjects(projects);
       showAllProjects(projects);
       showPriorityProjects(projects);
@@ -33,8 +35,6 @@ socket.on('connect', () => {
     showPriorityProjects(projects);
   });
 });
-
-
 
 // 1. Definiciones de Funciones Asíncronas para interactuar con la API
 async function getProjects() {
@@ -149,8 +149,6 @@ function showPriorityProjects(projects) {
 
 // 3. Bloque de inicialización $(document).ready
 $(document).ready(async function() {
-  
-
 
   try {
     projects = await getProjects();
@@ -364,7 +362,7 @@ $(document).ready(async function() {
       if (responseBody.errors) {
         console.error("Error al actualizar la prioridad del proyecto:", responseBody.errors);
       } else {
-        //console.log("Prioridad del proyecto actualizada con éxito", responseBody.data.updateProject);
+        console.log("Prioridad del proyecto actualizada con éxito", responseBody.data.updateProject);
         
         // Actualizar la imagen del botón
         $(this).find('img').attr('src', newPriority ? '/assets/estrellaM.png' : '/assets/estrellaV.png');

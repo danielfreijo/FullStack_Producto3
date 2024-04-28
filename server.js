@@ -34,13 +34,39 @@ io.on("connection", (socket) => {
   // Añadir el evento projectUpdated
   socket.on("projectUpdated", (updatedProject) => {
     console.log("Proyecto actualizado recibido vía Socket.io", updatedProject);
-    socket.broadcast.emit("updateProject", updatedProject);  // Avisa a todos excepto al emisor
+    socket.broadcast.emit("updateProject", updatedProject);  
   });
 
   // Añadir el evento projectDeleted
   socket.on("projectDeleted", (projectId) => {
     console.log("Proyecto eliminado recibido vía Socket.io", projectId);
-    socket.broadcast.emit("deletedProject", projectId);  // Avisa a todos excepto al emisor
+    socket.broadcast.emit("deletedProject", projectId);  
+  });
+
+  // Añadir el evento taskCreated
+  socket.on("taskCreated", (newTask) => {
+    console.log("Nueva tarea recibido vía Socket.io", newTask);
+    socket.broadcast.emit("updateTasks", newTask);
+  });
+
+  // Añadir el evento taskUpdated
+  socket.on("taskUpdated", (updatedTask) => {
+    console.log("tarea actualizada recibida vía Socket.io", updatedTask);
+    socket.broadcast.emit("updateTask", updatedTask);
+  });
+  socket.on("taskEndedUpdated", (updatedTask) => {
+    console.log("tarea finalizada recibida vía Socket.io", updatedTask);
+    socket.broadcast.emit("updateTaskEnded", updatedTask);
+  });
+  socket.on("taskStateUpdated", (updatedTask) => {
+    console.log("tarea finalizada recibida vía Socket.io", updatedTask);
+    socket.broadcast.emit("taskStateUpdated", updatedTask);
+  });
+
+  // Añadir el evento taskDeleted
+  socket.on("taskDeleted", (taskId) => {
+    console.log("Tarea eliminada recibido vía Socket.io", taskId);
+    socket.broadcast.emit("deletedTask", taskId);  
   });
 
   socket.on("disconnect", () => {
