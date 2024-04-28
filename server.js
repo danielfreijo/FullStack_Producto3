@@ -1,10 +1,23 @@
 const express = require('express');
 const path = require('path');
+const http = require('http');
+const { Server } = require('socket.io');
 const { ApolloServer} = require('apollo-server-express');
 const { projectTypeDefs, projectResolvers } = require('./controllers/projectsController');
 const { taskTypeDefs, taskResolvers } = require('./controllers/tasksController');
 const { connection} = require('./config/connectionDB');
 
+const multer = require('multer');
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'front/documents') // Cambia 'uploads/' a 'front/documents'
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname + '-' + Date.now() + path.extname(file.originalname))
+  }
+})
+
+const upload = multer({ storage: storage })
 
 const app = express();
 connection();
@@ -17,8 +30,70 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(publicPath, "index.html"));
 });
 
+const server = http.createServer(app);
+const io = new Server(server);
+
+// Manejo de conexiones de socket.io
+io.on("connection", (socket) => {
+  console.log("Usuario conectado");
+
+  socket.on('mensaje', (mensaje) => {
+    console.log('Mensaje recibido:', mensaje);
+    // Emitir el mensaje a todos los clientes conectados
+    io.emit('mensaje', mensaje);
+  });
+  
+  // Añadir el evento projectAdded
+  socket.on("projectAdded", (newProject) => {
+    console.log("Nuevo proyecto recibido vía Socket.io", newProject);
+    socket.broadcast.emit("updateProjects", newProject);
+  });
+
+  // Añadir el evento projectUpdated
+  socket.on("projectUpdated", (updatedProject) => {
+    console.log("Proyecto actualizado recibido vía Socket.io", updatedProject);
+    socket.broadcast.emit("updateProject", updatedProject);  
+  });
+
+  // Añadir el evento projectDeleted
+  socket.on("projectDeleted", (projectId) => {
+    console.log("Proyecto eliminado recibido vía Socket.io", projectId);
+    socket.broadcast.emit("deletedProject", projectId);  
+  });
+
+  // Añadir el evento taskCreated
+  socket.on("taskCreated", (newTask) => {
+    console.log("Nueva tarea recibido vía Socket.io", newTask);
+    socket.broadcast.emit("updateTasks", newTask);
+  });
+
+  // Añadir el evento taskUpdated
+  socket.on("taskUpdated", (updatedTask) => {
+    console.log("tarea actualizada recibida vía Socket.io", updatedTask);
+    socket.broadcast.emit("updateTask", updatedTask);
+  });
+  socket.on("taskEndedUpdated", (updatedTask) => {
+    console.log("tarea finalizada recibida vía Socket.io", updatedTask);
+    socket.broadcast.emit("updateTaskEnded", updatedTask);
+  });
+  socket.on("taskStateUpdated", (updatedTask) => {
+    console.log("tarea finalizada recibida vía Socket.io", updatedTask);
+    socket.broadcast.emit("taskStateUpdated", updatedTask);
+  });
+
+  // Añadir el evento taskDeleted
+  socket.on("taskDeleted", (taskId) => {
+    console.log("Tarea eliminada recibido vía Socket.io", taskId);
+    socket.broadcast.emit("deletedTask", taskId);  
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Usuario desconectado");
+  });
+});
+
 async function startServer() {
-  const server = new ApolloServer({
+  const apolloServer = new ApolloServer({
     typeDefs: [projectTypeDefs, taskTypeDefs],
     resolvers: {
       Query: {
@@ -29,21 +104,29 @@ async function startServer() {
         ...projectResolvers.Mutation,
         ...taskResolvers.Mutation
       }
-    }
+    },
+    context: ({ req }) => ({ io }) // Pasando el objeto io al contexto de Apollo
   });
 
-  await server.start();
-  server.applyMiddleware({ app, path: '/api'});
+  await apolloServer.start();
+  apolloServer.applyMiddleware({ app, path: '/api'});
 
   app.use((req, res, next) => {
     res.status(404).send('Error 404');
   });
 
   const PORT = process.env.PORT || 4000;
-  app.listen(PORT, () =>
+  server.listen(PORT, () =>
     console.log(`Servidor corriendo en http://localhost:${PORT}`)
     //console.log(`Servidor corriendo en http://localhost:${PORT}${server.graphqlPath}`)
   );
 }
+
+app.post('/upload', upload.single('file'), (req, res) => {
+  res.json({
+    message: 'Archivo subido con éxito.',
+    path: req.file.path
+  });
+});
 
 startServer();

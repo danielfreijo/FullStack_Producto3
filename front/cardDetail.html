@@ -45,6 +45,8 @@
             </div>
         </div>
     </nav>
+    
+    <div name="container" id="container"></div>
 
     <!-- Modal de agregar tarea -->
     <div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
@@ -83,6 +85,10 @@
                                 <option value="EN PROGRESO">En Progreso</option>
                                 <option value="FINALIZADO">Finalizado</option>
                             </select>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="taskFile">Archivo</label>
+                            <input type="file" id="taskFile" name="taskFile" class="form-control">
                         </div>
                         <button type="submit" class="btn btn-primary mt-4 float-end">Agregar Tarea</button>
                     </form>
@@ -128,6 +134,11 @@
                                 <option value="EN PROGRESO">En Progreso</option>
                                 <option value="FINALIZADO">Finalizado</option>
                             </select>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="editTaskFile">Archivo</label>
+                            <input type="file" id="editTaskFile" name="editTaskFile" class="form-control">
+                            <a id="editTaskFileLink" href="#" target="_blank" download>Descargar archivo</a>
                         </div>
                         <button type="submit" class="btn btn-primary mt-4 float-end">Guardar Cambios</button>
                     </form>
@@ -210,8 +221,9 @@
                         <textarea class="form-control" id="sidebarDescription" rows="3"></textarea>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="sidebarBackgroundTypeCard" class="form-label">Tipo de fondo para la targeta</label>
+                        <label for="sidebarBackgroundTypeCard" class="form-label">Cambiar fondo de targeta</label>
                         <select class="form-select" id="sidebarBackgroundTypeCard">
+                            <option value="null">Seleccione una opción</option>
                             <option value="color">Color</option>
                             <option value="image">Imagen</option>
                         </select>
@@ -232,6 +244,7 @@
                             <option value="diseño2.jpg">imagen 6</option>
                             <option value="marketing1.jpg">imagen 7</option>
                             <option value="marketing2.jpg">imagen 8</option>
+                            <option value="sushi.jpg">imagen 9</option>
                         </select>
                         <img id="previewImageCard" src="#" alt="Vista previa" style="width: 180px; height: 100px; display: none; margin-top: 10px; margin-bottom: 10px; border: 1px solid #000; border-radius: 5px; padding: 5px; background-color: #fff; box-shadow: 0 0 5px #000;">
                     </div>
@@ -244,8 +257,9 @@
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="sidebarBackgroundType" class="form-label">Tipo de fondo</label>
+                        <label for="sidebarBackgroundType" class="form-label">Cambiar fondo del tablero</label>
                         <select class="form-select" id="sidebarBackgroundType">
+                            <option value="null">Seleccione una opción</option>
                             <option value="color">Color</option>
                             <option value="image">Imagen</option>
                         </select>
@@ -277,6 +291,7 @@
     <script src="/assets/libraries/jquery-3.6.0.min.js" ></script>
     <script src="/assets/libraries/popper.min.js" ></script>
     <script src="/assets/libraries/bootstrap.bundle.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="/js/cardDetail.js"></script>
 
 </body>

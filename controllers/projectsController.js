@@ -51,34 +51,42 @@ const projectResolvers = {
     },
     
     Mutation: {
-        createProject: async (_, { input }) => {
+        createProject: async (_, { input }, { io }) => {
             if (input.name.trim() === '' || input.description.trim() === '') {
                 throw new Error('Este campo del proyecto no puede estar vacío.');
             }
-            console.log("entrada de datos", input);
             try {
-                console.log("entrada de datos", input);
                 const newProject = new Project({ ...input });
-                return await newProject.save();
+                const savedProject = await newProject.save();
+                io.emit('projectAdded', savedProject);
+                console.log("Proyecto creado y emitido CONTROLLER:", savedProject);
+                return savedProject;
             } catch (error) {
-                console.log("entrada de datos", input);
                 throw new Error('Error al crear el proyecto: ' + error.message);
-                
             }
         },
 
-        updateProject: async (_, { id, input }) => {
+        updateProject: async (_, { id, input }, { io }) => {
             try {
-                return await Project.findByIdAndUpdate(id, {...input }, { new: true });
+                const updatedProject = await Project.findByIdAndUpdate(id, {...input }, { new: true });
+                io.emit('projectUpdated', updatedProject);  
+                console.log("Proyecto actualizado y emitido CONTROLLER:", updatedProject);
+                return updatedProject;
             }catch (error) {
                 throw new Error('Error al actualizar el proyecto: ' + error.message);
             }
         },
 
-        deleteProject: async (_, { id }) => {
+        deleteProject: async (_, { id }, { io }) => {
             try{
-                await Project.findByIdAndDelete(id);
-                return 'Proyecto eliminado correctamente.';
+                const deletedProject = await Project.findByIdAndDelete(id);
+                if (deletedProject) {
+                    io.emit('projectDeleted', { id });
+                    console.log("Proyecto eliminado y emitido CONTROLLER:", id);
+                    return 'Proyecto eliminado correctamente.';
+                } else {
+                    throw new Error('El proyecto no existe.');
+                } 
             }catch (error) {
                 throw new Error('Error al eliminar el proyecto: ' + error.message);
             }
