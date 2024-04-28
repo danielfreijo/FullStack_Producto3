@@ -1,6 +1,52 @@
 let projects = [];
 const socket = io();
 
+socket.on('mensaje', (mensaje) => {
+  // Borramos lo que contenga el container de las alertas
+  const container_borrar = document.getElementById('container');
+  container_borrar.innerHTML = '';
+
+  const alertDiv = document.createElement('div');
+  alertDiv.classList.add('alert', 'alert-success', 'alert-dismissible');
+  
+  // Botón de cierre
+  const closeButton = document.createElement('button');
+  closeButton.setAttribute('type', 'button');
+  closeButton.classList.add('btn-close');
+  closeButton.setAttribute('data-bs-dismiss', 'alert');
+  
+  // Contenido de la tarjeta de alerta
+  const strongTag = document.createElement('strong');
+  strongTag.textContent = 'Alerta:';
+  
+  // Div para el mensaje
+  const mensajeDiv = document.createElement('div');
+  mensajeDiv.setAttribute('name', 'mensajeDiv');
+  mensajeDiv.setAttribute('id', 'mensajeDiv');
+  
+  // Agregar el contenido al mensajeDiv
+  mensajeDiv.textContent = mensaje;
+  
+  // Agregar el botón de cierre a la tarjeta de alerta
+  alertDiv.appendChild(closeButton);
+  
+  // Agregar el texto fuerte y el mensajeDiv a la tarjeta de alerta
+  alertDiv.appendChild(strongTag);
+  alertDiv.appendChild(mensajeDiv);
+  
+  // Obtener el contenedor donde se agregará la tarjeta de alerta
+  const container = document.getElementById('container');
+  
+  // Agregar la tarjeta de alerta al contenedor
+  container.appendChild(alertDiv);
+
+  setTimeout(() => {
+    container_borrar.innerHTML = '';
+    container_borrar.classList.remove('fade-out'); // Remover la clase de desvanecimiento
+  }, 5000); // Remover el mensaje después de 5 segundos
+});
+
+
 socket.on('connect', () => {
   console.log('Conectado al servidor de Socket.io');
   
@@ -98,6 +144,7 @@ function createProjectCard(project) {
       </div>
   </a>
   `;
+  socket.emit('mensaje', "proyecto creado" +project.name); 
 }
 function showRecentProjects(projects) {
   const recentProjects = $('#recentProjects');
@@ -299,6 +346,7 @@ $(document).ready(async function() {
         socket.emit('projectAdded', responseBody.data.createProject);
 
         $('#addProjectModal').modal('hide');
+        socket.emit('mensaje', "Nuevo proyecto creado."); 
       }
     } catch (error) {
       console.error("Error al realizar la solicitud a GraphQL:", error);
@@ -373,6 +421,8 @@ $(document).ready(async function() {
 
         // Enviar un mensaje al servidor de Socket.io
         socket.emit('projectUpdated', { id: projectId, priority: newPriority });
+        socket.emit('mensaje', "Proyecto actualizado"); 
+
       }
     } catch (error) {
       console.error("Error al realizar la solicitud a GraphQL:", error);
@@ -439,6 +489,8 @@ $(document).ready(async function() {
           socket.emit('projectDeleted', { id: projectId });
 
           $('#confirmationModal').modal('hide');
+          socket.emit('mensaje', "Proyecto eliminado."); 
+
         }
       } catch (error) { 
         console.error("Error al realizar la solicitud a GraphQL:", error);

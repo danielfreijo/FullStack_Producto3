@@ -1,6 +1,60 @@
 let tasks
 const socket = io();
 
+socket.on('mensaje', (mensaje) => {
+  // Borramos lo que contenga el container de las alertas
+  const container_borrar = document.getElementById('container');
+  container_borrar.innerHTML = '';
+
+  const alertDiv = document.createElement('div');
+  alertDiv.classList.add('alert', 'alert-success', 'alert-dismissible');
+  
+  // Botón de cierre
+  const closeButton = document.createElement('button');
+  closeButton.setAttribute('type', 'button');
+  closeButton.classList.add('btn-close');
+  closeButton.setAttribute('data-bs-dismiss', 'alert');
+  
+  // Contenido de la tarjeta de alerta
+  const strongTag = document.createElement('strong');
+  strongTag.textContent = 'Alerta:';
+  
+  // Div para el mensaje
+  const mensajeDiv = document.createElement('div');
+  mensajeDiv.setAttribute('name', 'mensajeDiv');
+  mensajeDiv.setAttribute('id', 'mensajeDiv');
+  
+  // Agregar el contenido al mensajeDiv
+  mensajeDiv.textContent = mensaje;
+  
+  // Agregar el botón de cierre a la tarjeta de alerta
+  alertDiv.appendChild(closeButton);
+  
+  // Agregar el texto fuerte y el mensajeDiv a la tarjeta de alerta
+  alertDiv.appendChild(strongTag);
+  alertDiv.appendChild(mensajeDiv);
+  
+  // Obtener el contenedor donde se agregará la tarjeta de alerta
+  const container = document.getElementById('container');
+  
+  // Agregar la tarjeta de alerta al contenedor
+  container.appendChild(alertDiv);
+
+  updatesAlerts();
+
+  setTimeout(() => {
+    updatesAlerts();
+    container_borrar.innerHTML = '';
+    container_borrar.classList.remove('fade-out'); // Remover la clase de desvanecimiento
+  }, 5000); // Remover el mensaje después de 5 segundos
+});
+
+async function updatesAlerts(){
+  const projectId = new URLSearchParams(window.location.search).get("id");
+  tasks = await getTasksByProjectId(projectId);
+  showTasksCards(tasks);
+}
+
 socket.on('connect', () => {
   console.log('Conectado al servidor de Socket.io');
  
@@ -299,6 +353,7 @@ function createTaskCard(task) {
       </div>
     </li>
   `;
+  socket.emit('mensaje', "Tarjeta creada");
 }
 function showTasksCards(tasks) {
   const taskCardsContainer = $(".task-cards");
@@ -351,6 +406,7 @@ function drop(event) {
       var targetState = targetContainer.getAttribute("data-state");
       draggedElement.dataset.state = targetState;
       updateTaskStateInProject(data, targetState);
+      socket.emit('mensaje', "Tarjeta ha cambiado de estado : "+targetState);
     } else {
       console.error(
         "No se pudo encontrar el contenedor de tarjetas dentro de la columna."
@@ -535,6 +591,7 @@ $(document).ready(async function () {
           console.error("Error en GraphQL:", responseBody.errors);
           throw new Error("Error al actualizar el proyecto");
         } else {
+          socket.emit('mensaje', "Tarjeta [ " + newName + " ] --> Actualizada");
           location.reload();
 
           // Enviar el proyecto actualizado a través de Socket.io
@@ -582,6 +639,7 @@ $(document).ready(async function () {
       $(event.target).closest(".task-end-date").toggleClass("green-background", isChecked);
 
       updateTaskEndDate(taskId, isChecked);
+      socket.emit('mensaje', "Tarjeta Finalizada.");
     });
 
     // Evento al hacer clic en una tarea
@@ -686,6 +744,7 @@ $(document).ready(async function () {
       
       // Cierra el modal
       $("#editTaskModal").modal("hide");
+      socket.emit('mensaje', "Tarjeta [ "+title+" ] -->Modificada");
     });
 
     // Agregar una nueva tarea al proyecto
@@ -747,6 +806,7 @@ $(document).ready(async function () {
 
           $("#addTaskModal").modal("hide");
           $("#addTaskForm")[0].reset();
+          socket.emit('mensaje', "Nueva tarjeta creada");
         }
       } catch (error) {
         console.error("Error en la solicitud:", error);
@@ -805,7 +865,8 @@ $(document).ready(async function () {
             // Enviar el ID de la tarea eliminada a través de Socket.io
             socket.emit('taskDeleted', taskId);
 
-            $("#confirmationModal").modal("hide");  
+            $("#confirmationModal").modal("hide"); 
+            socket.emit('mensaje', "Tarjeta eliminada."); 
           }
         } catch (error) {
           console.error("Error en la solicitud:", error);

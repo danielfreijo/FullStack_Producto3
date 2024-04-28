@@ -25,6 +25,12 @@ const io = new Server(server);
 io.on("connection", (socket) => {
   console.log("Usuario conectado");
 
+  socket.on('mensaje', (mensaje) => {
+    console.log('Mensaje recibido:', mensaje);
+    // Emitir el mensaje a todos los clientes conectados
+    io.emit('mensaje', mensaje);
+  });
+  
   // Añadir el evento projectAdded
   socket.on("projectAdded", (newProject) => {
     console.log("Nuevo proyecto recibido vía Socket.io", newProject);
