@@ -7,6 +7,18 @@ const { projectTypeDefs, projectResolvers } = require('./controllers/projectsCon
 const { taskTypeDefs, taskResolvers } = require('./controllers/tasksController');
 const { connection} = require('./config/connectionDB');
 
+const multer = require('multer');
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'front/documents') // Cambia 'uploads/' a 'front/documents'
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname + '-' + Date.now() + path.extname(file.originalname))
+  }
+})
+
+const upload = multer({ storage: storage })
+
 const app = express();
 connection();
 
@@ -109,5 +121,12 @@ async function startServer() {
     //console.log(`Servidor corriendo en http://localhost:${PORT}${server.graphqlPath}`)
   );
 }
+
+app.post('/upload', upload.single('file'), (req, res) => {
+  res.json({
+    message: 'Archivo subido con éxito.',
+    path: req.file.path
+  });
+});
 
 startServer();
