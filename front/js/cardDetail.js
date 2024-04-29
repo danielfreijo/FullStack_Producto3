@@ -370,7 +370,7 @@ async function updateTaskWithFilePath(taskId, filePath) {
     return;
   }
 
-  const serverUrl = 'http://localhost:4000'; 
+  const serverUrl = 'https://69d2dk-4000.csb.app'; 
   // Elimina 'front\' de la ruta del archivo
   const adjustedFilePath = filePath.replace('front\\', '');
 
