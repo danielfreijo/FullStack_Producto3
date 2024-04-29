@@ -372,7 +372,8 @@ async function updateTaskWithFilePath(taskId, filePath) {
 
   const serverUrl = 'https://69d2dk-4000.csb.app'; 
   // Elimina 'front\' de la ruta del archivo
-  const adjustedFilePath = filePath.replace('front\\', '');
+  // const adjustedFilePath = filePath.replace('front\\', '');
+  const adjustedFilePath = filePath.replace('front/', '');
 
   const downloadUrl = `${serverUrl}/${adjustedFilePath.replace(/\\/g, '/')}`;
   console.log('URL de descarga:', downloadUrl);
