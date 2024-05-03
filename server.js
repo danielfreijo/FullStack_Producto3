@@ -3,6 +3,10 @@ const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
 const { ApolloServer} = require('apollo-server-express');
+// Nuevas líneas para subscriptions-transport-ws
+const { execute, subscribe } = require('graphql');
+const { SubscriptionServer } = require('subscriptions-transport-ws');
+// ---------------------------------------------------------------------------------
 const { projectTypeDefs, projectResolvers } = require('./controllers/projectsController');
 const { taskTypeDefs, taskResolvers } = require('./controllers/tasksController');
 const { connection} = require('./config/connectionDB');
@@ -46,6 +50,7 @@ async function startServer() {
       }
     },
     context: ({ req }) => ({ io }) // Pasando el objeto io al contexto de Apollo
+    // context: ({ req }) => ({ req }) // Pasando el objeto req al contexto de Apollo
   });
 
   await apolloServer.start();
@@ -54,6 +59,17 @@ async function startServer() {
   app.use((req, res, next) => {
     res.status(404).send('Error 404');
   });
+
+  // Crear el servidor de suscripciones WebSocket
+  // ---------------------------------------------------------------
+  SubscriptionServer.create(
+    { 
+      schema: apolloServer.schema,
+      execute,
+      subscribe,
+    },
+    { server, path: '/subscriptions' } // Ruta para las suscripciones
+  );
 
   const PORT = process.env.PORT || 4000;
   server.listen(PORT, () =>

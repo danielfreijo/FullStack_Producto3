@@ -384,6 +384,18 @@ function drop(event) {
 
 // Funciones para el manejo de eventos
 $(document).ready(async function () {
+
+/*
+  Mostrando el comentario
+
+*/
+
+$("#sendcomment").on("click", function (e){
+  var addcomment = $("#newcomment").val();
+  //var taskname = $("#taskTitle").val();
+  $("#publishlist").append("<li class=\"task-card-btn\">"+addcomment+"</li>")
+});
+
   // Obtener el ID del proyecto de la URL
   const urlParams = new URLSearchParams(window.location.search);
   const projectId = urlParams.get("id");

@@ -56,7 +56,6 @@
                     <h5 class="modal-title" id="addTaskModalLabel">Crear nueva tarea</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body mt-4"> 
                     <form id="addTaskForm">
                         <div class="form-group mb-4">
                             <label for="taskTitle">Título</label>
@@ -99,44 +98,78 @@
 
     <!-- Modal de editar tarea -->
     <div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editTaskModalLabel">Editar tarea</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body mt-4"> 
-                    <form id="editTaskForm">
-                        <div class="form-group mb-4">
-                            <label for="editTaskTitle">Título</label>
-                            <input type="text" id="editTaskTitle" name="taskTitle" class="form-control" required>
+                    <div class="container-fluid">
+                            <div class="row">  
+                                <!-- Zona de formulario para editar tarea-->
+                                <div class="col-md-6 ml-auto">
+                                    <form id="editTaskForm">
+                                        <div class="form-group mb-4">
+                                            <label for="editTaskTitle">Título</label>
+                                            <input type="text" id="editTaskTitle" name="taskTitle" class="form-control" required>
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label for="editTaskDescription">Descripción</label>
+                                            <textarea id="editTaskDescription" name="taskDescription" class="form-control" rows="3" required></textarea>
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label for="editTaskResponsibles">Responsables:</label>
+                                            <input type="text" id="editTaskResponsibles" name="taskResponsibles" class="form-control">
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label for="editTaskEndDate">Fecha de Finalización</label>
+                                            <input type="date" id="editTaskEndDate" name="taskEndDate" class="form-control" required>
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label for="editTaskNotes">Notas</label>
+                                            <textarea id="editTaskNotes" name="taskNotes" class="form-control" rows="3"></textarea>
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label for="editTaskStatus">Estado</label>
+                                            <select id="editTaskStatus" name="taskStatus" class="form-control">
+                                                <option value="POR HACER">Por Hacer</option>
+                                                <option value="EN PROGRESO">En Progreso</option>
+                                                <option value="FINALIZADO">Finalizado</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary mt-4 float-end">Guardar Cambios</button>
+                                    </form>
+                                </div> 
+                                <!-- Zona de comentarios-->
+                                <div class="col-md-6 ml-auto float-md-end">
+                                    <div class="card bg-primary w-100 h-100">
+                                        <div class="card-body" style="height:300px; overflow-y: auto;">
+                                            <ul name="publishlist" id="publishlist" style="list-style-type: none; padding-left: 0; margin-left:0px;">
+                                                <li class="task-card-btn">Comentarios anteriores</li>
+                                                <li class="task-card-btn">Comentarios anteriores</li>
+                                                <li class="task-card-btn">Comentarios anteriores</li>
+                                            </ul>
+
+
+                                        </div>
+                                        <div class="card-foot center-text" style="background-color: #6c757d;">
+                                            
+                                                <label>Añadir comentario:</label><br>
+                                                <textarea class="form-control" name="newcomment" id="newcomment">Comentario</textarea>
+                                                <input class="btn btn-primary" type="submit" name="sendcomment" id="sendcomment">
+
+                                            
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group mb-4">
-                            <label for="editTaskDescription">Descripción</label>
-                            <textarea id="editTaskDescription" name="taskDescription" class="form-control" rows="3" required></textarea>
-                        </div>
-                        <div class="form-group mb-4">
-                            <label for="editTaskResponsibles">Responsables:</label>
-                            <input type="text" id="editTaskResponsibles" name="taskResponsibles" class="form-control">
-                        </div>
-                        <div class="form-group mb-4">
-                            <label for="editTaskEndDate">Fecha de Finalización</label>
-                            <input type="date" id="editTaskEndDate" name="taskEndDate" class="form-control" required>
-                        </div>
-                        <div class="form-group mb-4">
-                            <label for="editTaskNotes">Notas</label>
-                            <textarea id="editTaskNotes" name="taskNotes" class="form-control" rows="3"></textarea>
-                        </div>
-                        <div class="form-group mb-4">
-                            <label for="editTaskStatus">Estado</label>
-                            <select id="editTaskStatus" name="taskStatus" class="form-control">
-                                <option value="POR HACER">Por Hacer</option>
-                                <option value="EN PROGRESO">En Progreso</option>
-                                <option value="FINALIZADO">Finalizado</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary mt-4 float-end">Guardar Cambios</button>
-                    </form>
+
+                    </div>
+                    
                 </div>
             </div>
         </div>
