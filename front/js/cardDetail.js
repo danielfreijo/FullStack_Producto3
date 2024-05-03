@@ -41,10 +41,11 @@ socket.on('mensaje', (mensaje) => {
   // Agregar la tarjeta de alerta al contenedor
   container.appendChild(alertDiv);
 
-  Prueba();
+  alertshow();
 
   setTimeout(() => {
-    Prueba();
+    alertshow();
+    container_borrar.classList.add('fade-out'); 
     container_borrar.innerHTML = '';
     container_borrar.classList.remove('fade-out'); // Remover la clase de desvanecimiento
   }, 5000); // Remover el mensaje después de 5 segundos
@@ -67,7 +68,7 @@ socket.on('mensaje', (mensaje) => {
 }
 */
 
-async function Prueba(){
+async function alertshow(){
   const projectId = new URLSearchParams(window.location.search).get("id");
   tasks = await getTasksByProjectId(projectId);
   showTasksCards(tasks);
