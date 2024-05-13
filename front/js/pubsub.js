@@ -4,6 +4,7 @@ import { gql, useSubscription } from '@apollo/client';
 const NEW_MESSAGE_SUBSCRIPTION = gql`
   subscription {
     newMessage {
+      id
       idtask
       author
       comment

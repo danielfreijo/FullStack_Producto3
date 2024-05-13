@@ -1,0 +1,10 @@
+type Subscription {
+  newEvent: Event!
+}
+
+type Event {
+  id: ID!
+  name: String!
+  description: String!
+  date: String!
+}

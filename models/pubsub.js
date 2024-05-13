@@ -1,7 +1,8 @@
 const { Schema, model } = require('mongoose');
 
 const projectSchema = new Schema({
-    project_id: {
+    /*_id: Schema.Types.ObjectId, esto es agregado automaticamente por Mongoose*/
+    task_id: {
         type: Schema.Types.ObjectId,
         ref: 'Task',
         required: true,
@@ -15,3 +16,5 @@ const projectSchema = new Schema({
         required: true,
     },
 }); 
+
+module.exports = model('TaskSuscription', projectSchema);

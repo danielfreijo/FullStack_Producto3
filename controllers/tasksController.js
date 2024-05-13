@@ -1,5 +1,9 @@
 const { gql } = require('apollo-server-express');
+const { execute, subscribe } = require('graphql');
+const { PubSub } = require("graphql-subscriptions");
+
 const task = require('../models/task');
+const pubsub = new PubSub();
 
 const taskTypeDefs = gql`
 
@@ -36,6 +40,11 @@ const taskTypeDefs = gql`
         updateTask(id: ID!, input: TaskInput!): Task
         deleteTask(id: ID!): String
     }
+
+    type Subscription {
+        newMessage: String
+      }
+
 `;
 const taskResolvers = { 
     Query: {
@@ -50,37 +59,59 @@ const taskResolvers = {
     },
 
     Mutation: { 
-        createTask: async (_, { input }) => {
+        createTask: async (_, { input }, { pubsub }) => {
             if (input.title.trim() === '' || input.description.trim() === '') {
                 throw new Error('Este campo de la tarea no puede estar vacío.');
             }
             try {
-                //console.log(input);
-                //console.log("entrado en el try");
                 const newTask = new task({ ...input });
                 return await newTask.save();
             } catch (error) {
                 console.log(error);
-                //console.log("entrado en el catch");
                 throw new Error('Error al crear la tarea.');
             }
         },
-        updateTask: async (_, { id, input }) => {
+        updateTask: async (_, { id, input }, { pubsub }) => {
             try {
                 return await task.findByIdAndUpdate(id, input, { new: true });
             } catch (error) {
                 throw new Error('Error al actualizar la tarea.');
             }
         },
-        deleteTask: async (_, { id }) => {
+        deleteTask: async (_, { id }, { pubsub }) => {
             try {
                 await task.findByIdAndDelete(id);
                 return 'Tarea eliminada correctamente.';
             } catch (error) {
                 throw new Error('Error al eliminar la tarea.');
             }
-        }
-    }   
+        },
+    }, 
+    Subscription: {
+        createTask: {
+            async subscribe (_, __, { pubsub } ){
+                return pubsub.asyncIterator("PROJECT_CREATED")
+
+            }
+        },
+        updateTask: {
+            async subscribe (_, __, { pubsub } ){
+                return pubsub.asyncIterator("PROJECT_UPDATED")
+
+            }
+        },
+        deleteTask: {
+            async subscribe (_, __, { pubsub} ){
+                return pubsub.asyncIterator("PROJECT_DELETED")
+
+            }
+        },
+        newmessage: {
+            async subscribe (_, __, { pubsub} ){
+                return pubsub.asyncIterator("NEW_MESSAGE")
+            }
+        },
+      },
 };
 
 module.exports = { taskTypeDefs, taskResolvers };
